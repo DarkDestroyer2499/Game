@@ -1,0 +1,2 @@
+J:\workspace\Game\x64\Debug\Game.exe
+C:\Users\User\Documents\GitHub\Game\Game\x64\Debug\Game.exe
