@@ -1,5 +1,6 @@
 #include "Engine.hpp"
 #include "Log.h"
+
 Engine::Engine(ScreenMode wMode, unsigned int width = 0, unsigned int height = 0):
 	mWindowMode{ wMode }, mScnWidht{ sf::VideoMode::getDesktopMode().width / 2 }, mScnHeight{ sf::VideoMode::getDesktopMode().height / 2 }, mWorking{true}
 {
@@ -8,18 +9,26 @@ Engine::Engine(ScreenMode wMode, unsigned int width = 0, unsigned int height = 0
 
 void Engine::Run()
 {
-	mWindow.create(sf::VideoMode(mScnWidht, mScnHeight), WINDOW_NAME, mWindowMode);
 	Log(ERROR) << "Engine has been started" << 1 << 2 << 3;
-	while (mWindow.isOpen())
-	{
-		
-		while (mWindow.pollEvent(mEvent))
+	
+	mMainThread = std::make_unique<std::thread>(std::thread([&]() {
+		mWindow.create(sf::VideoMode(mScnWidht, mScnHeight), WINDOW_NAME, mWindowMode);
+		while (mWindow.isOpen() && mWorking == true)
 		{
-			if (mEvent.type == sf::Event::Closed || mWorking == false)
-				mWindow.close();
+			while (mWindow.pollEvent(mEvent))
+			{
+				if (mEvent.type == sf::Event::Closed || mWorking == false)
+					mWindow.close();
+			}
+			mWindow.display();
 		}
-		mWindow.display();
-	}
+		mWindow.close();
+	}));
+}
+
+Engine::~Engine()
+{
+	mMainThread->join();
 }
 
 sf::RenderWindow& Engine::GetWindow()
@@ -34,5 +43,5 @@ void Engine::SetScreenMode(ScreenMode newMode)
 
 void Engine::Stop()
 {
-	
+	mWorking = false;
 }

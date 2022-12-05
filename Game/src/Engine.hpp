@@ -3,6 +3,7 @@
 
 #include <SFML/Graphics.hpp>
 #include <box2d.h>
+#include <thread>
 
 #define WINDOW_NAME "SUPER GAME"
 
@@ -20,7 +21,7 @@ class Engine
 public:
 	Engine(ScreenMode, unsigned int, unsigned int);
     Engine() = delete;
-    ~Engine() = default;
+    ~Engine();
     void Run();
 
 	sf::RenderWindow& GetWindow();
@@ -41,6 +42,7 @@ private:
     ScreenMode mWindowMode;
     bool mWorking;
     sf::Event mEvent;
+    std::unique_ptr<std::thread> mMainThread;
 };
 
 #endif // !ENGINE
