@@ -6,10 +6,9 @@ Engine::Engine(ScreenMode wMode, unsigned int width = 0, unsigned int height = 0
 {
 }
 
-
 void Engine::Run()
 {
-	Log(ERROR) << "Engine has been started" << 1 << 2 << 3;
+	Log(SUCCESS) << "Engine has been started" << 1 << 2 << 3;
 	
 	mMainThread = std::make_unique<std::thread>(std::thread([&]() {
 		mWindow.create(sf::VideoMode(mScnWidht, mScnHeight), WINDOW_NAME, mWindowMode);
@@ -28,7 +27,9 @@ void Engine::Run()
 
 Engine::~Engine()
 {
-	mMainThread->join();
+	mWorking = false;
+	if(mMainThread->joinable())
+		mMainThread->join();
 }
 
 sf::RenderWindow& Engine::GetWindow()

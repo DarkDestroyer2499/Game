@@ -10,7 +10,7 @@
 #define ERROR "\033[1;31mERRR\033[0m"
 #define INFO "INFO"
 #define WARNING "\033[1;33mWARNING\033[0m"
-#define SUCCESS "\033[1;32mSUCCESS\033[0m");
+#define SUCCESS "\033[1;32mSUCCESS\033[0m"
 
 std::string GetLocalTime()
 {
