@@ -6,10 +6,12 @@
 class Entity
 {
 public:
-	virtual sf::Sprite& GetSprite() = 0;
-	virtual void Draw() = 0;
+	Entity(sf::Sprite&);
+	Entity(sf::Texture&, const sf::IntRect&);
+	sf::Sprite& GetSprite();
 	virtual ~Entity();
-
+protected:
+	sf::Sprite mSprite;
 };
 
 #endif // !ENTITY_H

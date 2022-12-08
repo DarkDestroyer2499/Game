@@ -10,24 +10,36 @@ void Engine::Run()
 {
 	Log(SUCCESS) << "Engine has been started" << 1 << 2 << 3;
 	
-	mMainThread = std::make_unique<std::thread>(std::thread([&]() {
-		mWindow.create(sf::VideoMode(mScnWidht, mScnHeight), WINDOW_NAME, mWindowMode);
-		while (mWindow.isOpen() && mWorking == true)
-		{
-			while (mWindow.pollEvent(mEvent))
-			{
-				if (mEvent.type == sf::Event::Closed || mWorking == false)
-					mWindow.close();
-			}
-			mWindow.display();
-		}
-		mWindow.close();
+	mMainThread = std::make_unique<std::thread>(std::thread([this]() {
+		Update();
 	}));
+}
+
+void Engine::Update()
+{
+	mWindow.create(sf::VideoMode(mScnWidht, mScnHeight), WINDOW_NAME, mWindowMode);
+	while (mWindow.isOpen() && mWorking == true)
+	{
+		while (mWindow.pollEvent(mEvent))
+		{
+			if (mEvent.type == sf::Event::Closed || mWorking == false)
+				mWindow.close();
+		}
+		//Draw sprite of all objects
+		mWindow.clear();
+		for (Entity& entity : mObjectList)
+		{
+			mWindow.draw(entity.GetSprite());
+		}
+
+		mWindow.display();
+	}
+	mWindow.close();
 }
 
 Engine::~Engine()
 {
-	mWorking = false;
+	Stop();
 	if(mMainThread->joinable())
 		mMainThread->join();
 }
@@ -40,6 +52,12 @@ sf::RenderWindow& Engine::GetWindow()
 void Engine::SetScreenMode(ScreenMode newMode)
 {
 	mWindow.create(sf::VideoMode(mScnWidht, mScnHeight), WINDOW_NAME, newMode);
+}
+
+Entity& Engine::CreateObject(Entity newEntity)
+{
+	mObjectList.push_back(newEntity);
+	return mObjectList[mObjectList.size() - 1];
 }
 
 void Engine::Stop()

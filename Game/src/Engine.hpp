@@ -4,8 +4,13 @@
 #include <SFML/Graphics.hpp>
 #include <box2d.h>
 #include <thread>
+#include <vector>
+#include "Entity.hpp"
+
 
 #define WINDOW_NAME "SUPER GAME"
+
+const b2Vec2 GRAVITY(0.f, 9.8f);
 
 enum ScreenMode
 {
@@ -28,11 +33,13 @@ public:
 
     void SetScreenMode(ScreenMode);
 
+    Entity& CreateObject(Entity);
+
     void Stop();
 
 
 private:
-    
+    void Update();
 
 
 
@@ -43,6 +50,7 @@ private:
     bool mWorking;
     sf::Event mEvent;
     std::unique_ptr<std::thread> mMainThread;
+    std::vector<Entity> mObjectList;
 };
 
 #endif // !ENGINE
