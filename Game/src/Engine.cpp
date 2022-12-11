@@ -4,6 +4,7 @@
 Engine::Engine(ScreenMode wMode, unsigned int width = 0, unsigned int height = 0):
 	mWindowMode{ wMode }, mScnWidht{ sf::VideoMode::getDesktopMode().width / 2 }, mScnHeight{ sf::VideoMode::getDesktopMode().height / 2 }, mWorking{true}
 {
+	mWorld = std::make_unique<b2World>(GRAVITY);
 }
 
 void Engine::Run()
@@ -27,10 +28,19 @@ void Engine::Update()
 		}
 		//Draw sprite of all objects
 		mWindow.clear();
-		for (Entity& entity : mObjectList)
+
+		for (auto& object : mObjectList)
 		{
-			mWindow.draw(entity.GetSprite());
+			b2Body* objectBody = object.GetBody();
+			sf::Sprite &objectSprite = object.GetSprite();
+			b2Vec2 pos = objectBody->GetPosition();
+			float angle = objectBody->GetAngle();
+			objectSprite.setPosition(pos.x, pos.y);
+			objectSprite.setRotation(angle * DEG_IN_RAD);
+			mWindow.draw(object.GetSprite());
 		}
+
+		mWorld->Step(1 / 500.f, 8, 3);
 
 		mWindow.display();
 	}
@@ -42,6 +52,7 @@ Engine::~Engine()
 	Stop();
 	if(mMainThread->joinable())
 		mMainThread->join();
+	
 }
 
 sf::RenderWindow& Engine::GetWindow()
@@ -54,9 +65,13 @@ void Engine::SetScreenMode(ScreenMode newMode)
 	mWindow.create(sf::VideoMode(mScnWidht, mScnHeight), WINDOW_NAME, newMode);
 }
 
-Entity& Engine::CreateObject(Entity newEntity)
+Entity& Engine::CreateObject(sf::Texture& texture, const sf::IntRect& rect, b2Shape& shape, b2BodyDef& bdef)
 {
-	mObjectList.push_back(newEntity);
+	Entity tmpEnt = Entity(texture, rect);
+	b2Body* tmpBody = mWorld->CreateBody(&bdef);
+	tmpBody->CreateFixture(&shape, 2);
+	tmpEnt.SetBody(tmpBody);
+	mObjectList.push_back(tmpEnt);
 	return mObjectList[mObjectList.size() - 1];
 }
 

@@ -12,16 +12,18 @@ int main()
 
 	t.loadFromFile("resources/TestSprite.jpg");
 
-
 	sf::Sprite sprite(t);
 	sprite.setTextureRect(sf::IntRect(50, 50, 100, 100));
 
-	Entity entity(sprite);
-	entity.GetSprite().setPosition(300, 100);
+	b2PolygonShape shape;
+	shape.SetAsBox(30 / SCALE, 30 / SCALE);
 
-	Entity &ent1 = engine.CreateObject(entity);
-	Entity& ent2 = engine.CreateObject(entity);
-	ent2.GetSprite().setPosition(400, 300);
+	b2BodyDef bdef;
+	bdef.type = b2_dynamicBody;
+
+
+	Entity &ent1 = engine.CreateObject(t, sf::IntRect(50, 50, 100, 100), shape, bdef);
+	
 
 	system("pause");
 	return 0;

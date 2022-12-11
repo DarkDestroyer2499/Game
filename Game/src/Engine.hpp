@@ -7,10 +7,11 @@
 #include <vector>
 #include "Entity.hpp"
 
-
 #define WINDOW_NAME "SUPER GAME"
 
 const b2Vec2 GRAVITY(0.f, 9.8f);
+constexpr float SCALE = 30.f;
+const float DEG_IN_RAD = 57.29577f;
 
 enum ScreenMode
 {
@@ -33,16 +34,12 @@ public:
 
     void SetScreenMode(ScreenMode);
 
-    Entity& CreateObject(Entity);
+    Entity& CreateObject(sf::Texture&, const sf::IntRect&, b2Shape&, b2BodyDef&);
 
     void Stop();
 
-
 private:
     void Update();
-
-
-
 private:
 	sf::RenderWindow mWindow;
     unsigned int mScnWidht, mScnHeight;
@@ -51,6 +48,7 @@ private:
     sf::Event mEvent;
     std::unique_ptr<std::thread> mMainThread;
     std::vector<Entity> mObjectList;
+    std::unique_ptr<b2World> mWorld;
 };
 
 #endif // !ENGINE
