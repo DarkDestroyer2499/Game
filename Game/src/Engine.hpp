@@ -11,7 +11,7 @@
 
 const b2Vec2 GRAVITY(0.f, 9.8f);
 constexpr float SCALE = 30.f;
-const float DEG_IN_RAD = 57.29577f;
+
 
 enum ScreenMode
 {
@@ -28,18 +28,16 @@ public:
 	Engine(ScreenMode, unsigned int, unsigned int);
     Engine() = delete;
     ~Engine();
+
     void Run();
-
 	sf::RenderWindow& GetWindow();
-
     void SetScreenMode(ScreenMode);
-
     Entity& CreateObject(sf::Texture&, const sf::IntRect&, b2Shape&, b2BodyDef&);
-
     void Stop();
 
 private:
     void Update();
+
 private:
 	sf::RenderWindow mWindow;
     unsigned int mScnWidht, mScnHeight;

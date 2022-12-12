@@ -31,12 +31,7 @@ void Engine::Update()
 
 		for (auto& object : mObjectList)
 		{
-			b2Body* objectBody = object.GetBody();
-			sf::Sprite &objectSprite = object.GetSprite();
-			b2Vec2 pos = objectBody->GetPosition();
-			float angle = objectBody->GetAngle();
-			objectSprite.setPosition(pos.x, pos.y);
-			objectSprite.setRotation(angle * DEG_IN_RAD);
+			object.Update();
 			mWindow.draw(object.GetSprite());
 		}
 
@@ -52,7 +47,6 @@ Engine::~Engine()
 	Stop();
 	if(mMainThread->joinable())
 		mMainThread->join();
-	
 }
 
 sf::RenderWindow& Engine::GetWindow()
