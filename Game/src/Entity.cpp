@@ -1,35 +1,38 @@
 #include "Entity.hpp"
+#include "Components/IComponent.hpp"
 
-Entity::Entity(sf::Texture& t, const sf::IntRect& textureRect)
+Entity::Entity(sf::RenderTarget* window) : 
+	mWindow{ window }, mPosition{}
 {
-	mSprite.setTexture(t);
-	mSprite.setTextureRect(textureRect);
-	mSprite.setOrigin(float(textureRect.width / 2), float(textureRect.height / 2));
 }
 
-void Entity::SetBody(b2Body* newBody)
+void Entity::SetPosition(const Vector2& newPosition)
 {
-	mBody = newBody;
+	mPosition = newPosition;
+}
+
+Vector2 Entity::GetPosition() const
+{
+	return mPosition;
 }
 
 void Entity::Update()
 {
-	b2Vec2 pos = mBody->GetPosition();
-	float angle = mBody->GetAngle();
-	mSprite.setPosition(pos.x, pos.y);
-	mSprite.setRotation(angle * DEG_IN_RAD);
+	for (auto component : mComponentList)
+	{
+		component->Update();
+	}
 }
 
-b2Body* Entity::GetBody()
+sf::RenderTarget* Entity::GetWindow()
 {
-	return mBody;
+	return mWindow;
 }
 
-sf::Sprite& Entity::GetSprite()
+Entity::~Entity() 
 {
-	return mSprite;
-}
-
-Entity::~Entity()
-{
+	for (auto component : mComponentList)
+	{
+		delete component;
+	}
 }

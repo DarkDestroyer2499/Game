@@ -149,13 +149,19 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\Components\Physics.cpp" />
+    <ClCompile Include="src\Components\Graphics.cpp" />
     <ClCompile Include="src\Engine.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="src\Entity.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\Components\Physics.hpp" />
+    <ClInclude Include="src\Components\ComponentLinker.hpp" />
+    <ClInclude Include="src\Components\Graphics.hpp" />
     <ClInclude Include="src\Entity.hpp" />
     <ClInclude Include="src\Engine.hpp" />
+    <ClInclude Include="src\Components\IComponent.hpp" />
     <ClInclude Include="src\Log.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

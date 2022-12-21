@@ -7,7 +7,7 @@ int main()
 {
 	Engine engine(ScreenMode::Close, 0, 0);
 	engine.Run();
-
+	engine.GetWindow().setFramerateLimit(144);
 	sf::Texture t;
 
 	t.loadFromFile("resources/TestSprite.jpg");
@@ -22,7 +22,10 @@ int main()
 	bdef.type = b2_dynamicBody;
 
 
-	Entity &ent1 = engine.CreateObject(t, sf::IntRect(50, 50, 100, 100), shape, bdef);
+	Entity &ent1 = engine.CreateObject();
+
+	ent1.AddComponent<GraphicsComponent>(new GraphicsComponent(sprite));
+	ent1.AddComponent<PhysicsComponent>(new PhysicsComponent(engine.GetMainWorld(), shape, bdef));
 	
 
 	system("pause");

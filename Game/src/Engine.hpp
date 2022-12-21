@@ -32,7 +32,8 @@ public:
     void Run();
 	sf::RenderWindow& GetWindow();
     void SetScreenMode(ScreenMode);
-    Entity& CreateObject(sf::Texture&, const sf::IntRect&, b2Shape&, b2BodyDef&);
+    Entity& CreateObject();
+    b2World* GetMainWorld();
     void Stop();
 
 private:

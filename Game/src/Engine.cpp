@@ -1,5 +1,6 @@
 #include "Engine.hpp"
 #include "Log.h"
+#include "Components/ComponentLinker.hpp"
 
 Engine::Engine(ScreenMode wMode, unsigned int width = 0, unsigned int height = 0):
 	mWindowMode{ wMode }, mScnWidht{ sf::VideoMode::getDesktopMode().width / 2 }, mScnHeight{ sf::VideoMode::getDesktopMode().height / 2 }, mWorking{true}
@@ -32,7 +33,7 @@ void Engine::Update()
 		for (auto& object : mObjectList)
 		{
 			object.Update();
-			mWindow.draw(object.GetSprite());
+			//mWindow.draw(object.GetSprite());
 		}
 
 		mWorld->Step(1 / 500.f, 8, 3);
@@ -54,18 +55,19 @@ sf::RenderWindow& Engine::GetWindow()
 	return mWindow;
 }
 
+b2World* Engine::GetMainWorld()
+{
+	return mWorld.get();
+}
+
 void Engine::SetScreenMode(ScreenMode newMode)
 {
 	mWindow.create(sf::VideoMode(mScnWidht, mScnHeight), WINDOW_NAME, newMode);
 }
 
-Entity& Engine::CreateObject(sf::Texture& texture, const sf::IntRect& rect, b2Shape& shape, b2BodyDef& bdef)
+Entity& Engine::CreateObject()
 {
-	Entity tmpEnt = Entity(texture, rect);
-	b2Body* tmpBody = mWorld->CreateBody(&bdef);
-	tmpBody->CreateFixture(&shape, 2);
-	tmpEnt.SetBody(tmpBody);
-	mObjectList.push_back(tmpEnt);
+	mObjectList.push_back( Entity(static_cast<sf::RenderTarget*>(&mWindow)));
 	return mObjectList[mObjectList.size() - 1];
 }
 
