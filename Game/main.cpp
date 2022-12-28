@@ -1,13 +1,24 @@
 #include <SFML/Graphics.hpp>
 #include "src/Engine.hpp" 
 #include <Windows.h>
+#include "src/Editor.hpp"
 using namespace sf;
 
 int main()
 {
-	Engine engine(ScreenMode::Close, 0, 0);
+	sf::RenderTexture window;
+
+	
+	Engine engine(&window,ScreenMode::Close, 0, 0);
+	Editor editor(&window, engine);
 	engine.Run();
-	engine.GetWindow().setFramerateLimit(144);
+
+
+
+	
+	
+	
+
 	sf::Texture t;
 
 	t.loadFromFile("resources/TestSprite.jpg");
@@ -27,7 +38,7 @@ int main()
 	ent1.AddComponent<GraphicsComponent>(new GraphicsComponent(sprite));
 	ent1.AddComponent<PhysicsComponent>(new PhysicsComponent(engine.GetMainWorld(), shape, bdef));
 	
-
+	editor.Run(); 
 	system("pause");
 	return 0;
 }

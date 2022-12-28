@@ -13,6 +13,8 @@ const b2Vec2 GRAVITY(0.f, 9.8f);
 constexpr float SCALE = 30.f;
 
 
+
+
 enum ScreenMode
 {
     None = 0,      ///< No border / title bar (this flag and all others are mutually exclusive)
@@ -25,22 +27,24 @@ enum ScreenMode
 class Engine
 {
 public:
-	Engine(ScreenMode, unsigned int, unsigned int);
+	Engine(sf::RenderTarget*,ScreenMode, unsigned int, unsigned int);
     Engine() = delete;
     ~Engine();
 
     void Run();
-	sf::RenderWindow& GetWindow();
+	sf::RenderTarget* GetWindow();
     void SetScreenMode(ScreenMode);
     Entity& CreateObject();
     b2World* GetMainWorld();
     void Stop();
-
+   
+    void Update(sf::RenderTexture* window);
 private:
-    void Update();
-
+    void Update(sf::RenderWindow* window);
+   
+    friend class Editor;
 private:
-	sf::RenderWindow mWindow;
+	sf::RenderTarget* mWindow;
     unsigned int mScnWidht, mScnHeight;
     ScreenMode mWindowMode;
     bool mWorking;
