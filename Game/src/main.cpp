@@ -1,7 +1,7 @@
 #include <SFML/Graphics.hpp>
-#include "src/Engine.hpp" 
+#include "Engine.hpp" 
 #include <Windows.h>
-#include "src/Editor.hpp"
+#include "Editor.hpp"
 using namespace sf;
 
 int main()
