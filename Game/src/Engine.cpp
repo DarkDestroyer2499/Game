@@ -69,7 +69,7 @@ void Engine::Update(sf::RenderTexture* window)
 Engine::~Engine()
 {
 	Stop();
-	if (mMainThread->joinable())
+	if (mMainThread != nullptr && mMainThread->joinable())
 		mMainThread->join();
 }
 
