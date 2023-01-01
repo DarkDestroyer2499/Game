@@ -1,25 +1,11 @@
 #include "Editor.hpp"
-#include "../lib/imgui/imgui.h"
-#include "../lib/imgui/imgui-SFML.h"
-#include <SFML/System/Clock.hpp>
-#include <SFML/Window/Event.hpp>
-
-//Editor::Editor(sf::RenderTexture* newTexture, ExternalRenderCallback callback):
-//	mTexture(newTexture), mExCallback(callback)
-//{
-//	mWindow.create(sf::VideoMode(900, 800), "Engine", 1 << 2);
-//	ImGui::SFML::Init(mWindow);
-//	auto& io = ImGui::GetIO();
-//	io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
-//
-//	mTexture->create(0,0);
-//	
-//}
 
 Editor::Editor(sf::RenderTexture* newTexture, Engine& engine) :
 	mTexture{ newTexture }, mEngine{ engine }, mEvent{}
 {
+	mUI = std::make_unique<UI>(this);
 	mWindow.create(sf::VideoMode(900, 800), "Engine", 1 << 2);
+
 	ImGui::SFML::Init(mWindow);
 	auto& io = ImGui::GetIO();
 	io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
@@ -43,21 +29,7 @@ void Editor::Run()
 
 		ImGui::SFML::Update(mWindow, mClock.restart());
 
-		ImGui::DockSpaceOverViewport();
-		static ImVec2 viewportSize = ImGui::GetWindowSize();
-		mTexture->create(viewportSize.x, viewportSize.y);
-
-		ImGui::ShowDemoWindow();
-
-		ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0.f, 0.f));
-
-		if (ImGui::Begin("Viewport")) {
-			viewportSize = ImGui::GetWindowSize();
-			ImGui::Image(*mTexture);
-		}
-
-		ImGui::End();
-		ImGui::PopStyleVar();
+		mUI->Update();
 
 		mWindow.clear();
 
@@ -67,4 +39,3 @@ void Editor::Run()
 		mWindow.display();
 	}
 }
-

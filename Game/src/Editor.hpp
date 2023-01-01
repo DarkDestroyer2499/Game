@@ -3,6 +3,7 @@
 
 #include <SFML/Graphics.hpp>
 #include "Engine.hpp"
+#include "UI.hpp"
 
 constexpr const char* PROGRAM_NAME = "Engine";
 
@@ -21,6 +22,10 @@ private:
 	sf::Event mEvent;
 	sf::RenderTexture* mTexture;
 	Engine& mEngine;
+	friend class UI;
+	std::unique_ptr<UI> mUI;
+
+	
 };
 
 #endif // !EDITOR_H
