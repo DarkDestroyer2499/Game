@@ -6,6 +6,7 @@ Engine::Engine(sf::RenderTarget* window, ScreenMode wMode, unsigned int width = 
 	mWindow{ window }, mWindowMode{ wMode }, mScnWidht{ sf::VideoMode::getDesktopMode().width / 2 }, mScnHeight{ sf::VideoMode::getDesktopMode().height / 2 }, mWorking{ true }
 {
 	mWorld = std::make_unique<b2World>(GRAVITY);
+	mObjectList.reserve(RESERVE_ENTITIES);
 }
 
 void Engine::Run()
@@ -65,7 +66,6 @@ void Engine::Update(sf::RenderTexture* window)
 	window->display();
 }
 
-
 Engine::~Engine()
 {
 	Stop();
@@ -96,10 +96,10 @@ void Engine::SetScreenMode(ScreenMode newMode)
 	//mWindow.create(sf::VideoMode(mScnWidht, mScnHeight), WINDOW_NAME, newMode);
 }
 
-Entity& Engine::CreateObject()
+Entity* Engine::CreateObject()
 {
-	mObjectList.push_back(Entity(mWindow));
-	return mObjectList[mObjectList.size() - 1];
+	mObjectList.emplace_back( mWindow );
+	return &mObjectList[mObjectList.size() - 1];
 }
 
 void Engine::Stop()

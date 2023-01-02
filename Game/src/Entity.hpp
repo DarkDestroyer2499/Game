@@ -1,7 +1,6 @@
 #ifndef ENTITY_H
 #define ENTITY_H
 
-
 #include <SFML/Graphics.hpp>
 #include <box2d.h>
 #include "Components/ComponentLinker.hpp"
@@ -40,8 +39,10 @@ struct Vector2
 class Entity
 {
 public:
-	explicit Entity(sf::RenderTarget* window);
+	Entity(sf::RenderTarget* window);
+	Entity(const Entity& other) = default;
 	virtual ~Entity();
+
 	virtual void Update();
 
 	void SetPosition(const Vector2&);

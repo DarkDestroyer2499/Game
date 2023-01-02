@@ -8,16 +8,10 @@ int main()
 {
 	sf::RenderTexture window;
 
-	
-	Engine engine(&window,ScreenMode::Close, 0, 0);
+
+	Engine engine(&window, ScreenMode::Close, 0, 0);
 	Editor editor(&window, engine);
 	engine.Run();
-
-
-
-	
-	
-	
 
 	sf::Texture t;
 
@@ -32,13 +26,12 @@ int main()
 	b2BodyDef bdef;
 	bdef.type = b2_dynamicBody;
 
-
-	Entity &ent1 = engine.CreateObject();
-
-	ent1.AddComponent<GraphicsComponent>(new GraphicsComponent(sprite));
-	ent1.AddComponent<PhysicsComponent>(new PhysicsComponent(engine.GetMainWorld(), shape, bdef));
+	Entity* ent1 = engine.CreateObject();
 	
-	editor.Run(); 
+	ent1->AddComponent<GraphicsComponent>(new GraphicsComponent(sprite));
+	ent1->AddComponent<PhysicsComponent>(new PhysicsComponent(engine.GetMainWorld(), shape, bdef));
+	
+	editor.Run();
 	system("pause");
 	return 0;
 }
