@@ -1,5 +1,5 @@
 #include "Engine.hpp"
-#include "Log.h"
+#include "Log.hpp"
 #include "Components/ComponentLinker.hpp"
 
 Engine::Engine(sf::RenderTarget* window, ScreenMode wMode, unsigned int width = 0, unsigned int height = 0) :
@@ -11,16 +11,16 @@ Engine::Engine(sf::RenderTarget* window, ScreenMode wMode, unsigned int width = 
 
 void Engine::Run()
 {
-	Log(SUCCESS) << "Engine has been started";
+	Log(SUCCESS, "Engine has been started");
 
 	auto tmpWindow = dynamic_cast<sf::RenderWindow*>(mWindow);
 	if (!tmpWindow)
 	{
-		Log(WARNING) << "Texture will be rendered!";
+		Log(WARNING, "Texture will be rendered!");
 	}
 	else
 	{
-		Log(WARNING) << "Window will be rendered!";
+		Log(WARNING, "Window will be rendered!");
 		mMainThread = std::make_unique<std::thread>(std::thread([this]() {
 			Update(static_cast<sf::RenderWindow*>(mWindow));
 		}));
