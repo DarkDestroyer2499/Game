@@ -1,4 +1,5 @@
 #include "Editor.hpp"
+#include "Log.hpp"
 
 Editor::Editor(sf::RenderTexture* newTexture, Engine& engine) :
 	mTexture{ newTexture }, mEngine{ engine }, mEvent{}
@@ -40,13 +41,14 @@ void Editor::EventHandler()
 	case sf::Event::MouseButtonPressed:
 	{
 		mMousePosition = sf::Mouse::getPosition(mWindow);
-		std::cout << "Position: (" << mMousePosition.x << " : " << mMousePosition.y << ")\n";
+		Log(INFO, "Position: (" << mMousePosition.x << " : " << mMousePosition.y << ")");
+		
 		for (auto& entity : mEngine.mObjectList)
 		{
 			auto tmp = entity.GetComponent<GraphicsComponent>();
 			if (tmp)
 			{
-				auto translated_pos = mWindow.mapPixelToCoords(mMousePosition); // Mouse position translated into world coordinates
+				auto translated_pos = mWindow.mapPixelToCoords(mMousePosition);
 				if (tmp->GetSprite().getGlobalBounds().contains(translated_pos))
 				{
 					if (!IsAlreadySelected(entity))

@@ -4,7 +4,6 @@
 #include <SFML/Graphics.hpp>
 #include "Engine.hpp"
 #include "UI.hpp"
-
 constexpr const char* PROGRAM_NAME = "Engine";
 
 class Editor
