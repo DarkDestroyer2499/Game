@@ -1,8 +1,9 @@
 #include "Entity.hpp"
 #include "Components/IComponent.hpp"
 
-Entity::Entity(sf::RenderTarget* window) : 
-	mWindow{ window }, mPosition{}
+#include <iostream>
+Entity::Entity(sf::RenderTarget* window, const char* newName) :
+	mWindow{ window }, mPosition{}, mName{newName}
 {
 }
 
@@ -27,6 +28,16 @@ void Entity::Update()
 sf::RenderTarget* Entity::GetWindow()
 {
 	return mWindow;
+}
+
+void Entity::SetName(const char* newName)
+{
+	mName = newName;
+}
+
+const char* Entity::GetName() const
+{
+	return mName.c_str();
 }
 
 Entity::~Entity() 

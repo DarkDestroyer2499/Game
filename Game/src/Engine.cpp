@@ -96,9 +96,10 @@ void Engine::SetScreenMode(ScreenMode newMode)
 	//mWindow.create(sf::VideoMode(mScnWidht, mScnHeight), WINDOW_NAME, newMode);
 }
 
-Entity* Engine::CreateObject()
+Entity* Engine::CreateObject(std::string name)
 {
-	mObjectList.emplace_back( mWindow );
+	Log(INFO, "Create entity with name: " << name);
+	mObjectList.emplace_back( mWindow, name.c_str() );
 	return &mObjectList[mObjectList.size() - 1];
 }
 

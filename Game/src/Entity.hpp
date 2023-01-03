@@ -4,7 +4,6 @@
 #include <SFML/Graphics.hpp>
 #include <box2d.h>
 #include "Components/ComponentLinker.hpp"
-
 const float DEG_IN_RAD = 57.29577f;
 
 #define PVARIABLE_GET_SET(type, name)\
@@ -34,13 +33,13 @@ struct Vector2
 	{
 	}
 };
-
-
+#include <iostream>
+class UI;
 class Entity
 {
 public:
-	Entity(sf::RenderTarget* window);
-	Entity(const Entity& other) = default;
+	Entity(sf::RenderTarget* window, const char* newName = "Unknown");
+	Entity(const Entity& other) { std::cout << "COPY\n\n"; };
 	virtual ~Entity();
 
 	virtual void Update();
@@ -58,10 +57,17 @@ public:
 		mComponentList.push_back(newComponent);
 	}
 
+	void SetName(const char* );
+
+	const char* GetName() const;
+
+	friend class UI;
+
 protected:
 	sf::RenderTarget* mWindow;
 	std::vector<IComponent*> mComponentList;
 	Vector2 mPosition;
+	std::string mName;
 };
 
 #endif // !ENTITY_H

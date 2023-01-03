@@ -11,6 +11,7 @@ public:
 	GraphicsComponent(sf::Texture&, const sf::IntRect&);
 	GraphicsComponent(sf::Sprite);
 	void Update() override;
+	const char* GetName() override;
 	~GraphicsComponent() override;
 
 private:

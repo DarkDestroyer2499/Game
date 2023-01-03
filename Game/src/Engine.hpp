@@ -34,7 +34,7 @@ public:
     void Run();
 	sf::RenderTarget* GetWindow();
     void SetScreenMode(ScreenMode);
-    Entity* CreateObject();
+    Entity* CreateObject(std::string name = std::string("Uknown"));
     b2World* GetMainWorld();
     void Stop();
    
@@ -43,6 +43,7 @@ private:
     void Update(sf::RenderWindow* window);
    
     friend class Editor;
+    friend class UI;
 private:
 	sf::RenderTarget* mWindow;
     unsigned int mScnWidht, mScnHeight;

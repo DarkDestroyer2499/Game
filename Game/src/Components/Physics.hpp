@@ -12,6 +12,7 @@ public:
 	PhysicsComponent() = delete;
 	PhysicsComponent(b2World*, b2Shape& shape, b2BodyDef& bdef);
 	void Update() override;
+	const char* GetName() override;
 	~PhysicsComponent() override;
 private:
 	b2Body* mBody;

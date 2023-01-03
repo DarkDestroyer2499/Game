@@ -17,7 +17,8 @@ public:
 private:
 	void DrawMenuBar();
 	void DrawViewport();
-
+	void DrawHierarchy();
+	void HierarchyTableViewDraw(Entity&);
 private:
 	Editor* mEditor;
 };
