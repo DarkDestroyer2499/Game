@@ -16,15 +16,56 @@ Editor::~Editor()
 	ImGui::SFML::Shutdown();
 }
 
+bool Editor::IsAlreadySelected(Entity& entity)
+{
+	for (auto& selectedEntity : mSelectedObjects)
+	{
+		if (&entity == selectedEntity)
+		{
+			return true;
+		}
+	}
+	return false;
+}
+
+void Editor::EventHandler()
+{
+	switch (mEvent.type)
+	{
+	case sf::Event::Closed:
+	{
+		mWindow.close();
+		break;
+	}
+	case sf::Event::MouseButtonPressed:
+	{
+		mMousePosition = sf::Mouse::getPosition(mWindow);
+		std::cout << "Position: (" << mMousePosition.x << " : " << mMousePosition.y << ")\n";
+		for (auto& entity : mEngine.mObjectList)
+		{
+			auto tmp = entity.GetComponent<GraphicsComponent>();
+			if (tmp)
+			{
+				auto translated_pos = mWindow.mapPixelToCoords(mMousePosition); // Mouse position translated into world coordinates
+				if (tmp->GetSprite().getGlobalBounds().contains(translated_pos))
+				{
+					if (!IsAlreadySelected(entity))
+						mSelectedObjects.push_back(&entity);
+				}
+			}
+		}
+		break;
+	}
+	}
+}
+
 void Editor::Run()
 {
 	while (mWindow.isOpen()) {
 		while (mWindow.pollEvent(mEvent)) {
 			ImGui::SFML::ProcessEvent(mWindow, mEvent);
 
-			if (mEvent.type == sf::Event::Closed) {
-				mWindow.close();
-			}
+			EventHandler();
 		}
 
 		ImGui::SFML::Update(mWindow, mClock.restart());

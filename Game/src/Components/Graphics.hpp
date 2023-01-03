@@ -3,7 +3,7 @@
 
 #include "IComponent.hpp"
 #include <SFML/Graphics.hpp>
-
+#include "../Entity.hpp"
 class GraphicsComponent : public IComponent
 {
 public:
@@ -11,6 +11,7 @@ public:
 	GraphicsComponent(sf::Texture&, const sf::IntRect&);
 	GraphicsComponent(sf::Sprite);
 	void Update() override;
+	sf::Sprite& GetSprite() { return mSprite; }
 	const char* GetName() override;
 	~GraphicsComponent() override;
 

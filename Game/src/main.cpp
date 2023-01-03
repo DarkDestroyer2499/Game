@@ -3,6 +3,7 @@
 #include <Windows.h>
 #include "Editor.hpp"
 #include <thread>
+
 using namespace sf;
 
 int main()
@@ -34,6 +35,7 @@ int main()
 	
 	Entity* ent2 = engine.CreateObject("Ama dog!");
 	ent2->AddComponent<GraphicsComponent>(new GraphicsComponent(sprite));
+
 	editor.Run();
 	
 	system("pause");

@@ -16,6 +16,11 @@ public:
 	~Editor();
 
 	void Run();
+
+private:
+	bool IsAlreadySelected(Entity& entity);
+	void EventHandler();
+
 private:
 	sf::RenderWindow mWindow;
 	sf::Clock mClock;
@@ -24,8 +29,8 @@ private:
 	Engine& mEngine;
 	friend class UI;
 	std::unique_ptr<UI> mUI;
-
-	
+	sf::Vector2i mMousePosition;
+	std::vector<Entity*> mSelectedObjects;
 };
 
 #endif // !EDITOR_H

@@ -4,6 +4,7 @@
 #include <SFML/Graphics.hpp>
 #include <box2d.h>
 #include "Components/ComponentLinker.hpp"
+
 const float DEG_IN_RAD = 57.29577f;
 
 #define PVARIABLE_GET_SET(type, name)\
@@ -28,7 +29,7 @@ struct Vector2
 	{
 	}
 
-	Vector2(b2Vec2 pos):
+	Vector2(b2Vec2 pos) :
 		x(pos.x), y(pos.y)
 	{
 	}
@@ -51,13 +52,36 @@ public:
 	sf::RenderTarget* GetWindow();
 
 	template<typename Component>
-	void AddComponent(Component *newComponent)
+	bool HasComponent()
+	{
+		for (auto component : mComponentList)
+		{
+			if (dynamic_cast<Component*>(component))
+				return true;
+		}
+		return false;
+	}
+
+	template<typename Component>
+	Component* GetComponent()
+	{
+		for (auto component : mComponentList)
+		{
+			Component* tmp = dynamic_cast<Component*>(component);
+			if (tmp)
+				return tmp;
+		}
+		return nullptr;
+	}
+
+	template<typename Component>
+	void AddComponent(Component* newComponent)
 	{
 		newComponent->SetOwner(this);
 		mComponentList.push_back(newComponent);
 	}
 
-	void SetName(const char* );
+	void SetName(const char*);
 
 	const char* GetName() const;
 

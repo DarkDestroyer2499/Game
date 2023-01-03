@@ -53,7 +53,7 @@ void Engine::Update(sf::RenderWindow* window)
 }
 
 void Engine::Update(sf::RenderTexture* window)
-{
+{	
 	window->clear();
 
 	for (auto& object : mObjectList)
