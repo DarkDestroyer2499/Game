@@ -16,7 +16,7 @@ public:
 	virtual ~IComponent() {};
 protected:
 	Entity* mOwner;
-	std::string mName;
+	std::string mName;	
 	friend class Entity;
 };
 

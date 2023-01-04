@@ -7,14 +7,19 @@ Entity::Entity(sf::RenderTarget* window, const char* newName) :
 {
 }
 
-void Entity::SetPosition(const Vector2& newPosition)
+void Entity::SetPosition(const Vec2& newPosition)
 {
 	mPosition = newPosition;
 }
 
-Vector2 Entity::GetPosition() const
+Vec2 Entity::GetPosition() const
 {
 	return mPosition;
+}
+
+Vec2 Entity::GetSize() const
+{
+	return Vec2();
 }
 
 void Entity::Update()
@@ -28,6 +33,12 @@ void Entity::Update()
 sf::RenderTarget* Entity::GetWindow()
 {
 	return mWindow;
+}
+
+bool Entity::IsContainsInBounds(Vec2 pos)
+{
+	//if(mPosition.x > pos.x && pos.x < mPosition.x + )
+	return false;
 }
 
 void Entity::SetName(const char* newName)

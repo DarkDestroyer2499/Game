@@ -1,5 +1,6 @@
 #include "UI.hpp"
 #include <iostream>
+#include "Log.hpp"
 UI::UI(Editor* editor)
 	: mEditor(editor)
 {
@@ -16,6 +17,11 @@ void UI::Update()
 	DrawViewport();
 	ImGui::ShowDemoWindow();
 	DrawHierarchy();
+}
+
+Vec2 UI::GetViewportPosition()
+{
+	return mViewportPos;
 }
 
 void UI::DrawMenuBar()
@@ -55,11 +61,12 @@ void UI::DrawViewport()
 	static ImVec2 viewportSize = ImGui::GetWindowSize();
 	mEditor->mTexture->create(static_cast<unsigned int>(viewportSize.x),
 		static_cast<unsigned int>(viewportSize.y));
-
+	static ImVec2 viewportPos;
 	ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0.f, 0.f));
 
 	if (ImGui::Begin("Viewport")) {
 		viewportSize = ImGui::GetWindowSize();
+		mViewportPos = ImGui::GetWindowPos();
 		ImGui::Image(*mEditor->mTexture);
 	}
 

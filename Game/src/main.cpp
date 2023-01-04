@@ -22,8 +22,7 @@ int main()
 	sf::Sprite sprite(t);
 	sprite.setTextureRect(sf::IntRect(50, 50, 100, 100));
 
-	b2PolygonShape shape;
-	shape.SetAsBox(30 / SCALE, 30 / SCALE);
+
 
 	b2BodyDef bdef;
 	bdef.type = b2_dynamicBody;
@@ -31,7 +30,7 @@ int main()
 	Entity* ent1 = engine.CreateObject("Ama bird!");
 
 	ent1->AddComponent<GraphicsComponent>(new GraphicsComponent(sprite));
-	ent1->AddComponent<PhysicsComponent>(new PhysicsComponent(engine.GetMainWorld(), shape, bdef));
+	ent1->AddComponent<PhysicsComponent>(new PhysicsComponent(engine.GetMainWorld(), PhysicsObjectType::POLYGON, bdef));
 	
 	Entity* ent2 = engine.CreateObject("Ama dog!");
 	ent2->AddComponent<GraphicsComponent>(new GraphicsComponent(sprite));

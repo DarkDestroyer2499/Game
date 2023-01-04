@@ -14,6 +14,7 @@ public:
 	Editor(Editor&) = delete;
 	~Editor();
 
+	Vec2 WindowToViewportCoords(const Vec2 &windowCoords);
 	void Run();
 
 private:

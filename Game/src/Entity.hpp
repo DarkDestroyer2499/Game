@@ -4,6 +4,8 @@
 #include <SFML/Graphics.hpp>
 #include <box2d.h>
 #include "Components/ComponentLinker.hpp"
+#include "Util.hpp"
+#include "Log.hpp"
 
 const float DEG_IN_RAD = 57.29577f;
 
@@ -18,38 +20,27 @@ const float DEG_IN_RAD = 57.29577f;
 	this->m ## name = new ## name;\
 	}
 
-struct Vector2
-{
-	float x, y;
-	Vector2(float x, float y) :x(x), y(y)
-	{
-	}
-	Vector2() :
-		x(0.f), y(0.f)
-	{
-	}
 
-	Vector2(b2Vec2 pos) :
-		x(pos.x), y(pos.y)
-	{
-	}
-};
-#include <iostream>
+
 class UI;
 class Entity
 {
 public:
 	Entity(sf::RenderTarget* window, const char* newName = "Unknown");
-	Entity(const Entity& other) { std::cout << "COPY\n\n"; };
+	Entity(const Entity& other) { Log(WARNING, "Entity has been copied!"); };
 	virtual ~Entity();
 
 	virtual void Update();
 
-	void SetPosition(const Vector2&);
+	void SetPosition(const Vec2&);
 
-	Vector2 GetPosition() const;
+	Vec2 GetPosition() const;
+
+	Vec2 GetSize() const;
 
 	sf::RenderTarget* GetWindow();
+
+	bool IsContainsInBounds(Vec2);
 
 	template<typename Component>
 	bool HasComponent()
@@ -90,7 +81,7 @@ public:
 protected:
 	sf::RenderTarget* mWindow;
 	std::vector<IComponent*> mComponentList;
-	Vector2 mPosition;
+	Vec2 mPosition;
 	std::string mName;
 };
 

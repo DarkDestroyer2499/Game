@@ -4,7 +4,7 @@
 #include "../lib/imgui/imgui.h"
 #include "../lib/imgui/imgui-SFML.h"
 #include "Editor.hpp"
-
+#include "Util.hpp"
 class UI
 {
 public:
@@ -13,7 +13,8 @@ public:
 	~UI();
 
 	void Update();
-
+	Vec2 GetViewportPosition();
+	
 private:
 	void DrawMenuBar();
 	void DrawViewport();
@@ -21,6 +22,8 @@ private:
 	void HierarchyTableViewDraw(Entity&);
 private:
 	Editor* mEditor;
+	Vec2 mViewportPos;
+	friend class Editor;
 };
 
 #endif // !UI_HPP

@@ -10,7 +10,7 @@
 #define WINDOW_NAME "SUPER GAME"
 
 const b2Vec2 GRAVITY(0.f, 9.8f);
-constexpr float SCALE = 30.f;
+
 
 constexpr unsigned int RESERVE_ENTITIES = 50;
 

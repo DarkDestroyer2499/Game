@@ -41,24 +41,33 @@ void Editor::EventHandler()
 	case sf::Event::MouseButtonPressed:
 	{
 		mMousePosition = sf::Mouse::getPosition(mWindow);
-		Log(INFO, "Position: (" << mMousePosition.x << " : " << mMousePosition.y << ")");
+		Log(INFO, "Position: (" << mMousePosition.x << " : " << mMousePosition.y << ")\t" << mUI->GetViewportPosition() << "\t" << WindowToViewportCoords(Vec2(mMousePosition.x, mMousePosition.y)));
 		
 		for (auto& entity : mEngine.mObjectList)
 		{
 			auto tmp = entity.GetComponent<GraphicsComponent>();
 			if (tmp)
 			{
-				auto translated_pos = mWindow.mapPixelToCoords(mMousePosition);
+				auto tmpCoords = WindowToViewportCoords(Vec2(mMousePosition.x, mMousePosition.y));
+				auto translated_pos = mWindow.mapPixelToCoords(sf::Vector2i(tmpCoords.x, tmpCoords.y));
 				if (tmp->GetSprite().getGlobalBounds().contains(translated_pos))
 				{
 					if (!IsAlreadySelected(entity))
 						mSelectedObjects.push_back(&entity);
+					else
+						Log(WARNING, "Already selected!");
 				}
 			}
 		}
 		break;
 	}
 	}
+}
+
+Vec2 Editor::WindowToViewportCoords(const Vec2 &windowCoords)
+{
+	Vec2 viewPos = mUI->GetViewportPosition();
+	return Vec2(windowCoords.x - viewPos.x, windowCoords.y - viewPos.y);
 }
 
 void Editor::Run()

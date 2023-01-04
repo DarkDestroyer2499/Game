@@ -45,11 +45,11 @@ static std::string GetLocalTime()
 	return localTime;
 }
 
-static std::mutex LOG_MUTEX;
 
-#define Log(severity, msg) LOG_MUTEX.lock();std::cout<< "\n[" << severity << "][" \
+
+#define Log(severity, msg) std::cout<< "\n[" << severity << "][" \
                                << GetLocalTime()<< "][" << __PRETTY_FILE_NAME__ << "]["\
-                               << __func__ << "][" << __LINE__ << "]: " << msg; LOG_MUTEX.unlock();
+                               << __func__ << "][" << __LINE__ << "]: " << msg; 
 #else
 #define Log(severity, msg)
 #endif // DEBUG
