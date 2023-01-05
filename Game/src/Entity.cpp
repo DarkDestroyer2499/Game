@@ -35,6 +35,7 @@ Vec2 Entity::GetSize() const
 		Vec2 size(tmpGraphics->GetSprite().getTextureRect().width, tmpGraphics->GetSprite().getTextureRect().height);
 		return size;
 	}
+
 	return Vec2();
 }
 

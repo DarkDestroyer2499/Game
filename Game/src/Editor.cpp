@@ -94,6 +94,7 @@ void Editor::Run()
 		mWindow.clear();
 		mTexture->clear(EDITOR_BG_COLOR);
 
+		//Log(INFO, mEngine.mObjectList[0].GetPosition());
 
 		mUI->Update();
 

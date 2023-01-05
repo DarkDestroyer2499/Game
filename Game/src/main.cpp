@@ -31,11 +31,16 @@ int main()
 	Entity* ent1 = engine.CreateObject("Ama bird!");
 
 	ent1->AddComponent<GraphicsComponent>(new GraphicsComponent(sprite));
-	ent1->AddComponent<PhysicsComponent>(new PhysicsComponent(engine.GetMainWorld(), PhysicsObjectType::POLYGON, bdef, Vec2(50,50), Vec2(100, 0)));
-	ent1->SetPosition(Vec2(100, 0));
-	Entity* ent2 = engine.CreateObject("Ama dog!");
-	ent2->AddComponent<GraphicsComponent>(new GraphicsComponent(sprite));
+	ent1->AddComponent<PhysicsComponent>(new PhysicsComponent(engine.GetMainWorld(), PhysicsObjectType::POLYGON, bdef, Vec2(50,50), Vec2(100, 0)));	
 	
+	Entity* ent3 = engine.CreateObject("Ama floor!");
+	sprite.setTextureRect(sf::IntRect(50, 50, 200, 30));
+	ent3->AddComponent<GraphicsComponent>(new GraphicsComponent(sprite));
+	b2BodyDef bdef2;
+	ent3->AddComponent<PhysicsComponent>(new PhysicsComponent(engine.GetMainWorld(), PhysicsObjectType::POLYGON, bdef2, Vec2(200, 30), Vec2(100, 400)));
+	ent3->SetPosition(Vec2(100, 400));
+	Log(WARNING, "ent3 pos: " << ent3->GetPosition());
+
 	editor.Run();
 	
 	system("pause");
