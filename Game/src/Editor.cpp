@@ -94,11 +94,11 @@ void Editor::Run()
 		mWindow.clear();
 		mTexture->clear(EDITOR_BG_COLOR);
 
-		//Log(INFO, mEngine.mObjectList[0].GetPosition());
-
-		mUI->Update();
+		
 
 		mEngine.Update(mTexture);
+
+		mUI->Update();
 
 		ImGui::SFML::Render(mWindow);
 		mTexture->display();
