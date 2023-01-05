@@ -49,8 +49,8 @@ void Editor::EventHandler()
 			auto tmp = entity.GetComponent<GraphicsComponent>();
 			if (tmp)
 			{
-				auto tmpCoords = WindowToViewportCoords(Vec2(mMousePosition.x, mMousePosition.y));
-				auto translated_pos = mWindow.mapPixelToCoords(sf::Vector2i(tmpCoords.x, tmpCoords.y));
+				auto tmpCoords = WindowToViewportCoords(Vec2((float)mMousePosition.x, (float)mMousePosition.y));
+				auto translated_pos = mWindow.mapPixelToCoords(sf::Vector2i((int)tmpCoords.x, (int)tmpCoords.y));
 				if (tmp->GetSprite().getGlobalBounds().contains(translated_pos))
 				{
 					isEmptySpaceClicked = false;

@@ -4,8 +4,6 @@
 #include <SFML/Graphics.hpp>
 #include "Entity.hpp"
 
-struct Corner;
-
 constexpr float LENGHT_CORNER_MULT = 3.f;
 constexpr float DEFAULT_LINE_WIDTH = 3.f;
 

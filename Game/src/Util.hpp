@@ -27,7 +27,7 @@ struct Vec2
 	}
 
 	Vec2(sf::Vector2u pos) :
-		x(pos.x), y(pos.y)
+		x((float)pos.x), y((float)pos.y)
 	{
 	}
 
@@ -38,7 +38,7 @@ struct Vec2
 
 	sf::Vector2u ToSFMLVec2u()
 	{
-		return sf::Vector2u(x, y);
+		return sf::Vector2u((unsigned int)x, (unsigned int)y);
 	}
 
 	friend std::ostream& operator<<(std::ostream& os, const Vec2& vec)

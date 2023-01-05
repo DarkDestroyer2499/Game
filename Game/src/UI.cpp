@@ -106,7 +106,7 @@ void UI::DrawSelected()
 	if (mEditor->mSelectedObjects.empty())
 		return;
 
-	int selectedObjectCount = mEditor->mSelectedObjects.size();
+	size_t selectedObjectCount = mEditor->mSelectedObjects.size();
 	if (selectedObjectCount > mVSelectorList.size())
 	{
 		mVSelectorList.resize(selectedObjectCount);
