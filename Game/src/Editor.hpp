@@ -4,7 +4,9 @@
 #include <SFML/Graphics.hpp>
 #include "Engine.hpp"
 #include "UI.hpp"
+
 constexpr const char* PROGRAM_NAME = "Engine";
+static const sf::Color EDITOR_BG_COLOR(62, 66, 63);
 
 class Editor
 {

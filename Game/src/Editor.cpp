@@ -41,8 +41,9 @@ void Editor::EventHandler()
 	case sf::Event::MouseButtonPressed:
 	{
 		mMousePosition = sf::Mouse::getPosition(mWindow);
-		Log(INFO, "Position: (" << mMousePosition.x << " : " << mMousePosition.y << ")\t" << mUI->GetViewportPosition() << "\t" << WindowToViewportCoords(Vec2(mMousePosition.x, mMousePosition.y)));
+		Log(INFO, "Position: (" << mMousePosition.x << " : " << mMousePosition.y << ")\t" << mUI->GetViewportPosition() << "\t" << WindowToViewportCoords(Vec2(mMousePosition.x, mMousePosition.y)) << "\t" << mSelectedObjects.size());
 		
+		bool isEmptySpaceClicked = true;
 		for (auto& entity : mEngine.mObjectList)
 		{
 			auto tmp = entity.GetComponent<GraphicsComponent>();
@@ -52,12 +53,18 @@ void Editor::EventHandler()
 				auto translated_pos = mWindow.mapPixelToCoords(sf::Vector2i(tmpCoords.x, tmpCoords.y));
 				if (tmp->GetSprite().getGlobalBounds().contains(translated_pos))
 				{
+					isEmptySpaceClicked = false;
 					if (!IsAlreadySelected(entity))
 						mSelectedObjects.push_back(&entity);
 					else
 						Log(WARNING, "Already selected!");
 				}
 			}
+		}
+
+		if (isEmptySpaceClicked)
+		{
+			mSelectedObjects.clear();
 		}
 		break;
 	}
@@ -79,15 +86,21 @@ void Editor::Run()
 			EventHandler();
 		}
 
-		ImGui::SFML::Update(mWindow, mClock.restart());
+		
 
-		mUI->Update();
+		ImGui::SFML::Update(mWindow, mClock.restart());
+		
 
 		mWindow.clear();
+		mTexture->clear(EDITOR_BG_COLOR);
+
+
+		mUI->Update();
 
 		mEngine.Update(mTexture);
 
 		ImGui::SFML::Render(mWindow);
+		mTexture->display();
 		mWindow.display();
 	}
 }

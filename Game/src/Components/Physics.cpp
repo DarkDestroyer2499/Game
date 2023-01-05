@@ -4,7 +4,7 @@
 
 //TODO: Add more object type to constructor switch
 
-PhysicsComponent::PhysicsComponent(b2World* world, const PhysicsObjectType& type, b2BodyDef& bdef, Vec2 size, float density)
+PhysicsComponent::PhysicsComponent(b2World* world, const PhysicsObjectType& type, b2BodyDef& bdef, Vec2 size, Vec2 pos, float density)
 	: mSize{size}
 {
 	this->mBody = world->CreateBody(&bdef);
@@ -16,10 +16,10 @@ PhysicsComponent::PhysicsComponent(b2World* world, const PhysicsObjectType& type
 		b2PolygonShape shape;
 		shape.SetAsBox(size.x / SCALE, size.y / SCALE);
 		this->mBody->CreateFixture(&shape, density);
+		this->mBody->SetTransform(b2Vec2(pos.x, pos.y), this->mBody->GetAngle());
 		break;
 	}
 	}
-	
 	mName = COMPONENT_NAME;
 }
 

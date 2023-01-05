@@ -4,7 +4,7 @@
 UI::UI(Editor* editor)
 	: mEditor(editor)
 {
-
+	mVSelectorList.reserve(START_SELECTOR_BUFFER_SIZE);
 }
 
 UI::~UI()
@@ -12,9 +12,10 @@ UI::~UI()
 }
 
 void UI::Update()
-{
+{	
 	DrawMenuBar();
-	DrawViewport();
+	DrawViewport();	
+	DrawSelected();
 	ImGui::ShowDemoWindow();
 	DrawHierarchy();
 }
@@ -57,20 +58,22 @@ void UI::DrawMenuBar()
 
 void UI::DrawViewport()
 {
+	
 	ImGui::DockSpaceOverViewport();
 	static ImVec2 viewportSize = ImGui::GetWindowSize();
 	mEditor->mTexture->create(static_cast<unsigned int>(viewportSize.x),
 		static_cast<unsigned int>(viewportSize.y));
-	static ImVec2 viewportPos;
 	ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0.f, 0.f));
 
 	if (ImGui::Begin("Viewport")) {
 		viewportSize = ImGui::GetWindowSize();
 		mViewportPos = ImGui::GetWindowPos();
+		ImGui::DrawLine(sf::Vector2f(200, 200), sf::Vector2f(500, 100), sf::Color::Blue);
 		ImGui::Image(*mEditor->mTexture);
 	}
-
+	
 	ImGui::End();
+	
 	ImGui::PopStyleVar();
 }
 
@@ -88,16 +91,31 @@ void UI::HierarchyTableViewDraw(Entity& entity)
 	ImGui::TableNextColumn();
 	bool open = ImGui::TreeNodeEx(entity.mName.c_str(), ImGuiTreeNodeFlags_SpanFullWidth);
 
-	
-
 	if (open)
 	{
 		for (auto Component : entity.mComponentList)
 		{			
-
 			ImGui::TreeNodeEx(Component->GetName(), ImGuiTreeNodeFlags_Leaf | ImGuiTreeNodeFlags_Bullet | ImGuiTreeNodeFlags_NoTreePushOnOpen | ImGuiTreeNodeFlags_SpanFullWidth);
 		}
 		ImGui::TreePop();
+	}
+}
+
+void UI::DrawSelected()
+{
+	if (mEditor->mSelectedObjects.empty())
+		return;
+
+	int selectedObjectCount = mEditor->mSelectedObjects.size();
+	if (selectedObjectCount > mVSelectorList.size())
+	{
+		mVSelectorList.resize(selectedObjectCount);
+	}
+
+	for (int i = 0; i < selectedObjectCount; ++i)
+	{
+		mVSelectorList[i].Update(mEditor->mSelectedObjects[i]);
+		mVSelectorList[i].Draw(mEditor->mTexture);
 	}
 }
 

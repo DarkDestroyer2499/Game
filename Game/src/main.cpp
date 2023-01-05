@@ -2,6 +2,7 @@
 #include "Engine.hpp" 
 #include <Windows.h>
 #include "Editor.hpp"
+#include "Entity.hpp"
 #include <thread>
 
 using namespace sf;
@@ -20,7 +21,7 @@ int main()
 	t.loadFromFile("../resources/TestSprite.jpg");
 
 	sf::Sprite sprite(t);
-	sprite.setTextureRect(sf::IntRect(50, 50, 100, 100));
+	sprite.setTextureRect(sf::IntRect(50, 50, 50, 50));
 
 
 
@@ -30,11 +31,11 @@ int main()
 	Entity* ent1 = engine.CreateObject("Ama bird!");
 
 	ent1->AddComponent<GraphicsComponent>(new GraphicsComponent(sprite));
-	ent1->AddComponent<PhysicsComponent>(new PhysicsComponent(engine.GetMainWorld(), PhysicsObjectType::POLYGON, bdef));
-	
+	ent1->AddComponent<PhysicsComponent>(new PhysicsComponent(engine.GetMainWorld(), PhysicsObjectType::POLYGON, bdef, Vec2(50,50), Vec2(100, 0)));
+	ent1->SetPosition(Vec2(100, 0));
 	Entity* ent2 = engine.CreateObject("Ama dog!");
 	ent2->AddComponent<GraphicsComponent>(new GraphicsComponent(sprite));
-
+	
 	editor.Run();
 	
 	system("pause");

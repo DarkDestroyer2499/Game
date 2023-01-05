@@ -54,16 +54,12 @@ void Engine::Update(sf::RenderWindow* window)
 
 void Engine::Update(sf::RenderTexture* window)
 {	
-	window->clear();
-
 	for (auto& object : mObjectList)
 	{
 		object.Update();
 	}
 
 	mWorld->Step(1 / 500.f, 8, 3);
-
-	window->display();
 }
 
 Engine::~Engine()

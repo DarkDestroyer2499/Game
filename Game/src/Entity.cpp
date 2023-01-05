@@ -1,7 +1,6 @@
 #include "Entity.hpp"
-#include "Components/IComponent.hpp"
+#include "Components/ComponentLinker.hpp"
 
-#include <iostream>
 Entity::Entity(sf::RenderTarget* window, const char* newName) :
 	mWindow{ window }, mPosition{}, mName{newName}
 {
@@ -19,6 +18,23 @@ Vec2 Entity::GetPosition() const
 
 Vec2 Entity::GetSize() const
 {
+	GraphicsComponent* tmpGraphics;
+	for (auto& component : mComponentList)
+	{
+		PhysicsComponent* tmpPhysics = dynamic_cast<PhysicsComponent*>(component);
+		
+		if (tmpPhysics != nullptr)
+		{
+			return tmpPhysics->GetSize();
+		}		
+		tmpGraphics = dynamic_cast<GraphicsComponent*>(component);
+	}
+
+	if (tmpGraphics != nullptr)
+	{
+		Vec2 size(tmpGraphics->GetSprite().getTextureRect().width, tmpGraphics->GetSprite().getTextureRect().height);
+		return size;
+	}
 	return Vec2();
 }
 

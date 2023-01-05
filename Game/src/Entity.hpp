@@ -82,6 +82,7 @@ protected:
 	sf::RenderTarget* mWindow;
 	std::vector<IComponent*> mComponentList;
 	Vec2 mPosition;
+	Vec2 mSize;
 	std::string mName;
 };
 

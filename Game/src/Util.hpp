@@ -3,8 +3,9 @@
 
 #include <imgui.h>
 #include <iostream>
+#include <SFML/Graphics.hpp>
 constexpr float SCALE = 30.f;
-
+constexpr float BORDER_MARGIN = 10.f;
 struct Vec2
 {
 	float x, y;
@@ -24,6 +25,22 @@ struct Vec2
 		x(pos.x), y(pos.y)
 	{
 	}
+
+	Vec2(sf::Vector2u pos) :
+		x(pos.x), y(pos.y)
+	{
+	}
+
+	sf::Vector2f ToSFMLVec2f()
+	{
+		return sf::Vector2f(x, y);
+	}
+
+	sf::Vector2u ToSFMLVec2u()
+	{
+		return sf::Vector2u(x, y);
+	}
+
 	friend std::ostream& operator<<(std::ostream& os, const Vec2& vec)
 	{
 		return os << '[' << vec.x << " : " << vec.y << ']';
