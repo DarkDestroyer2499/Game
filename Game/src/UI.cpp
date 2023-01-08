@@ -68,7 +68,6 @@ void UI::DrawViewport()
 	if (ImGui::Begin("Viewport")) {
 		viewportSize = ImGui::GetWindowSize();
 		mViewportPos = ImGui::GetWindowPos();
-		ImGui::DrawLine(sf::Vector2f(200, 200), sf::Vector2f(500, 100), sf::Color::Blue);
 		ImGui::Image(*mEditor->mTexture);
 	}
 	

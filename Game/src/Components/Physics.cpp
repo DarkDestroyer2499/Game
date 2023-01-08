@@ -37,7 +37,8 @@ Vec2 PhysicsComponent::GetSize() const
 
 Vec2 PhysicsComponent::GetPosition() const
 {
-	return mBody->GetPosition();
+	b2Vec2 pos = mBody->GetPosition();
+	return (Vec2(pos.x, pos.y - mSize.y*2));
 }
 
 const char* PhysicsComponent::GetName()
