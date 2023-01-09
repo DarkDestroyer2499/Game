@@ -33,8 +33,9 @@ public:
 
 	void Update(Entity* entity)
 	{
-		Vec2 pos = entity->GetPosition();
+		
 		Vec2 size = entity->GetSize();
+		Vec2 pos = Vec2(entity->GetPosition().x - size.x/2, entity->GetPosition().y - size.y / 2);
 		switch (mType)
 		{
 		case CornerType::LEFT_UP:

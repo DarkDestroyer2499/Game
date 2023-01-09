@@ -4,8 +4,9 @@
 #include <imgui.h>
 #include <iostream>
 #include <SFML/Graphics.hpp>
-constexpr float SCALE = 30.f;
+
 constexpr float BORDER_MARGIN = 10.f;
+
 struct Vec2
 {
 	float x, y;
@@ -46,8 +47,5 @@ struct Vec2
 		return os << '[' << vec.x << " : " << vec.y << ']';
 	}
 };
-
-
-
 
 #endif // !UTIL_HPP

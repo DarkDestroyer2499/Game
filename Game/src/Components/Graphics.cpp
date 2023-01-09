@@ -1,7 +1,6 @@
 #include "Graphics.hpp"
 #include "../Entity.hpp"
 
-#include <iostream>
 GraphicsComponent::GraphicsComponent(sf::Texture& texture, const sf::IntRect& rect)
 {
 	mSprite.setTexture(texture);
@@ -13,11 +12,14 @@ GraphicsComponent::GraphicsComponent(sf::Texture& texture, const sf::IntRect& re
 GraphicsComponent::GraphicsComponent(sf::Sprite sprite) : mSprite{std::move(sprite)}
 {
 	mName = COMPONENT_NAME;
+	sf::IntRect tmpRect = sprite.getTextureRect();
+	mSprite.setOrigin(float(tmpRect.width / 2), float(tmpRect.height / 2));
 }
 
 void GraphicsComponent::Update() 
 {
 	mSprite.setPosition(mOwner->GetPosition().x, mOwner->GetPosition().y);
+	mSprite.setRotation(mOwner->GetRotation() * 57.2957795f);
 	mOwner->GetWindow()->draw(mSprite);
 }
 
@@ -29,4 +31,3 @@ const char* GraphicsComponent::GetName()
 {
 	return mName.c_str();
 }
-

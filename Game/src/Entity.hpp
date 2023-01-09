@@ -38,6 +38,10 @@ public:
 
 	Vec2 GetSize() const;
 
+	void SetRotation(float);
+
+	float GetRotation() const;
+
 	sf::RenderTarget* GetWindow();
 
 	bool IsContainsInBounds(Vec2);
@@ -83,6 +87,7 @@ protected:
 	std::vector<IComponent*> mComponentList;
 	Vec2 mPosition;
 	Vec2 mSize;
+	float mRotation;
 	std::string mName;
 };
 

@@ -14,10 +14,10 @@ PhysicsComponent::PhysicsComponent(b2World* world, const PhysicsObjectType& type
 	case PhysicsObjectType::POLYGON:
 	{
 		b2PolygonShape shape;
-		shape.SetAsBox(size.x / SCALE, size.y / SCALE, b2Vec2(5, 5), 0.f);
+		shape.SetAsBox(size.x /2, size.y/2);
 		
 		this->mBody->CreateFixture(&shape, density);
-		this->mBody->SetTransform(b2Vec2(pos.x, pos.y + mSize.y*2), this->mBody->GetAngle());
+		this->mBody->SetTransform(b2Vec2(pos.x, pos.y), 0.3);
 		break;
 	}
 	}
@@ -27,7 +27,8 @@ PhysicsComponent::PhysicsComponent(b2World* world, const PhysicsObjectType& type
 void PhysicsComponent::Update()
 {
 	b2Vec2 pos = mBody->GetPosition();
-	mOwner->SetPosition(Vec2(pos.x, pos.y - mSize.y*2) );
+	mOwner->SetPosition(Vec2(pos.x, pos.y) );
+	mOwner->SetRotation(mBody->GetAngle());
 }
 
 Vec2 PhysicsComponent::GetSize() const
@@ -38,7 +39,7 @@ Vec2 PhysicsComponent::GetSize() const
 Vec2 PhysicsComponent::GetPosition() const
 {
 	b2Vec2 pos = mBody->GetPosition();
-	return (Vec2(pos.x, pos.y - mSize.y*2));
+	return (Vec2(pos.x, pos.y));
 }
 
 const char* PhysicsComponent::GetName()

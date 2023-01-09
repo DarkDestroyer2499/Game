@@ -39,6 +39,11 @@ Vec2 Entity::GetSize() const
 	return Vec2();
 }
 
+float Entity::GetRotation() const
+{
+	return mRotation;
+}
+
 void Entity::Update()
 {
 	for (auto component : mComponentList)
@@ -50,6 +55,11 @@ void Entity::Update()
 sf::RenderTarget* Entity::GetWindow()
 {
 	return mWindow;
+}
+
+void Entity::SetRotation(float newRotation)
+{
+	mRotation = newRotation;
 }
 
 bool Entity::IsContainsInBounds(Vec2 pos)
