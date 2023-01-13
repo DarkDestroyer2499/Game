@@ -26,7 +26,7 @@ struct Vec2
 		x(pos.x), y(pos.y)
 	{
 	}
-
+	 
 	Vec2(sf::Vector2u pos) :
 		x((float)pos.x), y((float)pos.y)
 	{

@@ -48,6 +48,8 @@ void Engine::Update(sf::RenderWindow* window)
 		mWorld->Step(1 / 500.f, 8, 3);
 
 		window->display();
+		mLastRenderTime = mClock.getElapsedTime().asMilliseconds();
+		mClock.restart();
 	}
 	window->close();
 }
@@ -60,6 +62,8 @@ void Engine::Update(sf::RenderTexture* window)
 	}
 
 	mWorld->Step(1 / 500.f, 8, 3);
+	mLastRenderTime = mClock.getElapsedTime().asMilliseconds();
+	mClock.restart();
 }
 
 Engine::~Engine()
@@ -85,6 +89,11 @@ sf::RenderTarget* Engine::GetWindow()
 b2World* Engine::GetMainWorld()
 {
 	return mWorld.get();
+}
+
+float Engine::GetRenderTime()
+{
+	return mLastRenderTime;
 }
 
 void Engine::SetScreenMode(ScreenMode newMode)

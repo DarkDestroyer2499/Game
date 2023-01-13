@@ -36,6 +36,7 @@ public:
     void SetScreenMode(ScreenMode);
     Entity* CreateObject(std::string name = std::string("Uknown"));
     b2World* GetMainWorld();
+    float GetRenderTime();
     void Stop();
    
     void Update(sf::RenderTexture* window);
@@ -53,6 +54,8 @@ private:
     std::unique_ptr<std::thread> mMainThread;
     std::vector<Entity> mObjectList;
     std::unique_ptr<b2World> mWorld;
+    float mLastRenderTime;
+    sf::Clock mClock;
 };
 
 #endif // !ENGINE
