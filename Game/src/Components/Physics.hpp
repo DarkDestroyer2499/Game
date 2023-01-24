@@ -1,7 +1,7 @@
 #pragma once
 
-#ifndef PHYSICS_H
-#define PHYSICS_H
+#ifndef PHYSICS_H_
+#define PHYSICS_H_
 
 #include "IComponent.hpp"
 #include "box2d.h"
@@ -30,4 +30,4 @@ private:
 	Vec2 mSize;
 };
 
-#endif // !PHYSICS_H
+#endif // !PHYSICS_H_

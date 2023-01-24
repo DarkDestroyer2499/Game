@@ -25,6 +25,9 @@ links
     "box2d"
 }
 
+staticruntime "off"
+runtime "Debug"
+
 filter "configurations:Debug"
 defines { "DEBUG" }
 symbols "On"
@@ -37,14 +40,26 @@ links
     "sfml-network-d"
 }
 
+buildoptions{"/IGNORE:4099"}
+
 filter "configurations:Release"
 defines { "NDEBUG" }
 optimize "On"
 links
 {
-    "sfml-graphics-s",
-    "sfml-window-s",
-    "sfml-system-s",
-    "sfml-audio-s",
-    "sfml-network-s"
+    "sfml-graphics-d",
+    "sfml-window-d",
+    "sfml-system-d",
+    "sfml-audio-d",
+    "sfml-network-d"
+}
+
+staticruntime "off"
+runtime "Debug"
+
+buildoptions{"/IGNORE:4099"}
+
+postbuildcommands
+{
+    "{COPY} ../lib/SFML-2.5.1/bin ../bin/Release"
 }
