@@ -41,7 +41,7 @@ void Editor::EventHandler()
 	case sf::Event::MouseButtonPressed:
 	{
 		mMousePosition = sf::Mouse::getPosition(mWindow);
-		Log(INFO, "Position: (" << mMousePosition.x << " : " << mMousePosition.y << ")\t" << mUI->GetViewportPosition() << "\t" << WindowToViewportCoords(Vec2(mMousePosition.x, mMousePosition.y)) << "\t" << mSelectedObjects.size());
+		Log(INFO, "Position: (" << mMousePosition.x << " : " << mMousePosition.y << ")\t" << mUI->GetViewportPosition() << "\t" << WindowToViewportCoords(Vec2((float)mMousePosition.x, (float)mMousePosition.y)) << "\t" << mSelectedObjects.size());
 		
 		bool isEmptySpaceClicked = true;
 		for (auto& entity : mEngine.mObjectList)

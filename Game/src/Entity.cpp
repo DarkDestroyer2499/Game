@@ -32,7 +32,7 @@ Vec2 Entity::GetSize() const
 
 	if (tmpGraphics != nullptr)
 	{
-		Vec2 size(tmpGraphics->GetSprite().getTextureRect().width, tmpGraphics->GetSprite().getTextureRect().height);
+		Vec2 size((float)tmpGraphics->GetSprite().getTextureRect().width, (float)tmpGraphics->GetSprite().getTextureRect().height);
 		return size;
 	}
 

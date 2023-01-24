@@ -17,7 +17,7 @@ PhysicsComponent::PhysicsComponent(b2World* world, const PhysicsObjectType& type
 		shape.SetAsBox(size.x /2, size.y/2);
 		
 		this->mBody->CreateFixture(&shape, density);
-		this->mBody->SetTransform(b2Vec2(pos.x, pos.y), 0.3);
+		this->mBody->SetTransform(b2Vec2((float)pos.x, (float)pos.y), 0.3f);
 		break;
 	}
 	}

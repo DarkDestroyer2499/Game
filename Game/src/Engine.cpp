@@ -91,7 +91,7 @@ b2World* Engine::GetMainWorld()
 	return mWorld.get();
 }
 
-float Engine::GetRenderTime()
+uint32_t Engine::GetRenderTime()
 {
 	return mLastRenderTime;
 }
