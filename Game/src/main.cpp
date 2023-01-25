@@ -39,7 +39,7 @@ int main()
 	ent3->AddComponent<GraphicsComponent>(new GraphicsComponent(sprite));
 	b2BodyDef bdef2;
 	ent3->AddComponent<PhysicsComponent>(new PhysicsComponent(engine.GetMainWorld(), PhysicsObjectType::POLYGON, bdef2, Vec2(200, 30), Vec2(100, 400)));
-
+	ent3->RemoveComponent<GraphicsComponent>();
 	editor.Run();
 	
 	system("pause");

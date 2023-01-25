@@ -76,6 +76,16 @@ public:
 		mComponentList.push_back(newComponent);
 	}
 
+	template<typename Component>
+	void RemoveComponent()
+	{
+		Component* tmpComponent = this->GetComponent<Component>();
+		if (tmpComponent != nullptr)
+		{
+			this->mComponentList.erase(std::remove(this->mComponentList.begin(), this->mComponentList.end(), tmpComponent), this->mComponentList.end());
+		}
+	}
+
 	void SetName(const char*);
 
 	const char* GetName() const;
