@@ -1,10 +1,10 @@
 #include "UI.hpp"
 #include <iostream>
 #include "../Util/Log.hpp"
+
 UI::UI(Editor* editor)
 	: mEditor(editor)
 {
-	mVSelectorList.reserve(START_SELECTOR_BUFFER_SIZE);
 }
 
 UI::~UI()
@@ -102,19 +102,10 @@ void UI::HierarchyTableViewDraw(Entity& entity)
 
 void UI::DrawSelected()
 {
-	if (mEditor->mSelectedObjects.empty())
-		return;
-
-	size_t selectedObjectCount = mEditor->mSelectedObjects.size();
-	if (selectedObjectCount > mVSelectorList.size())
+	for (int i = 0; i < mEditor->mSelectedObjects.size(); ++i)
 	{
-		mVSelectorList.resize(selectedObjectCount);
-	}
-
-	for (int i = 0; i < selectedObjectCount; ++i)
-	{
-		mVSelectorList[i].Update(mEditor->mSelectedObjects[i]);
-		mVSelectorList[i].Draw(mEditor->mTexture);
+		mEditor->mSelectedObjects[i].selector.Update(&mEditor->mSelectedObjects[i].entity);
+		mEditor->mSelectedObjects[i].selector.Draw(mEditor->mTexture);
 	}
 }
 

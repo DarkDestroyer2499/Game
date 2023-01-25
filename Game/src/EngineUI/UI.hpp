@@ -7,8 +7,6 @@
 #include "../Util/Util.hpp"
 #include "UIVisualSelector.h"
 
-constexpr int START_SELECTOR_BUFFER_SIZE = 20;
-
 class UI
 {
 public:
@@ -28,9 +26,7 @@ private:
 private:
 	Editor* mEditor;
 	Vec2 mViewportPos;
-	std::vector<UIVisualSelector> mVSelectorList;
 	friend class Editor;
-	friend class Corner;
 };
 
 #endif // !UI_HPP

@@ -18,7 +18,7 @@ Vec2 Entity::GetPosition() const
 
 Vec2 Entity::GetSize() const
 {
-	GraphicsComponent* tmpGraphics;
+	GraphicsComponent* tmpGraphics = nullptr;
 	for (auto& component : mComponentList)
 	{
 		PhysicsComponent* tmpPhysics = dynamic_cast<PhysicsComponent*>(component);

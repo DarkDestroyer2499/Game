@@ -21,7 +21,7 @@ bool Editor::IsAlreadySelected(Entity& entity)
 {
 	for (auto& selectedEntity : mSelectedObjects)
 	{
-		if (&entity == selectedEntity)
+		if (&entity == &selectedEntity.entity)
 		{
 			return true;
 		}
@@ -55,7 +55,7 @@ void Editor::EventHandler()
 				{
 					isEmptySpaceClicked = false;
 					if (!IsAlreadySelected(entity))
-						mSelectedObjects.push_back(&entity);
+						mSelectedObjects.push_back(SelectedObject(entity, UIVisualSelector()));
 					else
 						Log(WARNING, "Already selected!");
 				}

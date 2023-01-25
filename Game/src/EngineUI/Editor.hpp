@@ -4,9 +4,16 @@
 #include <SFML/Graphics.hpp>
 #include "../Engine.hpp"
 #include "UI.hpp"
-
+#include "../Util/Util.hpp"
+#include "UIVisualSelector.h"
 constexpr const char* PROGRAM_NAME = "Engine";
 static const sf::Color EDITOR_BG_COLOR(62, 66, 63);
+
+struct SelectedObject
+{
+	Entity& entity;
+	UIVisualSelector selector;
+};
 
 class Editor
 {
@@ -32,7 +39,7 @@ private:
 	friend class UI;
 	std::unique_ptr<UI> mUI;
 	sf::Vector2i mMousePosition;
-	std::vector<Entity*> mSelectedObjects;
+	std::vector<SelectedObject> mSelectedObjects;
 };
 
 #endif // !EDITOR_H
