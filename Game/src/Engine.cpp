@@ -1,5 +1,5 @@
 #include "Engine.hpp"
-#include "Log.hpp"
+#include "Util/Log.hpp"
 #include "Components/ComponentLinker.hpp"
 
 Engine::Engine(sf::RenderTarget* window, ScreenMode wMode, unsigned int width = 0, unsigned int height = 0) :

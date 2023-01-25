@@ -1,6 +1,6 @@
 #include "Physics.hpp"
 #include "../Entity.hpp"
-#include "../Util.hpp"
+#include "../Util/Util.hpp"
 
 //TODO: Add more object type to constructor switch
 

@@ -1,7 +1,7 @@
 #include <SFML/Graphics.hpp>
 #include "Engine.hpp" 
 #include <Windows.h>
-#include "Editor.hpp"
+#include "EngineUI/Editor.hpp"
 #include "Entity.hpp"
 #include <thread>
 

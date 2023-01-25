@@ -5,7 +5,7 @@
 
 #include "IComponent.hpp"
 #include "box2d.h"
-#include "../Util.hpp"
+#include "../Util/Util.hpp"
 
 enum class PhysicsObjectType
 {

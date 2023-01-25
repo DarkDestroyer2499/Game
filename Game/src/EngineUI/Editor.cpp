@@ -1,5 +1,5 @@
 #include "Editor.hpp"
-#include "Log.hpp"
+#include "../Util/Log.hpp"
 
 Editor::Editor(sf::RenderTexture* newTexture, Engine& engine) :
 	mTexture{ newTexture }, mEngine{ engine }, mEvent{}

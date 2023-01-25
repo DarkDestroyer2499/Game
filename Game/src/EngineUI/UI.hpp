@@ -1,10 +1,10 @@
 #ifndef UI_HPP
 #define UI_HPP
 
-#include "../lib/imgui/imgui.h"
-#include "../lib/imgui/imgui-SFML.h"
+#include "../../lib/imgui/imgui.h"
+#include "../../lib/imgui/imgui-SFML.h"
 #include "Editor.hpp"
-#include "Util.hpp"
+#include "../Util/Util.hpp"
 #include "UIVisualSelector.h"
 
 constexpr int START_SELECTOR_BUFFER_SIZE = 20;

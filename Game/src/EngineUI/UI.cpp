@@ -1,6 +1,6 @@
 #include "UI.hpp"
 #include <iostream>
-#include "Log.hpp"
+#include "../Util/Log.hpp"
 UI::UI(Editor* editor)
 	: mEditor(editor)
 {

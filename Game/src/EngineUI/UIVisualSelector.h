@@ -2,7 +2,7 @@
 #define UI_VISUAL_SELECTOR_H
 
 #include <SFML/Graphics.hpp>
-#include "Entity.hpp"
+#include "../Entity.hpp"
 
 constexpr float LENGHT_CORNER_MULT = 3.f;
 constexpr float DEFAULT_LINE_WIDTH = 3.f;

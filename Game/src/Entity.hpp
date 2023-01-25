@@ -4,8 +4,8 @@
 #include <SFML/Graphics.hpp>
 #include <box2d.h>
 #include "Components/ComponentLinker.hpp"
-#include "Util.hpp"
-#include "Log.hpp"
+#include "Util/Util.hpp"
+#include "Util/Log.hpp"
 
 const float DEG_IN_RAD = 57.29577f;
 
