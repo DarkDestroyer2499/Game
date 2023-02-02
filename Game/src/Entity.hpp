@@ -7,22 +7,8 @@
 #include "Util/Util.hpp"
 #include "Util/Log.hpp"
 
-const float DEG_IN_RAD = 57.29577f;
-
-#define PVARIABLE_GET_SET(type, name)\
-	private:\
-	type m ## name;\
-	public:\
-	type Get ## name ## (){\
-	return m ## name;\
-	}\
-	void Set ## name ## (type new ## name){\
-	this->m ## name = new ## name;\
-	}
-
-
-
 class UI;
+
 class Entity
 {
 public:
@@ -49,7 +35,7 @@ public:
 	template<typename Component>
 	bool HasComponent()
 	{
-		for (auto component : mComponentList)
+		for (auto& component : mComponentList)
 		{
 			if (dynamic_cast<Component*>(component))
 				return true;
@@ -60,7 +46,7 @@ public:
 	template<typename Component>
 	Component* GetComponent()
 	{
-		for (auto component : mComponentList)
+		for (auto& component : mComponentList)
 		{
 			Component* tmp = dynamic_cast<Component*>(component);
 			if (tmp)
@@ -83,6 +69,7 @@ public:
 		if (tmpComponent != nullptr)
 		{
 			this->mComponentList.erase(std::remove(this->mComponentList.begin(), this->mComponentList.end(), tmpComponent), this->mComponentList.end());
+			delete tmpComponent;
 		}
 	}
 

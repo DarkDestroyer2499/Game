@@ -16,15 +16,15 @@ GraphicsComponent::GraphicsComponent(sf::Sprite sprite) : mSprite{std::move(spri
 	mSprite.setOrigin(float(tmpRect.width / 2), float(tmpRect.height / 2));
 }
 
+GraphicsComponent::~GraphicsComponent()
+{
+}
+
 void GraphicsComponent::Update() 
 {
 	mSprite.setPosition(mOwner->GetPosition().x, mOwner->GetPosition().y);
 	mSprite.setRotation(mOwner->GetRotation() * 57.2957795f);
 	mOwner->GetWindow()->draw(mSprite);
-}
-
-GraphicsComponent::~GraphicsComponent()
-{
 }
 
 const char* GraphicsComponent::GetName()

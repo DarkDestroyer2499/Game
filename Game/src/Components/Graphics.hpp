@@ -10,10 +10,10 @@ public:
 	GraphicsComponent() = delete;
 	GraphicsComponent(sf::Texture&, const sf::IntRect&);
 	GraphicsComponent(sf::Sprite);
+	~GraphicsComponent() override;
 	void Update() override;
 	sf::Sprite& GetSprite() { return mSprite; }
 	const char* GetName() override;
-	~GraphicsComponent() override;
 
 private:
 	sf::Sprite mSprite;

@@ -10,10 +10,10 @@ class Entity;
 class IComponent
 {
 public:
+	virtual ~IComponent() {};
 	virtual void Update() = 0;
 	virtual void SetOwner(Entity* newOwner) { mOwner = newOwner; }
 	virtual const char* GetName() = 0;
-	virtual ~IComponent() {};
 protected:
 	Entity* mOwner;
 	std::string mName;	

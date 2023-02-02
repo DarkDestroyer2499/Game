@@ -19,7 +19,7 @@ class Corner
 {
 public:
 	Corner()
-		:mType{ CornerType::LEFT_DOWN }, mWidth{ DEFAULT_LINE_WIDTH }, mColor{ sf::Color::Green }
+		:mWidth{ DEFAULT_LINE_WIDTH }, mType{ CornerType::LEFT_DOWN },  mColor{ sf::Color::Green }
 	{
 	}
 	~Corner() {}
@@ -103,7 +103,7 @@ public:
 		mCorners[3].SetParameters(CornerType::RIGHT_DOWN, width, color);
 	}
 
-	~UIVisualSelector() {};
+	~UIVisualSelector() = default;
 
 	void Update(Entity* entity)
 	{

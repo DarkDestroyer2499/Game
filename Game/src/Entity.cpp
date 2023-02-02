@@ -6,6 +6,16 @@ Entity::Entity(sf::RenderTarget* window, const char* newName) :
 {
 }
 
+Entity::~Entity()
+{
+	for (auto& component : mComponentList)
+	{
+		delete component;
+	}
+	Log(INFO, "Entity has been destroyed!");
+}
+
+
 void Entity::SetPosition(const Vec2& newPosition)
 {
 	mPosition = newPosition;
@@ -64,7 +74,7 @@ void Entity::SetRotation(float newRotation)
 
 bool Entity::IsContainsInBounds(Vec2 pos)
 {
-	//if(mPosition.x > pos.x && pos.x < mPosition.x + )
+	//TODO: finish this
 	return false;
 }
 
@@ -76,12 +86,4 @@ void Entity::SetName(const char* newName)
 const char* Entity::GetName() const
 {
 	return mName.c_str();
-}
-
-Entity::~Entity() 
-{
-	for (auto component : mComponentList)
-	{
-		delete component;
-	}
 }

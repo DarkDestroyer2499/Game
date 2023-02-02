@@ -1,5 +1,5 @@
-#ifndef ENGINE
-#define ENGINE
+#ifndef ENGINE_H
+#define ENGINE_H
 
 #include <SFML/Graphics.hpp>
 #include <box2d.h>
@@ -52,10 +52,10 @@ private:
     bool mWorking;
     sf::Event mEvent;
     std::unique_ptr<std::thread> mMainThread;
-    std::vector<Entity> mObjectList;
     std::unique_ptr<b2World> mWorld;
+    std::vector<Entity> mObjectList;
     uint32_t mLastRenderTime;
     sf::Clock mClock;
 };
 
-#endif // !ENGINE
+#endif // !ENGINE_H

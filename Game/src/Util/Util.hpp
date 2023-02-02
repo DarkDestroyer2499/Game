@@ -7,6 +7,8 @@
 
 constexpr float BORDER_MARGIN = 10.f;
 
+const float DEG_IN_RAD = 57.29577f;
+
 struct Vec2
 {
 	float x, y;
@@ -47,5 +49,16 @@ struct Vec2
 		return os << '[' << vec.x << " : " << vec.y << ']';
 	}
 };
+
+#define PVARIABLE_GET_SET(type, name)\
+	private:\
+	type m ## name;\
+	public:\
+	type Get ## name ## (){\
+	return m ## name;\
+	}\
+	void Set ## name ## (type new ## name){\
+	this->m ## name = new ## name;\
+	}
 
 #endif // !UTIL_HPP
