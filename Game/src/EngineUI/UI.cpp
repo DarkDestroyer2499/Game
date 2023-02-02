@@ -88,7 +88,7 @@ void UI::HierarchyTableViewDraw(Entity& entity)
 {
 	ImGui::TableNextRow();
 	ImGui::TableNextColumn();
-	bool open = ImGui::TreeNodeEx(entity.mName.c_str(), ImGuiTreeNodeFlags_SpanFullWidth);
+	bool open = ImGui::TreeNodeEx(entity.GetComponent<TagComponent>()->GetTag().c_str(), ImGuiTreeNodeFlags_SpanFullWidth);
 
 	if (open)
 	{

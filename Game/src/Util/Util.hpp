@@ -4,6 +4,7 @@
 #include <imgui.h>
 #include <iostream>
 #include <SFML/Graphics.hpp>
+#include <box2d.h>
 
 constexpr float BORDER_MARGIN = 10.f;
 

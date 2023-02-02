@@ -3,5 +3,6 @@
 
 #include "Graphics.hpp"
 #include "Physics.hpp"
+#include "Tag.hpp"
 
 #endif // !COMPONENT_LINKER_H

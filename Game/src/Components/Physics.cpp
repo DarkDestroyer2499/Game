@@ -27,7 +27,6 @@ PhysicsComponent::PhysicsComponent(b2World* world, const PhysicsObjectType& type
 PhysicsComponent::~PhysicsComponent()
 {
 	mBody->GetWorld()->DestroyBody(mBody);
-	Log(INFO, mOwner->GetName() << "'s PhysicsComponent destroyed!");
 }
 
 

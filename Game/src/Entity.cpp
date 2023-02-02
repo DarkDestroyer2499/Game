@@ -2,8 +2,9 @@
 #include "Components/ComponentLinker.hpp"
 
 Entity::Entity(sf::RenderTarget* window, const char* newName) :
-	mWindow{ window }, mPosition{}, mName{newName}
+	mWindow{ window }, mPosition{}
 {
+	this->AddComponent<TagComponent>(new TagComponent(newName));
 }
 
 Entity::~Entity()
@@ -76,14 +77,4 @@ bool Entity::IsContainsInBounds(Vec2 pos)
 {
 	//TODO: finish this
 	return false;
-}
-
-void Entity::SetName(const char* newName)
-{
-	mName = newName;
-}
-
-const char* Entity::GetName() const
-{
-	return mName.c_str();
 }

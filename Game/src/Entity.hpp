@@ -73,10 +73,6 @@ public:
 		}
 	}
 
-	void SetName(const char*);
-
-	const char* GetName() const;
-
 	friend class UI;
 
 protected:
@@ -85,7 +81,6 @@ protected:
 	Vec2 mPosition;
 	Vec2 mSize;
 	float mRotation;
-	std::string mName;
 };
 
 #endif // !ENTITY_H
