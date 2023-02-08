@@ -3,7 +3,8 @@
 #include "Components/ComponentLinker.hpp"
 
 Engine::Engine(sf::RenderTarget* window, ScreenMode wMode, unsigned int width = 0, unsigned int height = 0) :
-	mWindow{ window }, mWindowMode{ wMode }, mScnWidht{ sf::VideoMode::getDesktopMode().width / 2 }, mScnHeight{ sf::VideoMode::getDesktopMode().height / 2 }, mWorking{ true }
+	mWindow{ window }, mWindowMode{ wMode }, mScnWidht{ sf::VideoMode::getDesktopMode().width / 2 },
+	mScnHeight{ sf::VideoMode::getDesktopMode().height / 2 }, mWorking{ true }, mLastRenderTime{1}
 {
 	mWorld = std::make_unique<b2World>(GRAVITY);
 	mObjectList.reserve(RESERVE_ENTITIES);
@@ -42,13 +43,13 @@ void Engine::Update(sf::RenderWindow* window)
 
 		for (auto& object : mObjectList)
 		{
-			object.Update();
+			object.Update(1.f / (float)mLastRenderTime);
 		}
 
 		mWorld->Step(1 / 500.f, 8, 3);
 
-		window->display();
-		mLastRenderTime = mClock.getElapsedTime().asMilliseconds();
+		window->display();		
+		mLastRenderTime = mClock.getElapsedTime().asMicroseconds();
 		mClock.restart();
 	}
 	window->close();
@@ -58,11 +59,11 @@ void Engine::Update(sf::RenderTexture* window)
 {	
 	for (auto& object : mObjectList)
 	{
-		object.Update();
+		object.Update(1.f/(float)mLastRenderTime);
 	}
 
 	mWorld->Step(1 / 500.f, 8, 3);
-	mLastRenderTime = mClock.getElapsedTime().asMilliseconds();
+	mLastRenderTime = mClock.getElapsedTime().asMicroseconds();
 	mClock.restart();
 }
 

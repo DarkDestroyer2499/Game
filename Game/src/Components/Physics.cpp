@@ -30,7 +30,7 @@ PhysicsComponent::~PhysicsComponent()
 }
 
 
-void PhysicsComponent::Update()
+void PhysicsComponent::Update(const float& ts)
 {
 	b2Vec2 pos = mBody->GetPosition();
 	mOwner->SetPosition(Vec2(pos.x, pos.y) );
@@ -46,9 +46,4 @@ Vec2 PhysicsComponent::GetPosition() const
 {
 	b2Vec2 pos = mBody->GetPosition();
 	return (Vec2(pos.x, pos.y));
-}
-
-const char* PhysicsComponent::GetName()
-{
-	return mName.c_str();
 }

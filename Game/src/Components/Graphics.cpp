@@ -20,14 +20,9 @@ GraphicsComponent::~GraphicsComponent()
 {
 }
 
-void GraphicsComponent::Update() 
+void GraphicsComponent::Update(const float& time) 
 {
 	mSprite.setPosition(mOwner->GetPosition().x, mOwner->GetPosition().y);
 	mSprite.setRotation(mOwner->GetRotation() * 57.2957795f);
 	mOwner->GetWindow()->draw(mSprite);
-}
-
-const char* GraphicsComponent::GetName()
-{
-	return mName.c_str();
 }

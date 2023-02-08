@@ -10,10 +10,9 @@ class TagComponent : public IComponent
 public:
 	TagComponent() = delete;
 	TagComponent(const std::string& newTag);
-	void Update() override;
+	void Update(const float&) override;
 	void SetTag(std::string& newTag);
 	const std::string& GetTag() const;
-	const char* GetName() override;
 	~TagComponent();
 private:
 	std::string mTag;

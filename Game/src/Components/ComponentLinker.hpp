@@ -4,5 +4,5 @@
 #include "Graphics.hpp"
 #include "Physics.hpp"
 #include "Tag.hpp"
-
+#include "AnimatedGraphics.h"
 #endif // !COMPONENT_LINKER_H

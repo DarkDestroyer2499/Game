@@ -16,7 +16,7 @@ public:
 	Entity(const Entity& other) { Log(WARNING, "Entity has been copied!"); };
 	virtual ~Entity();
 
-	virtual void Update();
+	virtual void Update(const float&);
 
 	void SetPosition(const Vec2&);
 

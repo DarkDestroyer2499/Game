@@ -55,11 +55,11 @@ float Entity::GetRotation() const
 	return mRotation;
 }
 
-void Entity::Update()
+void Entity::Update(const float& ts)
 {
 	for (auto component : mComponentList)
 	{
-		component->Update();
+		component->Update(ts);
 	}
 }
 

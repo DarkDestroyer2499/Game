@@ -11,9 +11,9 @@ class IComponent
 {
 public:
 	virtual ~IComponent() {};
-	virtual void Update() = 0;
+	virtual void Update(const float&) = 0;
 	virtual void SetOwner(Entity* newOwner) { mOwner = newOwner; }
-	virtual const char* GetName() = 0;
+	virtual const char* GetName() { return mName.c_str(); };
 protected:
 	Entity* mOwner;
 	std::string mName;	

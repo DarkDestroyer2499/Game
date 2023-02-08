@@ -10,7 +10,7 @@ TagComponent::~TagComponent()
 {
 }
 
-void TagComponent::Update()
+void TagComponent::Update(const float& ts)
 {
 }
 
@@ -22,9 +22,4 @@ void TagComponent::SetTag(std::string& newTag)
 const std::string& TagComponent::GetTag() const
 {
 	return mTag;
-}
-
-const char* TagComponent::GetName()
-{
-	return mName.c_str();
 }
