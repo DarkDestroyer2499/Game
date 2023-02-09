@@ -55,11 +55,13 @@ public:
 		return nullptr;
 	}
 
-	template<typename Component>
-	void AddComponent(Component* newComponent)
+	template<typename Component, typename... Args>
+	Component* AddComponent(Args&&... args)
 	{
-		newComponent->SetOwner(this);
-		mComponentList.push_back(newComponent);
+		Component* tmp = new Component(args...);
+		tmp->SetOwner(this);
+		mComponentList.push_back(tmp);
+		return tmp;
 	}
 
 	template<typename Component>

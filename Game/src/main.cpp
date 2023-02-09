@@ -36,9 +36,8 @@ int main()
 
 	
 	//ent5->AddComponent<GraphicsComponent>(new GraphicsComponent(s1));
-	ent5->AddComponent<AnimatedGraphicsComponent>(new AnimatedGraphicsComponent());
-	ent5->AddComponent<PhysicsComponent>(new PhysicsComponent(engine.GetMainWorld(), PhysicsObjectType::POLYGON, bdef, Vec2(50, 50), Vec2(190, 0)));
-
+	ent5->AddComponent<AnimatedGraphicsComponent>();
+	ent5->AddComponent<PhysicsComponent>(engine.GetMainWorld(), PhysicsObjectType::POLYGON, bdef, Vec2(50, 50), Vec2(190, 0));
 	auto* anim = ent5->GetComponent<AnimatedGraphicsComponent>();
 
 	sf::Texture playerTexture;
@@ -56,15 +55,15 @@ int main()
 	Entity* ent1 = engine.CreateObject("Ama bird!");
 
 
-	ent1->AddComponent<PhysicsComponent>(new PhysicsComponent(engine.GetMainWorld(), PhysicsObjectType::POLYGON, bdef, Vec2(50, 50), Vec2(210, 80)));
-	ent1->AddComponent<GraphicsComponent>(new GraphicsComponent(sprite));
+	ent1->AddComponent<PhysicsComponent>(engine.GetMainWorld(), PhysicsObjectType::POLYGON, bdef, Vec2(50, 50), Vec2(210, 80));
+	ent1->AddComponent<GraphicsComponent>(sprite);
 	
 	
 	Entity* ent3 = engine.CreateObject("Ama floor!");
 	sprite.setTextureRect(sf::IntRect(50, 50, 200, 30));
-	ent3->AddComponent<GraphicsComponent>(new GraphicsComponent(sprite));
+	ent3->AddComponent<GraphicsComponent>(sprite);
 	b2BodyDef bdef2;
-	ent3->AddComponent<PhysicsComponent>(new PhysicsComponent(engine.GetMainWorld(), PhysicsObjectType::POLYGON, bdef2, Vec2(200, 30), Vec2(100, 400)));
+	ent3->AddComponent<PhysicsComponent>(engine.GetMainWorld(), PhysicsObjectType::POLYGON, bdef2, Vec2(200, 30), Vec2(100, 400));
 	//ent3->RemoveComponent<PhysicsComponent>();
 	editor.Run();
 	

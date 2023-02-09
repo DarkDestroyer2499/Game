@@ -4,7 +4,7 @@
 Entity::Entity(sf::RenderTarget* window, const char* newName) :
 	mWindow{ window }, mPosition{}
 {
-	this->AddComponent<TagComponent>(new TagComponent(newName));
+	this->AddComponent<TagComponent>(newName);
 }
 
 Entity::~Entity()

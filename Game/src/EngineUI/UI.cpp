@@ -114,7 +114,7 @@ void UI::DrawHierarchy()
 	
 	if (ImGui::Begin("Hierarchy"))
 	{
-		ImGui::Text("Render time: %.3fms", mEditor->mEngine.GetRenderTime());
+		ImGui::Text("Render time: %ius", mEditor->mEngine.GetRenderTime());
 		static ImGuiTableFlags flags = ImGuiTableFlags_BordersV | ImGuiTableFlags_BordersOuterH | ImGuiTableFlags_Resizable | ImGuiTableFlags_RowBg | ImGuiTableFlags_NoBordersInBody;
 		ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0.f, 0.f));
 		if (ImGui::BeginTable("EntityList", 1, flags))
