@@ -38,13 +38,15 @@ public:
     b2World* GetMainWorld();
     uint32_t GetRenderTime();
     void Stop();
-   
+    std::vector< Entity>& GetEntityList() { return mObjectList; }
+
+
     void Update(sf::RenderTexture* window);
 private:
     void Update(sf::RenderWindow* window);
    
     friend class Editor;
-    friend class UI;
+
 private:
 	sf::RenderTarget* mWindow;
     unsigned int mScnWidht, mScnHeight;

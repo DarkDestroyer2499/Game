@@ -4,12 +4,12 @@
 Editor::Editor(sf::RenderTexture* newTexture, Engine& engine) :
 	mTexture{ newTexture }, mEngine{ engine }, mEvent{}
 {
-	mUI = std::make_unique<UI>(this);
 	mWindow.create(sf::VideoMode(900, 800), "Engine", 1 << 2);
 
 	ImGui::SFML::Init(mWindow);
 	auto& io = ImGui::GetIO();
 	io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
+	
 }
 
 Editor::~Editor()
@@ -41,7 +41,7 @@ void Editor::EventHandler()
 	case sf::Event::MouseButtonPressed:
 	{
 		mMousePosition = sf::Mouse::getPosition(mWindow);
-		Log(INFO, "Position: (" << mMousePosition.x << " : " << mMousePosition.y << ")\t" << mUI->GetViewportPosition() << "\t" << WindowToViewportCoords(Vec2((float)mMousePosition.x, (float)mMousePosition.y)) << "\t" << mSelectedObjects.size());
+		Log(INFO, "Position: (" << mMousePosition.x << " : " << mMousePosition.y << ")\t" << GetComponent<ViewportComponent>()->GetPosition() << "\t" << WindowToViewportCoords(Vec2((float)mMousePosition.x, (float)mMousePosition.y)) << "\t" << mSelectedObjects.size());
 		
 		bool isEmptySpaceClicked = true;
 		for (auto& entity : mEngine.mObjectList)
@@ -73,7 +73,7 @@ void Editor::EventHandler()
 
 Vec2 Editor::WindowToViewportCoords(const Vec2 &windowCoords)
 {
-	Vec2 viewPos = mUI->GetViewportPosition();
+	Vec2 viewPos = GetComponent<ViewportComponent>()->GetPosition();
 	return Vec2(windowCoords.x - viewPos.x, windowCoords.y - viewPos.y);
 }
 
@@ -82,25 +82,33 @@ void Editor::Run()
 	while (mWindow.isOpen()) {
 		while (mWindow.pollEvent(mEvent)) {
 			ImGui::SFML::ProcessEvent(mWindow, mEvent);
-
 			EventHandler();
 		}
 
-		
-
 		ImGui::SFML::Update(mWindow, mClock.restart());
 		
-
+		
 		mWindow.clear();
 		mTexture->clear(EDITOR_BG_COLOR);
 
 		
-
+		ImGui::DockSpaceOverViewport();
 		mEngine.Update(mTexture);
+		//TODO: create other panel components
+		for (auto& component : mComponentList)
+		{
+			component->Update();
+		}
+		
+		for (int i = 0; i < mSelectedObjects.size(); ++i)
+		{
+			mSelectedObjects[i].selector.Update(&mSelectedObjects[i].entity);
+			mSelectedObjects[i].selector.Draw(mTexture);
+		}
 
-		mUI->Update();
-
+		ImGui::ShowDemoWindow();
 		ImGui::SFML::Render(mWindow);
+		
 		mTexture->display();
 		mWindow.display();
 	}

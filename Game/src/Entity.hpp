@@ -75,6 +75,8 @@ public:
 		}
 	}
 
+	std::vector<IComponent*>& GetComponentList() { return mComponentList; };
+
 	friend class UI;
 
 protected:

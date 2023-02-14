@@ -4,6 +4,7 @@
 #include "EngineUI/Editor.hpp"
 #include "Entity.hpp"
 #include <thread>
+#include "EngineUI/Components/UIComponents.hpp"
 
 using namespace sf;
 
@@ -11,10 +12,13 @@ int main()
 {
 	sf::RenderTexture window;
 
-
 	Engine engine(&window, ScreenMode::Close, 0, 0);
 	Editor editor(&window, engine);
 	engine.Run();
+
+	editor.AddComponent<ViewportComponent>(&editor);
+	editor.AddComponent<HierarchyComponent>(&editor);
+	editor.AddComponent<MenuBarComponent>(&editor);
 
 	sf::Texture t;
 
@@ -67,6 +71,5 @@ int main()
 	//ent3->RemoveComponent<PhysicsComponent>();
 	editor.Run();
 	
-	system("pause");
 	return 0;
 }
