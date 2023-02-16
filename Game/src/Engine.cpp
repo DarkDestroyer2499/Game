@@ -97,6 +97,11 @@ uint32_t Engine::GetRenderTime()
 	return mLastRenderTime;
 }
 
+void Engine::SetGravity(Vec2 newGravity)
+{
+	mWorld->SetGravity(b2Vec2(newGravity.x, newGravity.y));
+}
+
 void Engine::SetScreenMode(ScreenMode newMode)
 {
 	//mWindow.create(sf::VideoMode(mScnWidht, mScnHeight), WINDOW_NAME, newMode);

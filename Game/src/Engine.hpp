@@ -37,6 +37,7 @@ public:
     Entity* CreateObject(std::string name = std::string("Uknown"));
     b2World* GetMainWorld();
     uint32_t GetRenderTime();
+    void SetGravity(Vec2);
     void Stop();
     std::vector< Entity>& GetEntityList() { return mObjectList; }
 

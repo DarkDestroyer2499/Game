@@ -24,6 +24,26 @@ PhysicsComponent::PhysicsComponent(b2World* world, const PhysicsObjectType& type
 	mName = COMPONENT_NAME;
 }
 
+PhysicsComponent::PhysicsComponent(b2World* world, const PhysicsObjectType& type, b2BodyDef& bdef, b2FixtureDef fdef, Vec2 size, Vec2 pos, float density)
+	: mSize{ size }
+{
+	this->mBody = world->CreateBody(&bdef);
+
+	switch (type)
+	{
+	case PhysicsObjectType::POLYGON:
+	{
+		b2PolygonShape shape;
+		shape.SetAsBox(size.x / 2, size.y / 2);
+
+		this->mBody->CreateFixture(&fdef);
+		this->mBody->SetTransform(b2Vec2((float)pos.x, (float)pos.y), 0);
+		break;
+	}
+	}
+	mName = COMPONENT_NAME;
+}
+
 PhysicsComponent::~PhysicsComponent()
 {
 	mBody->GetWorld()->DestroyBody(mBody);
