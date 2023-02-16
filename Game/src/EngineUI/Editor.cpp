@@ -41,24 +41,29 @@ void Editor::EventHandler()
 	case sf::Event::MouseButtonPressed:
 	{
 		mMousePosition = sf::Mouse::getPosition(mWindow);
-		Log(INFO, "Position: (" << mMousePosition.x << " : " << mMousePosition.y << ")\t" << GetComponent<ViewportComponent>()->GetPosition() << "\t" << WindowToViewportCoords(Vec2((float)mMousePosition.x, (float)mMousePosition.y)) << "\t" << mSelectedObjects.size());
 		
+		auto tmpCoords = WindowToViewportCoords(Vec2((float)mMousePosition.x, (float)mMousePosition.y));
+
+		if (!IsInsideWorkspace(tmpCoords))
+			return;
+
+		Log(INFO, "Position: (" << mMousePosition.x << " : " << mMousePosition.y << ")\t" << GetComponent<ViewportComponent>()->GetPosition() << "\t" << WindowToViewportCoords(Vec2((float)mMousePosition.x, (float)mMousePosition.y)) << "\t" << mSelectedObjects.size());
+		auto translated_pos = mWindow.mapPixelToCoords(sf::Vector2i((int)tmpCoords.x, (int)tmpCoords.y));
 		bool isEmptySpaceClicked = true;
+		
 		for (auto& entity : mEngine.mObjectList)
 		{
 			auto tmp = entity.GetComponent<GraphicsComponent>();
-			if (tmp)
+			if (!tmp)
+				continue;
+
+			if (tmp->GetSprite().getGlobalBounds().contains(translated_pos))
 			{
-				auto tmpCoords = WindowToViewportCoords(Vec2((float)mMousePosition.x, (float)mMousePosition.y));
-				auto translated_pos = mWindow.mapPixelToCoords(sf::Vector2i((int)tmpCoords.x, (int)tmpCoords.y));
-				if (tmp->GetSprite().getGlobalBounds().contains(translated_pos))
-				{
-					isEmptySpaceClicked = false;
-					if (!IsAlreadySelected(entity))
-						mSelectedObjects.push_back(SelectedObject(entity, UIVisualSelector()));
-					else
-						Log(WARNING, "Already selected!");
-				}
+				isEmptySpaceClicked = false;
+				if (!IsAlreadySelected(entity))
+					mSelectedObjects.push_back(SelectedObject(entity, UIVisualSelector()));
+				else
+					Log(WARNING, "Already selected!");
 			}
 		}
 
@@ -75,6 +80,16 @@ Vec2 Editor::WindowToViewportCoords(const Vec2 &windowCoords)
 {
 	Vec2 viewPos = GetComponent<ViewportComponent>()->GetPosition();
 	return Vec2(windowCoords.x - viewPos.x, windowCoords.y - viewPos.y);
+}
+
+bool Editor::IsInsideWorkspace(Vec2 translatedMousePos)
+{
+	Vec2 viewSize = GetComponent<ViewportComponent>()->mSize;
+	if (translatedMousePos.x >= 0 && translatedMousePos.x <= viewSize.x &&
+		translatedMousePos.y >= 0 && translatedMousePos.y <= viewSize.y)
+		return true;
+	else
+		return false;
 }
 
 void Editor::Run()

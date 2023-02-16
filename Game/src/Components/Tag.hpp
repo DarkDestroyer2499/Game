@@ -12,6 +12,8 @@ public:
 	TagComponent(const std::string& newTag);
 	void Update(const float&) override;
 	void SetTag(std::string& newTag);
+	void SetTag(std::string newTag);
+	void SetTag(char* newTag);
 	const std::string& GetTag() const;
 	~TagComponent();
 private:

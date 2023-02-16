@@ -5,5 +5,6 @@
 #include "Hierarchy.hpp"
 #include "MenuBar.hpp"
 #include "Viewport.hpp"
+#include "Properties.hpp"
 
 #endif // !UI_COMPONENTS_H

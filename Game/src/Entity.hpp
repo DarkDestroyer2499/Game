@@ -75,9 +75,8 @@ public:
 		}
 	}
 
-	std::vector<IComponent*>& GetComponentList() { return mComponentList; };
-
-	friend class UI;
+	friend class PropertiesComponent;
+	friend class HierarchyComponent;
 
 protected:
 	sf::RenderTarget* mWindow;

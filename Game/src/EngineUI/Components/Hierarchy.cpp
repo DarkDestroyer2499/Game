@@ -25,7 +25,7 @@ void HierarchyComponent::Update()
 
 				if (open)
 				{
-					for (auto Component : entity.GetComponentList())
+					for (auto Component : entity.mComponentList)
 					{
 						ImGui::TreeNodeEx(Component->GetName(), ImGuiTreeNodeFlags_Leaf | ImGuiTreeNodeFlags_Bullet | ImGuiTreeNodeFlags_NoTreePushOnOpen | ImGuiTreeNodeFlags_SpanFullWidth);
 					}

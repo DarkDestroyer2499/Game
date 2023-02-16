@@ -27,6 +27,7 @@ public:
 	~Editor();
 
 	Vec2 WindowToViewportCoords(const Vec2 &windowCoords);
+	bool IsInsideWorkspace(Vec2);
 	void Run();
 
 	template<typename Component>
@@ -87,6 +88,7 @@ private:
 
 	friend class HierarchyComponent;
 	friend class ViewportComponent;
+	friend class PropertiesComponent;
 };
 
 #endif // !EDITOR_H

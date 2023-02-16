@@ -19,6 +19,16 @@ void TagComponent::SetTag(std::string& newTag)
 	mTag = newTag;
 }
 
+void TagComponent::SetTag(std::string newTag)
+{
+	mTag = newTag;
+}
+
+void TagComponent::SetTag(char* newTag)
+{
+	mTag = newTag;
+}
+
 const std::string& TagComponent::GetTag() const
 {
 	return mTag;

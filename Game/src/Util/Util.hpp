@@ -35,6 +35,11 @@ struct Vec2
 	{
 	}
 
+	Vec2(sf::Vector2f pos) :
+		x(pos.x), y(pos.y)
+	{
+	}
+
 	sf::Vector2f ToSFMLVec2f()
 	{
 		return sf::Vector2f(x, y);

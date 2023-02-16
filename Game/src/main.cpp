@@ -19,6 +19,7 @@ int main()
 	editor.AddComponent<ViewportComponent>(&editor);
 	editor.AddComponent<HierarchyComponent>(&editor);
 	editor.AddComponent<MenuBarComponent>(&editor);
+	editor.AddComponent<PropertiesComponent>(&editor);
 
 	sf::Texture t;
 
