@@ -6,10 +6,13 @@ Editor::Editor(sf::RenderTexture* newTexture, Engine& engine) :
 {
 	mWindow.create(sf::VideoMode(900, 800), "Engine", 1 << 2);
 
-	ImGui::SFML::Init(mWindow);
+	ImGui::SFML::Init(mWindow, false);
 	auto& io = ImGui::GetIO();
 	io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
 	
+	io.Fonts->AddFontFromFileTTF("../resources/fonts/Noto_Sans/NotoSans-Medium.ttf", 17);
+
+	ImGui::SFML::UpdateFontTexture(); 
 }
 
 Editor::~Editor()
@@ -102,11 +105,9 @@ void Editor::Run()
 
 		ImGui::SFML::Update(mWindow, mClock.restart());
 		
-		
 		mWindow.clear();
 		mTexture->clear(EDITOR_BG_COLOR);
 
-		
 		ImGui::DockSpaceOverViewport();
 		mEngine.Update(mTexture);
 		//TODO: create other panel components

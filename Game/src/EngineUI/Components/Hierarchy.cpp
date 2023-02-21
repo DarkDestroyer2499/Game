@@ -10,7 +10,7 @@ HierarchyComponent::HierarchyComponent(Editor* editor):
 
 void HierarchyComponent::Update()
 {
-	if (ImGui::Begin("Hierarchy1"))
+	if (ImGui::Begin("Hierarchy"))
 	{
 		ImGui::Text("Render time: %ius", mEditor->mEngine.GetRenderTime());
 		static ImGuiTableFlags flags = ImGuiTableFlags_BordersV | ImGuiTableFlags_BordersOuterH | ImGuiTableFlags_Resizable | ImGuiTableFlags_RowBg | ImGuiTableFlags_NoBordersInBody;

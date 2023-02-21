@@ -5,4 +5,5 @@
 #include "Physics.hpp"
 #include "Tag.hpp"
 #include "AnimatedGraphics.h"
+#include "Transform.hpp"
 #endif // !COMPONENT_LINKER_H

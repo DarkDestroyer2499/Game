@@ -67,3 +67,19 @@ Vec2 PhysicsComponent::GetPosition() const
 	b2Vec2 pos = mBody->GetPosition();
 	return (Vec2(pos.x, pos.y));
 }
+
+void PhysicsComponent::SetPosition(Vec2 newPosition)
+{
+	mBody->SetTransform({ newPosition.x, newPosition.y }, mBody->GetAngle());
+}
+
+void PhysicsComponent::SetRotation(float newRotation)
+{
+	Vec2 position = mBody->GetPosition();
+	mBody->SetTransform({ position.x, position.y }, newRotation);
+}
+
+float PhysicsComponent::GetRotation() const
+{
+	return mBody->GetAngle();
+}

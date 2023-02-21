@@ -22,7 +22,10 @@ public:
 	~PhysicsComponent() override;
 	void Update(const float&) override;
 	Vec2 GetSize() const;
+	void SetPosition(Vec2 newPosition);
 	Vec2 GetPosition() const;
+	void SetRotation(float newRotation);
+	float GetRotation() const;
 	b2Body* GetBody() { return mBody; }
 private:
 	b2Body* mBody;

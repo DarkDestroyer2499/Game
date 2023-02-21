@@ -70,7 +70,7 @@ public:
 			this->mComponentList.erase(std::remove(this->mComponentList.begin(), this->mComponentList.end(), tmpComponent), this->mComponentList.end());
 			delete tmpComponent;
 		}
-	}
+	}	
 
 private:
 	bool IsAlreadySelected(Entity& entity);
@@ -85,6 +85,7 @@ private:
 	sf::Vector2i mMousePosition;
 	std::vector<SelectedObject> mSelectedObjects;
 	std::vector<IUIComponent*> mComponentList;
+	std::map<std::string, ImFont*> mFonts;
 
 	friend class HierarchyComponent;
 	friend class ViewportComponent;

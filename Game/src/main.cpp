@@ -60,7 +60,7 @@ int main()
 	Entity* ent1 = engine.CreateObject("Ama bird!");
 
 
-	ent1->AddComponent<PhysicsComponent>(engine.GetMainWorld(), PhysicsObjectType::POLYGON, bdef, Vec2(50, 50), Vec2(210, 80));
+	ent1->AddComponent<PhysicsComponent>(engine.GetMainWorld(), PhysicsObjectType::POLYGON, bdef, Vec2(50, 50), Vec2(190, 80));
 	ent1->AddComponent<GraphicsComponent>(sprite);
 	
 	
