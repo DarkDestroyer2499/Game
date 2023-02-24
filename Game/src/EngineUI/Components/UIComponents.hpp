@@ -6,5 +6,6 @@
 #include "MenuBar.hpp"
 #include "Viewport.hpp"
 #include "Properties.hpp"
+#include "FileExplorer.hpp"
 
 #endif // !UI_COMPONENTS_H

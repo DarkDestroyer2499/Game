@@ -10,7 +10,19 @@ Editor::Editor(sf::RenderTexture* newTexture, Engine& engine) :
 	auto& io = ImGui::GetIO();
 	io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
 	
-	io.Fonts->AddFontFromFileTTF("../resources/fonts/Noto_Sans/NotoSans-Medium.ttf", 17);
+	io.Fonts->AddFontDefault();
+	mFonts["MAIN_FONT"] = io.Fonts->AddFontFromFileTTF("../resources/fonts/Noto_Sans/NotoSans-Medium.ttf", 17);
+	
+
+	// Add character ranges and merge into main font
+	static ImWchar ranges[] = { 0xf000, 0xf3ff, 0 };
+	ImFontConfig config;
+	config.MergeMode = true;
+	mFonts["ICON_FONT"] = io.Fonts->AddFontFromFileTTF("../resources/fontAwersome/fa-regular-400.ttf", 48, &config, ranges);	
+
+	io.FontDefault = mFonts["MAIN_FONT"];
+
+	
 
 	ImGui::SFML::UpdateFontTexture(); 
 }
@@ -128,4 +140,9 @@ void Editor::Run()
 		mTexture->display();
 		mWindow.display();
 	}
+}
+
+std::map<std::string, ImFont*>& Editor::GetLoadedFonts()
+{
+	return mFonts;
 }

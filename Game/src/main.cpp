@@ -20,6 +20,7 @@ int main()
 	editor.AddComponent<HierarchyComponent>(&editor);
 	editor.AddComponent<MenuBarComponent>(&editor);
 	editor.AddComponent<PropertiesComponent>(&editor);
+	editor.AddComponent<FileExplorerComponent>(&editor);
 
 	sf::Texture t;
 

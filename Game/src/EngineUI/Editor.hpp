@@ -29,6 +29,7 @@ public:
 	Vec2 WindowToViewportCoords(const Vec2 &windowCoords);
 	bool IsInsideWorkspace(Vec2);
 	void Run();
+	std::map<std::string, ImFont*>& GetLoadedFonts();
 
 	template<typename Component>
 	bool HasComponent()
