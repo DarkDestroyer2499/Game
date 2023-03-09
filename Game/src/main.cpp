@@ -1,12 +1,14 @@
 #include <SFML/Graphics.hpp>
-#include "Engine.hpp" 
+#include "Core/Engine.hpp" 
 #include <Windows.h>
-#include "EngineUI/Editor.hpp"
-#include "Entity.hpp"
+#include "Editor/Editor.hpp"
+#include "Core/Entity.hpp"
 #include <thread>
-#include "EngineUI/Components/UIComponents.hpp"
+#include "Editor/Components/EditorComponents.hpp"
 
 using namespace sf;
+
+using namespace Oblivion;
 
 int main()
 {
@@ -16,11 +18,12 @@ int main()
 	Editor editor(&window, engine);
 	engine.Run();
 
-	editor.AddComponent<ViewportComponent>(&editor);
-	editor.AddComponent<HierarchyComponent>(&editor);
-	editor.AddComponent<MenuBarComponent>(&editor);
-	editor.AddComponent<PropertiesComponent>(&editor);
-	editor.AddComponent<FileExplorerComponent>(&editor);
+	editor.ecs.AddComponent<ViewportComponent>(&editor);
+	editor.ecs.AddComponent<HierarchyComponent>(&editor);
+	editor.ecs.AddComponent<MenuBarComponent>(&editor);
+	editor.ecs.AddComponent<PropertiesComponent>(&editor);
+	editor.ecs.AddComponent<FileExplorerComponent>(&editor);
+	editor.ecs.AddComponent<SelectionHandlerComponent>(&editor, &engine);
 
 	sf::Texture t;
 
@@ -42,9 +45,9 @@ int main()
 
 	
 	//ent5->AddComponent<GraphicsComponent>(new GraphicsComponent(s1));
-	ent5->AddComponent<AnimatedGraphicsComponent>();
-	ent5->AddComponent<PhysicsComponent>(engine.GetMainWorld(), PhysicsObjectType::POLYGON, bdef, Vec2(50, 50), Vec2(190, 0));
-	auto* anim = ent5->GetComponent<AnimatedGraphicsComponent>();
+	ent5->ecs.AddComponent<AnimatedGraphicsComponent>();
+	ent5->ecs.AddComponent<PhysicsComponent>(engine.GetMainWorld(), PhysicsObjectType::POLYGON, bdef, Vec2(50, 50), Vec2(190, 0));
+	auto* anim = ent5->ecs.GetComponent<AnimatedGraphicsComponent>();
 
 	sf::Texture playerTexture;
 	playerTexture.loadFromFile("../resources/fang.png");
@@ -56,20 +59,20 @@ int main()
 	anim->AddAnimation("shoot", playerTexture, Vec2(0, 572), Vec2(45, 52), 5, 2, 45.5f);
 
 
-	anim->Set("wal");
+	anim->Set("walk");
 
 	Entity* ent1 = engine.CreateObject("Ama bird!");
 
 
-	ent1->AddComponent<PhysicsComponent>(engine.GetMainWorld(), PhysicsObjectType::POLYGON, bdef, Vec2(50, 50), Vec2(190, 80));
-	ent1->AddComponent<GraphicsComponent>(sprite);
+	ent1->ecs.AddComponent<PhysicsComponent>(engine.GetMainWorld(), PhysicsObjectType::POLYGON, bdef, Vec2(50, 50), Vec2(190, 80));
+	ent1->ecs.AddComponent<GraphicsComponent>(sprite);
 	
 	
 	Entity* ent3 = engine.CreateObject("Ama floor!");
 	sprite.setTextureRect(sf::IntRect(50, 50, 200, 30));
-	ent3->AddComponent<GraphicsComponent>(sprite);
+	ent3->ecs.AddComponent<GraphicsComponent>(sprite);
 	b2BodyDef bdef2;
-	ent3->AddComponent<PhysicsComponent>(engine.GetMainWorld(), PhysicsObjectType::POLYGON, bdef2, Vec2(200, 30), Vec2(100, 400));
+	ent3->ecs.AddComponent<PhysicsComponent>(engine.GetMainWorld(), PhysicsObjectType::POLYGON, bdef2, Vec2(200, 30), Vec2(100, 400));
 	//ent3->RemoveComponent<PhysicsComponent>();
 	editor.Run();
 	

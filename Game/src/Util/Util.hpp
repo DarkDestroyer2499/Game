@@ -6,55 +6,57 @@
 #include <SFML/Graphics.hpp>
 #include <box2d.h>
 
-constexpr float BORDER_MARGIN = 10.f;
+namespace Oblivion {
 
-const float DEG_IN_RAD = 57.29577f;
+	constexpr float BORDER_MARGIN = 10.f;
 
-struct Vec2
-{
-	float x, y;
-	Vec2(float x, float y) :x(x), y(y)
-	{
-	}
-	Vec2(ImVec2 vec) :
-		x(vec.x), y(vec.y)
-	{
-	}
-	Vec2() :
-		x(0.f), y(0.f)
-	{
-	}
+	const float DEG_IN_RAD = 57.29577f;
 
-	Vec2(b2Vec2 pos) :
-		x(pos.x), y(pos.y)
+	struct Vec2
 	{
-	}
-	 
-	Vec2(sf::Vector2u pos) :
-		x((float)pos.x), y((float)pos.y)
-	{
-	}
+		float x, y;
+		Vec2(float x, float y) :x(x), y(y)
+		{
+		}
+		Vec2(ImVec2 vec) :
+			x(vec.x), y(vec.y)
+		{
+		}
+		Vec2() :
+			x(0.f), y(0.f)
+		{
+		}
 
-	Vec2(sf::Vector2f pos) :
-		x(pos.x), y(pos.y)
-	{
-	}
+		Vec2(b2Vec2 pos) :
+			x(pos.x), y(pos.y)
+		{
+		}
 
-	sf::Vector2f ToSFMLVec2f()
-	{
-		return sf::Vector2f(x, y);
-	}
+		Vec2(sf::Vector2u pos) :
+			x((float)pos.x), y((float)pos.y)
+		{
+		}
 
-	sf::Vector2u ToSFMLVec2u()
-	{
-		return sf::Vector2u((unsigned int)x, (unsigned int)y);
-	}
+		Vec2(sf::Vector2f pos) :
+			x(pos.x), y(pos.y)
+		{
+		}
 
-	friend std::ostream& operator<<(std::ostream& os, const Vec2& vec)
-	{
-		return os << '[' << vec.x << " : " << vec.y << ']';
-	}
-};
+		sf::Vector2f ToSFMLVec2f()
+		{
+			return sf::Vector2f(x, y);
+		}
+
+		sf::Vector2u ToSFMLVec2u()
+		{
+			return sf::Vector2u((unsigned int)x, (unsigned int)y);
+		}
+
+		friend ::std::ostream& operator<<(::std::ostream& os, const Vec2& vec)
+		{
+			return os << '[' << vec.x << " : " << vec.y << ']';
+		}
+	};
 
 #define PVARIABLE_GET_SET(type, name)\
 	private:\
@@ -66,5 +68,5 @@ struct Vec2
 	void Set ## name ## (type new ## name){\
 	this->m ## name = new ## name;\
 	}
-
+}
 #endif // !UTIL_HPP

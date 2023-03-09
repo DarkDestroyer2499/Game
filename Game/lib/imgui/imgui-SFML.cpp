@@ -556,10 +556,10 @@ void ProcessEvent(const sf::Event& event) {
     if (s_currWindowCtx->windowHasFocus) {
         switch (event.type) {
         case sf::Event::Resized:
-            io.DisplaySize = ImVec2(event.size.width, event.size.height);
+            io.DisplaySize = ImVec2((float)event.size.width, (float)event.size.height);
             break;
         case sf::Event::MouseMoved:
-            io.AddMousePosEvent(event.mouseMove.x, event.mouseMove.y);
+            io.AddMousePosEvent((float)event.mouseMove.x, (float)event.mouseMove.y);
             s_currWindowCtx->mouseMoved = true;
             break;
         case sf::Event::MouseButtonPressed: // fall-through

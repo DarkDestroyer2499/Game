@@ -1,4 +1,4 @@
-workspace "sfml_project"
+workspace "Oblivion Engine"
 configurations { "Debug", "Release" }
 location "build"
 
@@ -12,13 +12,15 @@ files { "src/**.*", "lib/imgui/**.cpp" }
 
 postbuildcommands
 {
-    "{COPY} ../lib/SFML-2.5.1/bin ../bin/Debug"
+    "{COPY} ../lib/SFML-2.5.1/bin ../bin/Debug",
+    "{COPY} ../vendor/Config/imgui.ini ."
 }
 
 filter "configurations:*"
+flags("MultiProcessorCompile")
 defines { "SFML_DYNAMIC" }
-includedirs { "lib/SFML-2.5.1/include", "lib/box2d-main/include/box2d", "lib/imgui" }
-libdirs { "lib/SFML-2.5.1/lib", "lib/box2d-main/lib" }
+includedirs { "lib/**", "resources", "src" }
+libdirs { "lib/**" }
 links
 {
     "opengl32",
@@ -40,8 +42,6 @@ links
     "sfml-network-d"
 }
 
-buildoptions{"/IGNORE:4099"}
-
 filter "configurations:Release"
 defines { "NDEBUG" }
 optimize "On"
@@ -57,9 +57,8 @@ links
 staticruntime "off"
 runtime "Debug"
 
-buildoptions{"/IGNORE:4099"}
-
 postbuildcommands
 {
-    "{COPY} ../lib/SFML-2.5.1/bin ../bin/Release"
+    "{COPY} ../lib/SFML-2.5.1/bin ../bin/Release",
+    "{COPY} ../vendor/Config/imgui.ini imgui.ini"
 }
