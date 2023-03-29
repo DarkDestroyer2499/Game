@@ -7,6 +7,7 @@
 #include "Util/Util.hpp"
 #include "Util/Log.hpp"
 #include "Core/ECS.hpp"
+#include "Core/ResourceComponents/ResourceComponentLinker.hpp"
 
 namespace Oblivion
 {
@@ -15,9 +16,9 @@ namespace Oblivion
 	class Entity
 	{
 	public:
-		Entity() = default;
+		Entity();
 		Entity(Engine* engine, const char* newName = "Unknown");
-		Entity(const Entity& other) { Log(ERROR, "Entity has been copied!"); };
+		Entity(const Entity& other);
 		virtual ~Entity();
 
 		virtual void Update(const float&);
@@ -28,9 +29,11 @@ namespace Oblivion
 		float GetRotation() const;
 		Engine* GetEngine();
 
+		Entity& operator=(const Entity& other);
+	
 	public:
+		ResourceManager* rm;
 		ECS<IEntityComponent, Entity*> ecs;
-
 	protected:
 		Engine* mEngine;
 		Vec2 mPosition;

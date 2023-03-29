@@ -1,12 +1,13 @@
 #include "Editor.hpp"
 #include "Util/Log.hpp"
+#include <Core/Serializer.hpp>
 
 namespace Oblivion
 {
 	Editor::Editor(sf::RenderTexture* newTexture, Engine& engine) :
 		mTexture{ newTexture }, mEngine{ engine }, mEvent{}, ecs{ this }
 	{
-		mWindow.create(sf::VideoMode(1200, 900), "Engine", ScreenMode::Resize | ScreenMode::Close);
+		mWindow.create(sf::VideoMode(1200, 900), "Oblivion Engine", ScreenMode::Resize | ScreenMode::Close);
 
 		mView = mWindow.getDefaultView();
 
@@ -56,7 +57,9 @@ namespace Oblivion
 			if (!ecs.GetComponent<SelectionHandlerComponent>()->IsInsideWorkspace(tmpCoords))
 				return;
 
-			watch(tmpCoords);
+			Serializer s(&mEngine, *mEngine.GetCurrentScene());
+
+			s.Deserialize(*mEngine.GetCurrentScene(), mEngine.GetCurrentScene()->GetName() + ".yaml");
 
 			ecs.GetComponent<SelectionHandlerComponent>()->TrySelectObject(translatedPos);
 			break;
@@ -95,13 +98,15 @@ namespace Oblivion
 			mTexture->clear(EDITOR_BG_COLOR);
 
 			ImGui::DockSpaceOverViewport();
-			mEngine.Update(mTexture);
+			
 			
 			for (auto& component : ecs.GetComponentList())
 			{
 				component->Update();
 			}
 
+			mEngine.Update(mTexture);
+			
 			ImGui::ShowDemoWindow();
 			ImGui::SFML::Render(mWindow);
 

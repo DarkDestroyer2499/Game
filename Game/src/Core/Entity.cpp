@@ -1,15 +1,33 @@
 #include "Core/Entity.hpp"
 #include "Components/ComponentLinker.hpp"
+#include "Core/Engine.hpp"
 
 namespace Oblivion
 {
+	Entity::Entity()
+		: mEngine{ nullptr }, mPosition{}, ecs{ nullptr }, mRotation{}, rm{nullptr}
+
+	{
+		this->ecs.AddComponent<TagComponent>("");
+		this->ecs.AddComponent<TransformComponent>();
+		this->ecs.AddComponent<IDComponent>();
+	}
 
 	Entity::Entity(Engine* engine, const char* newName) :
-		mEngine{engine},mPosition {}, ecs{ this }
+		mEngine{ engine }, mPosition{}, ecs{ this }, mRotation{}
 	{
 		this->ecs.AddComponent<TagComponent>(newName);
 		this->ecs.AddComponent<TransformComponent>();
 		this->ecs.AddComponent<IDComponent>();
+
+		rm = &mEngine->resourceManager;
+	}
+
+	Entity::Entity(const Entity& other):
+		mEngine{other.mEngine}, mPosition{other.mPosition}, ecs{other.ecs}, mRotation{}
+	{
+		rm = &other.mEngine->resourceManager;
+		Log(ERROR, "Entity has been copied!");
 	}
 
 	Entity::~Entity()
@@ -59,6 +77,11 @@ namespace Oblivion
 	Engine* Entity::GetEngine()
 	{
 		return mEngine;
+	}
+
+	Entity& Entity::operator=(const Entity& other)
+	{
+		return *this;
 	}
 
 	void Entity::Update(const float& ts)

@@ -12,6 +12,7 @@ namespace Oblivion
 		TagComponent(const ::std::string& newTag);
 		~TagComponent();
 
+		::std::unique_ptr<IEntityComponent> Clone() const override;
 		void Update(const float&) override;
 		void SetTag(::std::string& newTag);
 		void SetTag(::std::string newTag);

@@ -1,0 +1,3 @@
+[submodule "Game/lib/yaml"]
+	path = Game/lib/yaml
+	url = https://github.com/jbeder/yaml-cpp.git

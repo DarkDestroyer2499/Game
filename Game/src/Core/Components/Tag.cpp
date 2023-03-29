@@ -12,6 +12,11 @@ namespace Oblivion
 	{
 	}
 
+	::std::unique_ptr<IEntityComponent> TagComponent::Clone() const
+	{
+		return ::std::make_unique<TagComponent>(*this);
+	}
+
 	void TagComponent::Update(const float& ts)
 	{
 	}

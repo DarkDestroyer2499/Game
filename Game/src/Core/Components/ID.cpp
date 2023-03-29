@@ -10,6 +10,21 @@ namespace Oblivion
 		mName = COMPONENT_NAME;
 	}
 
+	IDComponent::IDComponent(UUID uuid)
+		:mUUID{uuid}
+	{
+	}
+
+	void IDComponent::SetUUID(UUID uuid)
+	{
+		mUUID = uuid;
+	}
+
+	::std::unique_ptr<IEntityComponent> IDComponent::Clone() const
+	{
+		return ::std::make_unique<IDComponent>(*this);
+	}
+
 	void IDComponent::Update(const float& time)
 	{
 	}

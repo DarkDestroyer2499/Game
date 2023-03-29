@@ -10,8 +10,11 @@ namespace Oblivion
 	{
 	public:
 		AnimatedGraphicsComponent();
+		AnimatedGraphicsComponent(const AnimatedGraphicsComponent& other);
+		AnimatedGraphicsComponent(AnimatedGraphicsComponent&& other) noexcept;
 		~AnimatedGraphicsComponent() = default;
 
+		::std::unique_ptr<IEntityComponent> Clone() const override;
 		void AddAnimation(const ::std::string& name, sf::Texture& t, Vec2 pos, Vec2 size, int countOfFrames, float speed, float step);
 		void SetFlip(bool);
 		void Set(const ::std::string&);
@@ -22,6 +25,8 @@ namespace Oblivion
 	private:
 		::std::string mCurrentAnimation;
 		::std::map<::std::string, Animation> mAnimList;
+
+		friend Serializer;
 	};
 }
 #endif // !ANIMATED_GRAPHICS_COMPONENT_H

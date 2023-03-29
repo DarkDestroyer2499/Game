@@ -7,6 +7,7 @@
 namespace Oblivion
 {
 	class AnimatedGraphicsComponent;
+	class Serializer;
 
 	class Animation
 	{
@@ -16,13 +17,16 @@ namespace Oblivion
 		~Animation() = default;
 
 		void Update(const float&);
+		
 	private:
 		bool isFlipped, isPlaying;
-		float mCurrentFrame, mSpeed;
+		float mCurrentFrame, mSpeed, mStep;
 		::std::vector<sf::IntRect> mFrames, mFramesFlipped;
 		sf::Sprite mSprite;
+		Vec2 mSize, mStartPos;
 
 		friend AnimatedGraphicsComponent;
+		friend Serializer;
 	};
 }
 #endif //!ANIMATION_H

@@ -12,6 +12,11 @@ namespace Oblivion
 	{
 	}
 
+	::std::unique_ptr<IEntityComponent> TransformComponent::Clone() const
+	{
+		return ::std::make_unique<TransformComponent>();
+	}
+
 	void TransformComponent::Update(const float& ts)
 	{
 	}

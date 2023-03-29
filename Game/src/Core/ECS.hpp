@@ -10,7 +10,9 @@ namespace Oblivion
 	{
 	public:
 		ECS();
-		ECS(OwnerType owner); 
+		ECS(OwnerType owner);
+		ECS(ECS&& other);
+		ECS(const ECS& other);
 		~ECS();
 
 		template<typename Component>
@@ -73,6 +75,29 @@ namespace Oblivion
 	inline ECS<T, OwnerType>::ECS(OwnerType owner)
 		: mOwner{owner}
 	{
+	}
+
+	template<typename T, typename OwnerType>
+	inline ECS<T, OwnerType>::ECS(ECS&& other)
+		: mOwner{other.mOwner}, mComponentList{other.mComponentList}
+	{
+		other.mOwner = nullptr;
+		for (auto& component : other.mComponentList)
+		{
+			component = nullptr;
+		}
+	}
+
+	template<typename T, typename OwnerType>
+	inline ECS<T, OwnerType>::ECS(const ECS& other)
+		: mOwner{other.mOwner}
+	{		
+		for (auto& component : other.mComponentList)
+		{
+			auto newComponent = component->Clone();
+			newComponent->SetOwner(other.mOwner);
+			mComponentList.push_back(newComponent.release());
+		}
 	}
 
 	template<typename T, typename OwnerType>

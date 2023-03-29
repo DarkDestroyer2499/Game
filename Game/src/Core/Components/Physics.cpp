@@ -8,7 +8,7 @@ namespace Oblivion
 {
 
 	PhysicsComponent::PhysicsComponent(b2World* world, const PhysicsObjectType& type, b2BodyDef& bdef, Vec2 size, Vec2 pos, float density)
-		: mSize{ size }
+		: mSize{ size }, mType{ type }, mBodyDef{ bdef }, mDensity{ density }
 	{
 		this->mBody = world->CreateBody(&bdef);
 
@@ -27,8 +27,13 @@ namespace Oblivion
 		mName = COMPONENT_NAME;
 	}
 
-	PhysicsComponent::PhysicsComponent(b2World* world, const PhysicsObjectType& type, b2BodyDef& bdef, b2FixtureDef fdef, Vec2 size, Vec2 pos, float density)
-		: mSize{ size }
+	::std::unique_ptr<IEntityComponent> PhysicsComponent::Clone() const
+	{
+		return ::std::make_unique<PhysicsComponent>(mBody->GetWorld(), mType, mBodyDef, mFixtureDef, mSize, mBody->GetPosition(), mDensity);
+	}
+
+	PhysicsComponent::PhysicsComponent(b2World* world, const PhysicsObjectType& type, b2BodyDef bdef, b2FixtureDef fdef, Vec2 size, Vec2 pos, float density)
+		: mSize{ size }, mType{ type }, mBodyDef{ bdef }, mDensity{ density }, mFixtureDef{ fdef }
 	{
 		this->mBody = world->CreateBody(&bdef);
 
@@ -39,8 +44,10 @@ namespace Oblivion
 			b2PolygonShape shape;
 			shape.SetAsBox(size.x / 2, size.y / 2);
 
-			this->mBody->CreateFixture(&fdef);
+			this->mBody->CreateFixture(&shape, density);
+
 			this->mBody->SetTransform(b2Vec2((float)pos.x, (float)pos.y), 0);
+
 			break;
 		}
 		}
@@ -85,5 +92,21 @@ namespace Oblivion
 	float PhysicsComponent::GetRotation() const
 	{
 		return mBody->GetAngle();
+	}
+	PhysicsObjectType PhysicsComponent::GetPhysicsType()
+	{
+		return mType;
+	}
+	b2BodyDef PhysicsComponent::GetBodyDef()
+	{
+		return mBodyDef;
+	}
+	float PhysicsComponent::GetDensity()
+	{
+		return mDensity;
+	}
+	b2FixtureDef PhysicsComponent::GetFixtureDef()
+	{
+		return mFixtureDef;
 	}
 }

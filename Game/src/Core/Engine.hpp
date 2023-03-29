@@ -6,15 +6,15 @@
 #include <thread>
 #include <vector>
 #include "Core/Entity.hpp"
+#include "Scene.hpp"
+#include "Core/ResourceManager.hpp"
 
 namespace Oblivion
 {
 
 #define WINDOW_NAME "SUPER GAME"
 
-    const b2Vec2 GRAVITY(0.f, 9.8f);
-
-    constexpr unsigned int RESERVE_ENTITIES = 50;
+    const b2Vec2 GRAVITY(0.f, 9.8f);    
 
     enum ScreenMode
     {
@@ -35,20 +35,23 @@ namespace Oblivion
         Entity* GetEntityByID(UUID uuid);
         sf::RenderTarget* GetRenderWindow();
         Entity* CreateObject(::std::string name = ::std::string("Uknown"));
+        Entity* CreateObject(Scene& scene, ::std::string entityName = ::std::string("Uknown"));
         b2World* GetMainWorld();
         uint32_t GetRenderTime();
-        ::std::vector< Entity>& GetEntityList();
+        Scene* GetCurrentScene();
 
+        void SetCurrentScene(Scene newScene);
         void SetScreenMode(ScreenMode);
         void SetGravity(Vec2);
         void Run();
         void Stop();
         void Update(sf::RenderTexture* window);
 
+    public:
+        ResourceManager resourceManager;
     private:
         void Update(sf::RenderWindow* window);
 
-        
     private:
         sf::RenderTarget* mWindow;
         unsigned int mScnWidht, mScnHeight;
@@ -57,7 +60,7 @@ namespace Oblivion
         sf::Event mEvent;
         ::std::unique_ptr<::std::thread> mMainThread;
         ::std::unique_ptr<b2World> mWorld;
-        ::std::vector<Entity> mObjectList;
+        Scene mCurrentScene;
         uint32_t mLastRenderTime;
         sf::Clock mClock;
     };

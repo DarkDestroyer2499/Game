@@ -12,6 +12,7 @@ namespace Oblivion
 		TransformComponent();
 		~TransformComponent();
 
+		::std::unique_ptr<IEntityComponent> Clone() const override;
 		void Update(const float&) override;
 		void SetPosition(Vec2 newPosition);
 		Vec2 GetPosition();

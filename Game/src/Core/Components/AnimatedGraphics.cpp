@@ -9,6 +9,22 @@ namespace Oblivion
 		mName = COMPONENT_NAME;
 	}
 
+	AnimatedGraphicsComponent::AnimatedGraphicsComponent(const AnimatedGraphicsComponent& other)
+		: mCurrentAnimation{ mCurrentAnimation }, mAnimList{ mAnimList }
+	{
+	}
+
+	AnimatedGraphicsComponent::AnimatedGraphicsComponent(AnimatedGraphicsComponent&& other) noexcept
+		: mCurrentAnimation{ std::move(mCurrentAnimation) }
+	{
+		mAnimList.merge(other.mAnimList);
+	}
+
+	::std::unique_ptr<IEntityComponent> AnimatedGraphicsComponent::Clone() const
+	{
+		return ::std::make_unique<AnimatedGraphicsComponent>(*this);
+	}
+
 	void AnimatedGraphicsComponent::AddAnimation(const ::std::string& name, sf::Texture& t, Vec2 pos, Vec2 size, int countOfFrames, float speed, float step)
 	{
 		mAnimList[name] = Animation(t, pos, size, countOfFrames, speed, step);

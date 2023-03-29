@@ -2,6 +2,7 @@
 #define I_COMPONENT_H
 
 #include <string>
+#include <memory>
 
 namespace Oblivion
 {
@@ -14,6 +15,7 @@ namespace Oblivion
 	public:
 		virtual ~IEntityComponent() = default;
 
+		virtual ::std::unique_ptr<IEntityComponent> Clone() const = 0;
 		virtual void Update(const float&) = 0;
 		virtual void SetOwner(Entity* newOwner) { mOwner = newOwner; }
 		virtual const char* GetName() { return mName.c_str(); };

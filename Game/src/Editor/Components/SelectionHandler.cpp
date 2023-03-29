@@ -60,7 +60,7 @@ namespace Oblivion
 	{
 		bool isEmptySpaceClicked = true;
 
-		for (auto& entity : mEngine->GetEntityList())
+		for (auto& entity : mEngine->GetCurrentScene()->GetEntityList())
 		{
 			auto graphicsComponent = entity.ecs.GetComponent<GraphicsComponent>();
 			if (!graphicsComponent)

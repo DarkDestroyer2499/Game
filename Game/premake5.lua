@@ -18,13 +18,14 @@ postbuildcommands
 
 filter "configurations:*"
 flags("MultiProcessorCompile")
-defines { "SFML_DYNAMIC" }
+defines { "SFML_DYNAMIC", "YAML_CPP_STATIC_DEFINE" }
 includedirs { "lib/**", "resources", "src" }
 libdirs { "lib/**" }
 links
 {
     "opengl32",
-    "box2d"
+    "box2d",
+    "yaml-cppd"
 }
 
 staticruntime "off"

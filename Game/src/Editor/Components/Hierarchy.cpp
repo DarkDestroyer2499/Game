@@ -12,11 +12,12 @@ namespace Oblivion
 		if (ImGui::Begin("Hierarchy"))
 		{
 			ImGui::Text("Render time: %ius", mEditor->GetEngine()->GetRenderTime());
+			ImGui::Text("Entity count: %i", mEditor->GetEngine()->GetCurrentScene()->GetEntityList().size());
 			static ImGuiTableFlags flags = ImGuiTableFlags_BordersV | ImGuiTableFlags_BordersOuterH | ImGuiTableFlags_Resizable | ImGuiTableFlags_RowBg | ImGuiTableFlags_NoBordersInBody;
 			ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0.f, 0.f));
 			if (ImGui::BeginTable("EntityList", 1, flags))
 			{
-				for (auto& entity : mEditor->GetEngine()->GetEntityList())
+				for (auto& entity : mEditor->GetEngine()->GetCurrentScene()->GetEntityList())
 				{
 					ImGui::TableNextRow();
 					ImGui::TableNextColumn();

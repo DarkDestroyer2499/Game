@@ -4,18 +4,16 @@
 
 namespace Oblivion
 {
-
 	Engine::Engine(sf::RenderTarget* window, ScreenMode wMode, unsigned int width = 0, unsigned int height = 0) :
 		mWindow{ window }, mWindowMode{ wMode }, mScnWidht{ sf::VideoMode::getDesktopMode().width / 2 },
-		mScnHeight{ sf::VideoMode::getDesktopMode().height / 2 }, mWorking{ true }, mLastRenderTime{ 1 }
+		mScnHeight{ sf::VideoMode::getDesktopMode().height / 2 }, mWorking{ true }, mLastRenderTime{ 1 }, mCurrentScene(Scene(this))
 	{
 		mWorld = ::std::make_unique<b2World>(GRAVITY);
-		mObjectList.reserve(RESERVE_ENTITIES);
 	}
 
 	Entity* Engine::GetEntityByID(UUID uuid)
 	{
-		for (auto& entity : mObjectList)
+		for (auto& entity : mCurrentScene.GetEntityList())
 		{
 			if (entity.ecs.GetComponent<IDComponent>()->GetUUID() == uuid)
 				return &entity;
@@ -55,7 +53,7 @@ namespace Oblivion
 			//Draw sprite of all objects
 			window->clear();
 
-			for (auto& object : mObjectList)
+			for (auto& object : mCurrentScene.GetEntityList())
 			{
 				object.Update(1.f / (float)mLastRenderTime);
 			}
@@ -71,12 +69,12 @@ namespace Oblivion
 
 	void Engine::Update(sf::RenderTexture* window)
 	{
-		for (auto& object : mObjectList)
+		for (auto& object : mCurrentScene.GetEntityList())
 		{
 			object.Update(1.f / (float)mLastRenderTime);
 		}
 
-		mWorld->Step(1 / 500.f, 8, 3);
+		mWorld->Step(1.f / 400.f, 8, 3);
 		mLastRenderTime = (uint32_t)mClock.getElapsedTime().asMicroseconds();
 		mClock.restart();
 	}
@@ -111,9 +109,19 @@ namespace Oblivion
 		return mLastRenderTime;
 	}
 
+	Scene* Engine::GetCurrentScene()
+	{
+		return &mCurrentScene;
+	}
+
 	void Engine::SetGravity(Vec2 newGravity)
 	{
 		mWorld->SetGravity(b2Vec2(newGravity.x, newGravity.y));
+	}
+
+	void Engine::SetCurrentScene(Scene newScene)
+	{
+		mCurrentScene = newScene;
 	}
 
 	void Engine::SetScreenMode(ScreenMode newMode)
@@ -123,17 +131,23 @@ namespace Oblivion
 
 	Entity* Engine::CreateObject(::std::string name)
 	{
-		Log(INFO, "Create entity with name: " << name);
-		mObjectList.emplace_back(this, name.c_str());
-		return &mObjectList[mObjectList.size() - 1];
+
+		::std::list<Entity>& entityList = mCurrentScene.GetEntityList();
+		entityList.emplace_back(this, name.c_str());
+		Log(INFO, &entityList.back() << " Create entity with name: " << name);
+		return &entityList.back();
+	}
+
+	Entity* Engine::CreateObject(Scene& scene, ::std::string name)
+	{
+		::std::list<Entity>& entityList = scene.GetEntityList();
+		entityList.emplace_back(this, name.c_str());
+		Log(INFO, &entityList.back() << " Create entity with name: " << name);
+		return &entityList.back();
 	}
 
 	void Engine::Stop()
 	{
 		mWorking = false;
-	}
-	::std::vector<Entity>& Engine::GetEntityList()
-	{
-		return mObjectList;
 	}
 }
