@@ -3,6 +3,7 @@
 
 #include <map>
 #include "SFML/Graphics.hpp"
+#include <list>
 
 namespace Oblivion
 {

@@ -20,8 +20,10 @@ int main()
 	engine.Run();
 
 	engine.resourceManager.resources.AddComponent<TextureComponent>();
-
 	editor.ecs.AddComponent<ViewportComponent>(&editor);
+	editor.ecs.AddComponent<CameraComponent>(&editor);
+
+	
 	editor.ecs.AddComponent<HierarchyComponent>(&editor);
 	editor.ecs.AddComponent<MenuBarComponent>(&editor);
 	editor.ecs.AddComponent<PropertiesComponent>(&editor);

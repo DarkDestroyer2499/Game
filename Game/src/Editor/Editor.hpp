@@ -27,6 +27,8 @@ namespace Oblivion
 		void Run();
 		Engine* GetEngine();
 		sf::RenderTexture* GetRenderTexture();
+		Vec2 GetMousePosition();
+
 
 	private:
 		void OnWindowClosed() override;

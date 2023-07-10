@@ -37,6 +37,11 @@ namespace Oblivion {
 		{
 		}
 
+		Vec2(sf::Vector2i pos) :
+			x((float)pos.x), y((float)pos.y)
+		{
+		}
+
 		Vec2(sf::Vector2f pos) :
 			x(pos.x), y(pos.y)
 		{
@@ -50,6 +55,11 @@ namespace Oblivion {
 		sf::Vector2u ToSFMLVec2u()
 		{
 			return sf::Vector2u((unsigned int)x, (unsigned int)y);
+		}
+
+		sf::Vector2i ToSFMLVec2i()
+		{
+			return sf::Vector2i((int)x, (int)y);
 		}
 
 		friend ::std::ostream& operator<<(::std::ostream& os, const Vec2& vec)

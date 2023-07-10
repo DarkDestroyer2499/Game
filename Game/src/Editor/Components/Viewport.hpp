@@ -14,10 +14,7 @@ namespace Oblivion
 
 		Vec2 GetPosition();
 		Vec2 GetSize();
-		void Update() override;
-
-	private:
-		void OnMouseButtonPressed(const sf::Event&) override;
+		void Update() override;		
 
 	private:
 		Editor* mEditor;

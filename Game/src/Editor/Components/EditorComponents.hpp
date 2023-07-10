@@ -9,5 +9,6 @@
 #include "FileExplorer.hpp"
 #include "SelectionHandler.hpp"
 #include "Font.hpp"
+#include "Camera.hpp"
 
 #endif // !EDITOR_COMPONENTS_H
