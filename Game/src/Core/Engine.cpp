@@ -1,6 +1,6 @@
 #include "Core/Engine.hpp"
 #include "Util/Log.hpp"
-#include "Components/ComponentLinker.hpp"
+#include "EntityComponents/ComponentLinker.hpp"
 
 namespace Oblivion
 {
@@ -8,7 +8,7 @@ namespace Oblivion
 		mWindow{ window }, mWindowMode{ wMode }, mScnWidht{ sf::VideoMode::getDesktopMode().width / 2 },
 		mScnHeight{ sf::VideoMode::getDesktopMode().height / 2 }, mWorking{ true }, mLastRenderTime{ 1 }, mCurrentScene(Scene(this))
 	{
-		mWorld = ::std::make_unique<b2World>(GRAVITY);
+		mWorld = ::std::make_unique<b2World>(b2Vec2(0.f, 9.8f));
 	}
 
 	Entity* Engine::GetEntityByID(UUID uuid)
@@ -112,11 +112,6 @@ namespace Oblivion
 	Scene* Engine::GetCurrentScene()
 	{
 		return &mCurrentScene;
-	}
-
-	void Engine::SetGravity(Vec2 newGravity)
-	{
-		mWorld->SetGravity(b2Vec2(newGravity.x, newGravity.y));
 	}
 
 	void Engine::SetCurrentScene(Scene newScene)

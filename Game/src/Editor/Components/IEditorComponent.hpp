@@ -1,11 +1,13 @@
 #ifndef IUI_COMPONENT_HPP
 #define IUI_COMPONENT_HPP
 
+#include <Core/EventBroadcaster.hpp>
+
 namespace Oblivion
 {
 	class Editor;
 
-	class IEditorComponent
+	class IEditorComponent : public IObserver
 	{
 	public:
 		virtual ~IEditorComponent() = default;

@@ -1,5 +1,5 @@
 #include "Core/Entity.hpp"
-#include "Components/ComponentLinker.hpp"
+#include "EntityComponents/ComponentLinker.hpp"
 #include "Core/Engine.hpp"
 
 namespace Oblivion

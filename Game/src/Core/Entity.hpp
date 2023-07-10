@@ -3,7 +3,7 @@
 
 #include <SFML/Graphics.hpp>
 #include <box2d.h>
-#include "Components/ComponentLinker.hpp"
+#include "EntityComponents/ComponentLinker.hpp"
 #include "Util/Util.hpp"
 #include "Util/Log.hpp"
 #include "Core/ECS.hpp"

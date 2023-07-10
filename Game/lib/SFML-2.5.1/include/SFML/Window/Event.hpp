@@ -34,13 +34,13 @@
 #include <SFML/Window/Mouse.hpp>
 #include <SFML/Window/Sensor.hpp>
 
-
 namespace sf
 {
 ////////////////////////////////////////////////////////////
 /// \brief Defines a system event and its parameters
 ///
 ////////////////////////////////////////////////////////////
+
 class Event
 {
 public:

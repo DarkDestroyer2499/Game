@@ -32,50 +32,16 @@ namespace Oblivion
 		io.FontDefault = fontComponent->GetFont("MAIN_FONT");
 
 		ImGui::SFML::UpdateFontTexture();
+
+
+		GetEngine()->eventBroadcaster.Attach(EventType::Closed, this);
+		GetEngine()->eventBroadcaster.Attach(EventType::MouseButtonPressed, this);
+		GetEngine()->eventBroadcaster.Attach(EventType::Resized, this);
 	}
 
 	Editor::~Editor()
 	{
 		ImGui::SFML::Shutdown();
-	}
-
-	void Editor::EventHandler()
-	{
-		switch (mEvent.type)
-		{
-		case sf::Event::Closed:
-		{
-			mWindow.close();
-			break;
-		}
-		case sf::Event::MouseButtonPressed:
-		{
-			mMousePosition = sf::Mouse::getPosition(mWindow);
-
-			auto tmpCoords = WindowToViewportCoords(Vec2((float)mMousePosition.x, (float)mMousePosition.y));
-			auto translatedPos = mWindow.mapPixelToCoords(sf::Vector2i((int)tmpCoords.x, (int)tmpCoords.y));
-			if (!ecs.GetComponent<SelectionHandlerComponent>()->IsInsideWorkspace(tmpCoords))
-				return;
-
-			Serializer s(&mEngine, *mEngine.GetCurrentScene());
-
-			s.Deserialize(*mEngine.GetCurrentScene(), mEngine.GetCurrentScene()->GetName() + ".yaml");
-
-			ecs.GetComponent<SelectionHandlerComponent>()->TrySelectObject(translatedPos);
-			break;
-		}
-		case sf::Event::Resized:
-		{
-			sf::FloatRect visibleArea(0, 0, (float)mEvent.size.width, (float)mEvent.size.height);
-			mWindow.setView(sf::View(visibleArea));
-			Log(INFO, "RESIZED!");			
-			break;
-		}
-		}
-	}
-
-	void Editor::KeyboardHandler()
-	{
 	}
 
 	Vec2 Editor::WindowToViewportCoords(const Vec2& windowCoords)
@@ -89,7 +55,7 @@ namespace Oblivion
 		while (mWindow.isOpen()) {
 			while (mWindow.pollEvent(mEvent)) {
 				ImGui::SFML::ProcessEvent(mWindow, mEvent);
-				EventHandler();
+				GetEngine()->eventBroadcaster.Notify(mEvent);
 			}
 
 			ImGui::SFML::Update(mWindow, mClock.restart());
@@ -98,15 +64,15 @@ namespace Oblivion
 			mTexture->clear(EDITOR_BG_COLOR);
 
 			ImGui::DockSpaceOverViewport();
-			
-			
+
+
 			for (auto& component : ecs.GetComponentList())
 			{
 				component->Update();
 			}
 
 			mEngine.Update(mTexture);
-			
+
 			ImGui::ShowDemoWindow();
 			ImGui::SFML::Render(mWindow);
 
@@ -121,5 +87,27 @@ namespace Oblivion
 	sf::RenderTexture* Editor::GetRenderTexture()
 	{
 		return mTexture;
+	}
+	void Editor::OnWindowClosed()
+	{
+		Log(WARNING, "CLOSE");
+		mWindow.close();
+	}
+	void Editor::OnMouseButtonPressed(const sf::Event&)
+	{
+		mMousePosition = sf::Mouse::getPosition(mWindow);
+		auto tmpCoords = WindowToViewportCoords(Vec2((float)mMousePosition.x, (float)mMousePosition.y));
+		auto translatedPos = mWindow.mapPixelToCoords(sf::Vector2i((int)tmpCoords.x, (int)tmpCoords.y));
+		if (!ecs.GetComponent<SelectionHandlerComponent>()->IsInsideWorkspace(tmpCoords))
+			return;
+		Serializer s(&mEngine, *mEngine.GetCurrentScene());
+		s.Deserialize(*mEngine.GetCurrentScene(), mEngine.GetCurrentScene()->GetName() + ".yaml");
+		ecs.GetComponent<SelectionHandlerComponent>()->TrySelectObject(translatedPos);
+	}
+	void Editor::OnResized(const sf::Event&)
+	{
+		sf::FloatRect visibleArea(0, 0, (float)mEvent.size.width, (float)mEvent.size.height);
+		mWindow.setView(sf::View(visibleArea));
+		Log(INFO, "RESIZED!");
 	}
 }

@@ -15,7 +15,7 @@ namespace Oblivion
 	constexpr const char* PROGRAM_NAME = "Engine";
 	static const sf::Color EDITOR_BG_COLOR(62, 66, 63);
 
-	class Editor
+	class Editor : public IObserver
 	{
 	public:
 		Editor(sf::RenderTexture*, Engine&);
@@ -28,12 +28,13 @@ namespace Oblivion
 		Engine* GetEngine();
 		sf::RenderTexture* GetRenderTexture();
 
+	private:
+		void OnWindowClosed() override;
+		void OnMouseButtonPressed(const sf::Event&) override;
+		void OnResized(const sf::Event&) override;
+
 	public:
 		ECS<IEditorComponent, Editor*> ecs;
-
-	private:		
-		void EventHandler();
-		void KeyboardHandler();
 
 	private:
 		sf::RenderWindow mWindow;

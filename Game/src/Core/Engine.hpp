@@ -8,13 +8,12 @@
 #include "Core/Entity.hpp"
 #include "Scene.hpp"
 #include "Core/ResourceManager.hpp"
+#include <Core/EventBroadcaster.hpp>
 
 namespace Oblivion
 {
 
 #define WINDOW_NAME "SUPER GAME"
-
-    const b2Vec2 GRAVITY(0.f, 9.8f);    
 
     enum ScreenMode
     {
@@ -42,13 +41,14 @@ namespace Oblivion
 
         void SetCurrentScene(Scene newScene);
         void SetScreenMode(ScreenMode);
-        void SetGravity(Vec2);
         void Run();
         void Stop();
         void Update(sf::RenderTexture* window);
 
     public:
         ResourceManager resourceManager;
+        EventBroadcaster eventBroadcaster;
+
     private:
         void Update(sf::RenderWindow* window);
 

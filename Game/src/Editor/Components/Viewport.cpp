@@ -5,6 +5,7 @@ namespace Oblivion
 	ViewportComponent::ViewportComponent(Editor* editor) :
 		mEditor{ editor }
 	{
+		mEditor->GetEngine()->eventBroadcaster.Attach(EventType::MouseButtonPressed, this);
 	}
 
 	Vec2 ViewportComponent::GetPosition()
@@ -15,6 +16,11 @@ namespace Oblivion
 	Vec2 ViewportComponent::GetSize()
 	{
 		return mSize;
+	}
+
+	void ViewportComponent::OnMouseButtonPressed(const sf::Event& event)
+	{
+		Log(SUCCESS, "Mouse has been pressed: ");
 	}
 
 	void ViewportComponent::Update()
