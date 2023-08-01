@@ -1,3 +1,7 @@
 # Game
 
-You have to add msbuild to you PATH as "msbuild" (check build.bat)
+Project for Visual studio 2022
+
+How to:
+
+Just run "Build.bat"
