@@ -58,6 +58,20 @@ namespace Oblivion
 			}
 		}
 
+		ECS& operator=(const ECS& other)
+		{
+			if (this == &other)
+				return *this;
+			mOwner = other.mOwner;
+			for (auto& component : other.mComponentList)
+			{
+				auto newComponent = component->Clone();
+				newComponent->SetOwner(other.mOwner);
+				mComponentList.push_back(newComponent.release());
+			}
+			return *this;
+		}
+
 		::std::vector<T*>& GetComponentList();
 
 	private:
@@ -67,19 +81,19 @@ namespace Oblivion
 
 	template<typename T, typename OwnerType>
 	inline ECS<T, OwnerType>::ECS()
-		: mOwner{nullptr}
+		: mOwner{ nullptr }
 	{
 	}
 
 	template<typename T, typename OwnerType>
 	inline ECS<T, OwnerType>::ECS(OwnerType owner)
-		: mOwner{owner}
+		: mOwner{ owner }
 	{
 	}
 
 	template<typename T, typename OwnerType>
 	inline ECS<T, OwnerType>::ECS(ECS&& other)
-		: mOwner{other.mOwner}, mComponentList{other.mComponentList}
+		: mOwner{ other.mOwner }, mComponentList{ other.mComponentList }
 	{
 		other.mOwner = nullptr;
 		for (auto& component : other.mComponentList)
@@ -90,8 +104,8 @@ namespace Oblivion
 
 	template<typename T, typename OwnerType>
 	inline ECS<T, OwnerType>::ECS(const ECS& other)
-		: mOwner{other.mOwner}
-	{		
+		: mOwner{ other.mOwner }
+	{
 		for (auto& component : other.mComponentList)
 		{
 			auto newComponent = component->Clone();
@@ -99,6 +113,9 @@ namespace Oblivion
 			mComponentList.push_back(newComponent.release());
 		}
 	}
+
+
+
 
 	template<typename T, typename OwnerType>
 	inline ECS<typename T, typename OwnerType>::~ECS()
@@ -115,4 +132,7 @@ namespace Oblivion
 		return mComponentList;
 	}
 }
+
+
+
 #endif // !ECS_HPP

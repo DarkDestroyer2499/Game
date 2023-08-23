@@ -13,9 +13,9 @@ namespace Oblivion
 	{
 	public:
 		Scene();
-		Scene(Engine* engine, std::string name = "uknown scene");
+		Scene(Engine* engine, std::string name = "New scene");
+		Scene(const Scene& other);
 		//TODO: Implement this
-		//Scene(const Scene& other);
 		//Scene(Scene&& other);
 		::std::list<Entity>& GetEntityList();
 

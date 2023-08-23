@@ -91,6 +91,10 @@ namespace Oblivion
 	{
 		return sf::Mouse::getPosition(mWindow);
 	}
+	sf::RenderWindow& Editor::GetMainWindow()
+	{
+		return mWindow;
+	}
 	void Editor::OnWindowClosed()
 	{
 		Log(WARNING, "CLOSE");

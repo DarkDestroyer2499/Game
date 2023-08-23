@@ -6,14 +6,14 @@ namespace Oblivion
 {
 	Engine::Engine(sf::RenderTarget* window, ScreenMode wMode, unsigned int width = 0, unsigned int height = 0) :
 		mWindow{ window }, mWindowMode{ wMode }, mScnWidht{ sf::VideoMode::getDesktopMode().width / 2 },
-		mScnHeight{ sf::VideoMode::getDesktopMode().height / 2 }, mWorking{ true }, mLastRenderTime{ 1 }, mCurrentScene(Scene(this))
+		mScnHeight{ sf::VideoMode::getDesktopMode().height / 2 }, mWorking{ true }, mLastRenderTime{ 1 }, mCurrentScene(std::make_unique<Scene>(this))
 	{
 		mWorld = ::std::make_unique<b2World>(b2Vec2(0.f, 9.8f));
 	}
 
 	Entity* Engine::GetEntityByID(UUID uuid)
 	{
-		for (auto& entity : mCurrentScene.GetEntityList())
+		for (auto& entity : mCurrentScene->GetEntityList())
 		{
 			if (entity.ecs.GetComponent<IDComponent>()->GetUUID() == uuid)
 				return &entity;
@@ -53,7 +53,7 @@ namespace Oblivion
 			//Draw sprite of all objects
 			window->clear();
 
-			for (auto& object : mCurrentScene.GetEntityList())
+			for (auto& object : mCurrentScene->GetEntityList())
 			{
 				object.Update(1.f / (float)mLastRenderTime);
 			}
@@ -69,7 +69,7 @@ namespace Oblivion
 
 	void Engine::Update(sf::RenderTexture* window)
 	{
-		for (auto& object : mCurrentScene.GetEntityList())
+		for (auto& object : mCurrentScene->GetEntityList())
 		{
 			object.Update(1.f / (float)mLastRenderTime);
 		}
@@ -111,12 +111,12 @@ namespace Oblivion
 
 	Scene* Engine::GetCurrentScene()
 	{
-		return &mCurrentScene;
+		return mCurrentScene.get();
 	}
 
-	void Engine::SetCurrentScene(Scene newScene)
+	void Engine::SetCurrentScene(std::unique_ptr<Scene> newScene)
 	{
-		mCurrentScene = newScene;
+		mCurrentScene = std::move(newScene);
 	}
 
 	void Engine::SetScreenMode(ScreenMode newMode)
@@ -127,7 +127,7 @@ namespace Oblivion
 	Entity* Engine::CreateObject(::std::string name)
 	{
 
-		::std::list<Entity>& entityList = mCurrentScene.GetEntityList();
+		::std::list<Entity>& entityList = mCurrentScene->GetEntityList();
 		entityList.emplace_back(this, name.c_str());
 		Log(INFO, &entityList.back() << " Create entity with name: " << name);
 		return &entityList.back();

@@ -1,9 +1,11 @@
 #include "FileExplorer.hpp"
 #include "IconFontCppHeaders/IconsFontAwesome5Pro.h"
 
+#include <Windows.h>
+#include <Commdlg.h>
+
 namespace Oblivion
 {
-
 	constexpr const char* ROOT_FOLDER_PATH{ "Assets" };
 
 	FileExplorerComponent::FileExplorerComponent(Editor* editor) :
@@ -25,6 +27,48 @@ namespace Oblivion
 			const fs::path assetFolderPath{ path };
 			fs::create_directory(assetFolderPath);
 		}
+	}
+
+	std::string FileExplorerComponent::OpenFile(const char* filter)
+	{
+		OPENFILENAMEA ofn;
+		CHAR szFile[MAX_PATH] = { 0 };
+		ZeroMemory(&ofn, sizeof(OPENFILENAMEA));
+		ofn.lStructSize = sizeof(OPENFILENAMEA);
+		ofn.hwndOwner = mEditor->GetMainWindow().getSystemHandle();
+		ofn.lpstrFile = szFile;
+		ofn.nMaxFile = sizeof(szFile);
+		ofn.lpstrFilter = filter;
+		ofn.nFilterIndex = 1;
+		ofn.lpstrFile[0] = '\0';
+		ofn.Flags = OFN_PATHMUSTEXIST | OFN_FILEMUSTEXIST | OFN_NOCHANGEDIR;
+		if (GetOpenFileNameA(&ofn) == TRUE)
+		{
+			return ofn.lpstrFile;
+		}
+
+		return std::string();
+	}
+
+	std::string FileExplorerComponent::SaveFile(const char* filter)
+	{
+		OPENFILENAMEA ofn;
+		CHAR szFile[MAX_PATH] = { 0 };
+		ZeroMemory(&ofn, sizeof(OPENFILENAMEA));
+		ofn.lStructSize = sizeof(OPENFILENAMEA);
+		ofn.hwndOwner = mEditor->GetMainWindow().getSystemHandle();
+		ofn.lpstrFile = szFile;
+		ofn.nMaxFile = sizeof(szFile);
+		ofn.lpstrFilter = filter;
+		ofn.nFilterIndex = 1;
+		ofn.lpstrFile[0] = '\0';
+		ofn.Flags = OFN_PATHMUSTEXIST | OFN_FILEMUSTEXIST | OFN_NOCHANGEDIR;
+		if (GetSaveFileNameA(&ofn) == TRUE)
+		{
+			return ofn.lpstrFile;
+		}
+
+		return std::string();
 	}
 
 	Vec2 FileExplorerComponent::GetPosition()
@@ -194,4 +238,5 @@ namespace Oblivion
 
 		ImGui::End();
 	}
+
 }

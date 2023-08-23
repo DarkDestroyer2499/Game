@@ -39,7 +39,7 @@ namespace Oblivion
         uint32_t GetRenderTime();
         Scene* GetCurrentScene();
 
-        void SetCurrentScene(Scene newScene);
+        void SetCurrentScene(std::unique_ptr<Scene> newScene);
         void SetScreenMode(ScreenMode);
         void Run();
         void Stop();
@@ -60,7 +60,7 @@ namespace Oblivion
         sf::Event mEvent;
         ::std::unique_ptr<::std::thread> mMainThread;
         ::std::unique_ptr<b2World> mWorld;
-        Scene mCurrentScene;
+        std::unique_ptr<Scene> mCurrentScene;
         uint32_t mLastRenderTime;
         sf::Clock mClock;
     };

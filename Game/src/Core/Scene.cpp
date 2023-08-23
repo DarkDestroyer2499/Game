@@ -12,6 +12,13 @@ namespace Oblivion
 	{
 	}
 
+	Scene::Scene(const Scene& other)
+	{
+		this->mEntityList = other.mEntityList;
+		this->mEngine = other.mEngine;
+		this->mName = other.mName;
+	}
+
 	::std::list<Entity>& Oblivion::Scene::GetEntityList()
 	{
 		return mEntityList;

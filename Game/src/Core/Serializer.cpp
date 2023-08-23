@@ -128,7 +128,7 @@ namespace Oblivion
 
 	void Serializer::Serialize(Scene& scene, ::std::filesystem::path filePath)
 	{
-		mStream.open(scene.GetName() + ".yaml", std::fstream::trunc);
+		mStream.open(filePath.string() + ".yaml", std::fstream::trunc);
 
 		if (mStream.is_open())
 		{
@@ -173,6 +173,7 @@ namespace Oblivion
 		if (!data["Scene"])
 		{
 			file.close();
+			Log(ERROR, "Scene was not found: " << filePath);
 			return false;
 		}
 

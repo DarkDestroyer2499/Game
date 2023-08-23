@@ -13,6 +13,9 @@ namespace Oblivion
 		FileExplorerComponent(Editor*);
 		~FileExplorerComponent() = default;
 
+		std::string OpenFile(const char*);
+		std::string SaveFile(const char*);
+
 		Vec2 GetPosition();
 		void Update() override;
 	private:

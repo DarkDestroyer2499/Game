@@ -5,7 +5,7 @@
 namespace Oblivion
 {
 	Entity::Entity()
-		: mEngine{ nullptr }, mPosition{}, ecs{ nullptr }, mRotation{}, rm{nullptr}
+		: mEngine{ nullptr }, mPosition{}, ecs{ nullptr }, mRotation{}, rm{ nullptr }
 
 	{
 		this->ecs.AddComponent<TagComponent>("");
@@ -21,13 +21,6 @@ namespace Oblivion
 		this->ecs.AddComponent<IDComponent>();
 
 		rm = &mEngine->resourceManager;
-	}
-
-	Entity::Entity(const Entity& other):
-		mEngine{other.mEngine}, mPosition{other.mPosition}, ecs{other.ecs}, mRotation{}
-	{
-		rm = &other.mEngine->resourceManager;
-		Log(ERROR, "Entity has been copied!");
 	}
 
 	Entity::~Entity()
@@ -79,8 +72,18 @@ namespace Oblivion
 		return mEngine;
 	}
 
+	Entity::Entity(const Entity& other)
+	{
+		rm = other.rm;
+		ecs = other.ecs;
+		mEngine = other.mEngine;
+	}
+
 	Entity& Entity::operator=(const Entity& other)
 	{
+		rm = other.rm;
+		ecs = other.ecs;
+		mEngine = other.mEngine;
 		return *this;
 	}
 
