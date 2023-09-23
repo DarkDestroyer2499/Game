@@ -15,7 +15,7 @@ namespace Oblivion
 	{
 		for (auto& entity : mCurrentScene->GetEntityList())
 		{
-			if (entity.ecs.GetComponent<IDComponent>()->GetUUID() == uuid)
+			if (entity.GetComponent<IDComponent>()->GetUUID() == uuid)
 				return &entity;
 		}
 

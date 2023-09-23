@@ -21,12 +21,12 @@ namespace Oblivion
 				{
 					ImGui::TableNextRow();
 					ImGui::TableNextColumn();
-					bool open = ImGui::TreeNodeEx(entity.ecs.GetComponent<TagComponent>()->GetTag().c_str(),(IsNeedToSelect(entity) ? ImGuiTreeNodeFlags_Selected : 0) | ImGuiTreeNodeFlags_SpanFullWidth | ImGuiTreeNodeFlags_OpenOnArrow);
+					bool open = ImGui::TreeNodeEx(entity.GetComponent<TagComponent>()->GetTag().c_str(),(IsNeedToSelect(entity) ? ImGuiTreeNodeFlags_Selected : 0) | ImGuiTreeNodeFlags_SpanFullWidth | ImGuiTreeNodeFlags_OpenOnArrow);
 
 					//TODO: select multiple objects
 					if (ImGui::IsItemClicked())
 					{
-						auto* component = mEditor->ecs.GetComponent<SelectionHandlerComponent>();
+						auto* component = mEditor->GetComponent<SelectionHandlerComponent>();
 						if (!component->IsAlreadySelected(entity))
 						{
 							component->ClearSelected();
@@ -36,7 +36,7 @@ namespace Oblivion
 
 					if (open)
 					{
-						for (auto Component : entity.ecs.GetComponentList())
+						for (auto Component : entity.GetComponentList())
 						{
 							ImGui::TreeNodeEx(Component->GetName(), ImGuiTreeNodeFlags_Leaf | ImGuiTreeNodeFlags_Bullet | ImGuiTreeNodeFlags_NoTreePushOnOpen | ImGuiTreeNodeFlags_SpanFullWidth);
 						}
@@ -52,10 +52,10 @@ namespace Oblivion
 
 	bool HierarchyComponent::IsNeedToSelect(Entity& entity)
 	{
-		auto component = mEditor->ecs.GetComponent<SelectionHandlerComponent>();
+		auto component = mEditor->GetComponent<SelectionHandlerComponent>();
 		for (auto&[ent, selector] : component->GetSelectedObjectList())
 		{
-			if (ent.ecs.GetComponent<IDComponent>()->GetUUID() == entity.ecs.GetComponent<IDComponent>()->GetUUID())
+			if (ent.GetComponent<IDComponent>()->GetUUID() == entity.GetComponent<IDComponent>()->GetUUID())
 			{
 				return true;
 			}

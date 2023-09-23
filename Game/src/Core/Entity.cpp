@@ -9,7 +9,9 @@ namespace Oblivion
 
 	{
 		this->ecs.AddComponent<TagComponent>("");
-		this->ecs.AddComponent<TransformComponent>();
+		this->transform = std::make_unique<TransformComponent>();
+		this->transform->SetOwner(this);
+		//this->ecs.AddComponent<TransformComponent>();
 		this->ecs.AddComponent<IDComponent>();
 	}
 
@@ -17,7 +19,9 @@ namespace Oblivion
 		mEngine{ engine }, mPosition{}, ecs{ this }, mRotation{}
 	{
 		this->ecs.AddComponent<TagComponent>(newName);
-		this->ecs.AddComponent<TransformComponent>();
+		//this->ecs.AddComponent<TransformComponent>();
+		this->transform = std::make_unique<TransformComponent>();
+		this->transform->SetOwner(this);
 		this->ecs.AddComponent<IDComponent>();
 
 		rm = &mEngine->resourceManager;

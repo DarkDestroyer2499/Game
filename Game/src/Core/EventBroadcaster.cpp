@@ -3,12 +3,12 @@
 
 namespace Oblivion
 {
-	void EventBroadcaster::Attach(EventType eventType, IObserver* observer)
+	void EventBroadcaster::Attach(EventType eventType, EventSubscriber* observer)
 	{
 		mObserverList[eventType].push_back(observer);
 	}
 
-	void EventBroadcaster::Detach(EventType eventType, IObserver* observer)
+	void EventBroadcaster::Detach(EventType eventType, EventSubscriber* observer)
 	{
 		mObserverList[eventType].remove(observer);
 	}

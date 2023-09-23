@@ -29,12 +29,42 @@ namespace Oblivion
 		float GetRotation() const;
 		Engine* GetEngine();
 
+		template<typename Component>
+		bool HasComponent()
+		{
+			return this.ecs.GetComponent<Component>();
+		}
+
+		template<typename Component>
+		Component* GetComponent()
+		{
+			return ecs.GetComponent<Component>();
+		}
+
+		template<typename Component, typename... Args>
+		Component* AddComponent(Args&&... args)
+		{
+			return ecs.AddComponent<Component>(args...);
+		}
+
+		template<typename Component>
+		void RemoveComponent()
+		{
+			ecs.RemoveComponent<Component>();
+		}
+
+		::std::vector<IEntityComponent*>& GetComponentList()
+		{
+			return ecs.GetComponentList();
+		}
+
 		Entity& operator=(const Entity& other);
 	
 	public:
 		ResourceManager* rm;
+		std::unique_ptr<TransformComponent> transform;
+	private:
 		ECS<IEntityComponent, Entity*> ecs;
-	protected:
 		Engine* mEngine;
 		Vec2 mPosition;
 		Vec2 mSize;

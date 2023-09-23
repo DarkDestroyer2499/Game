@@ -71,29 +71,29 @@ namespace Oblivion
 		virtual void OnSensorChanged(const sf::Event&) {};
 	};
 
-	class IObserver : public Event {
+	class EventSubscriber : public Event {
 	public:
-		virtual ~IObserver() = default;
+		virtual ~EventSubscriber() = default;
 	};
 
 	class ISubject {
 	public:
 		virtual ~ISubject() = default;
-		virtual void Attach(EventType, IObserver* observer) = 0;
-		virtual void Detach(EventType, IObserver* observer) = 0;
+		virtual void Attach(EventType, EventSubscriber* observer) = 0;
+		virtual void Detach(EventType, EventSubscriber* observer) = 0;
 		virtual void Notify(const sf::Event& event) = 0;
 	};
 
 	class EventBroadcaster : public ISubject
 	{
 	public:
-		void Attach(EventType eventType, IObserver* observer) override;
-		void Detach(EventType, IObserver* observer) override;
+		void Attach(EventType eventType, EventSubscriber* observer) override;
+		void Detach(EventType, EventSubscriber* observer) override;
 		void Notify(const sf::Event& event) override;
 		void Notify(EventType event);
 
 	private:
-		std::map<EventType, std::list<IObserver*>> mObserverList;
+		std::map<EventType, std::list<EventSubscriber*>> mObserverList;
 	};
 }
 #endif // !EVENT_BROADCASTER_HPP

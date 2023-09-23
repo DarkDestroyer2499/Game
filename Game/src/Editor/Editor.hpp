@@ -15,7 +15,7 @@ namespace Oblivion
 	constexpr const char* PROGRAM_NAME = "Engine";
 	static const sf::Color EDITOR_BG_COLOR(62, 66, 63);
 
-	class Editor : public IObserver
+	class Editor : public EventSubscriber
 	{
 	public:
 		Editor(sf::RenderTexture*, Engine&);
@@ -29,6 +29,36 @@ namespace Oblivion
 		sf::RenderTexture* GetRenderTexture();
 		Vec2 GetMousePosition();
 		sf::RenderWindow& GetMainWindow();
+
+		template<typename Component>
+		bool HasComponent()
+		{
+			return ecs.GetComponent<Component>();
+		}
+
+		template<typename Component>
+		Component* GetComponent()
+		{
+			return ecs.GetComponent<Component>();
+		}
+
+		template<typename Component, typename... Args>
+		Component* AddComponent(Args&&... args)
+		{
+			return ecs.AddComponent<Component>(args...);
+		}
+
+		template<typename Component>
+		void RemoveComponent()
+		{
+			ecs.RemoveComponent<Component>();
+		}
+
+		::std::vector<IEditorComponent*>& GetComponentList()
+		{
+			return this->ecs.GetComponentList();
+		}
+
 
 	private:
 		void OnWindowClosed() override;

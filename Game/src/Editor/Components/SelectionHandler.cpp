@@ -62,7 +62,7 @@ namespace Oblivion
 
 		for (auto& entity : mEngine->GetCurrentScene()->GetEntityList())
 		{
-			auto graphicsComponent = entity.ecs.GetComponent<GraphicsComponent>();
+			auto graphicsComponent = entity.GetComponent<GraphicsComponent>();
 			if (!graphicsComponent)
 				continue;
 

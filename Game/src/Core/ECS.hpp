@@ -114,9 +114,6 @@ namespace Oblivion
 		}
 	}
 
-
-
-
 	template<typename T, typename OwnerType>
 	inline ECS<typename T, typename OwnerType>::~ECS()
 	{
@@ -132,7 +129,5 @@ namespace Oblivion
 		return mComponentList;
 	}
 }
-
-
 
 #endif // !ECS_HPP

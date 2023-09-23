@@ -13,7 +13,7 @@ namespace Oblivion
 		if (ImGui::Begin("Properties")) {
 
 			auto* selectionComponent = mEditor->ecs.GetComponent<SelectionHandlerComponent>();
-			
+
 			if (selectionComponent->GetSelectedObjectList().size() == 0)
 			{
 				ImGui::End();
@@ -28,9 +28,90 @@ namespace Oblivion
 
 			ImGuiTreeNodeFlags TreeNodeFlags = ImGuiTreeNodeFlags_SpanFullWidth | ImGuiTreeNodeFlags_Framed;
 
+			ImGui::TableNextRow();
+			ImGui::TableNextColumn();
+
+
 			for (auto& selectedObject : selectionComponent->GetSelectedObjectList())
 			{
-				for (auto& component : selectedObject.entity.ecs.GetComponentList())
+				{//Render TransformComponent
+					ImGui::TableNextRow();
+					ImGui::TableNextColumn();
+					auto tmp = selectedObject.entity.transform.get();
+					bool open = ImGui::TreeNodeEx((::std::string(tmp->GetName()) + ::std::string(" component")).c_str(), TreeNodeFlags);
+
+					if (open)
+					{
+						Vec2 pos = tmp->GetPosition();
+						float position[2]{ pos.x, pos.y };
+						ImGui::AlignTextToFramePadding();
+						ImGui::Text("Position: ");
+
+						ImGui::SameLine();
+
+						ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2(0.f, 0.f));
+						ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(255, 0, 0, 255.0f));
+						ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(255, 0, 0, 0.9f));
+						ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4(255, 0, 0, 1.f));
+						if (ImGui::Button("X"))
+						{
+							position[0] = 0.f;
+						}
+						ImGui::PopStyleColor(3);
+						ImGui::SameLine();
+						ImGui::PushItemWidth(50);
+						ImGui::DragFloat("##Position DraggerX", &position[0], 1.f, 0, 0, "%.2f");;
+						ImGui::PopItemWidth();
+						ImGui::PopStyleVar();
+						ImGui::SameLine();
+
+						ImGui::NextColumn();
+
+						ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2(0.f, 0.f));
+						ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0, 100, 0, 0.7f));
+						ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(0, 100, 0, 0.9f));
+						ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4(0, 100, 0, 1.f));
+						if (ImGui::Button("Y"))
+						{
+							position[1] = 0.f;
+						}
+						ImGui::PopStyleColor(3);
+						ImGui::SameLine();
+						ImGui::PushItemWidth(50);
+						ImGui::DragFloat("##Position DraggerY", &position[1], 1.f, 0, 0, "%.2f");
+						ImGui::PopItemWidth();
+						ImGui::PopStyleVar();
+
+
+						//Rotation
+						float rotation = tmp->GetRotation() * DEG_IN_RAD;
+
+						ImGui::Text("Rotation: ");
+						ImGui::SameLine();
+						ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2(0.f, 0.f));
+						ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0, 0, 255, 255.0f));
+						ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(0, 0, 255, 0.9f));
+						ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4(0, 0, 255, 1.f));
+						if (ImGui::Button("R"))
+						{
+							rotation = 0.f;
+						}
+						ImGui::PopStyleColor(3);
+						ImGui::SameLine();
+						ImGui::PushItemWidth(50);
+						ImGui::DragFloat("##Rotation DraggerX", &rotation, 1.0f, 0.f, 360.f, "%.0f");
+						ImGui::PopItemWidth();
+						ImGui::PopStyleVar();
+						ImGui::SameLine();
+
+
+
+						tmp->SetRotation(rotation / DEG_IN_RAD);
+						tmp->SetPosition({ position[0], position[1] });
+						ImGui::TreePop();
+					}
+				}
+				for (auto& component : selectedObject.entity.GetComponentList())
 				{
 					if (dynamic_cast<TagComponent*>(component) != nullptr)
 					{
@@ -55,84 +136,6 @@ namespace Oblivion
 							ImGui::TreePop();
 						}
 						//ImGui::Separator();
-					}
-					else if (dynamic_cast<TransformComponent*>(component) != nullptr)
-					{
-						ImGui::TableNextRow();
-						ImGui::TableNextColumn();
-						auto tmp = dynamic_cast<TransformComponent*>(component);
-						bool open = ImGui::TreeNodeEx((::std::string(tmp->GetName()) + ::std::string(" component")).c_str(), TreeNodeFlags);
-
-						if (open)
-						{
-							Vec2 pos = tmp->GetPosition();
-							float position[2]{ pos.x, pos.y };
-							ImGui::AlignTextToFramePadding();
-							ImGui::Text("Position: ");
-
-							ImGui::SameLine();
-
-							ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2(0.f, 0.f));
-							ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(255, 0, 0, 255.0f));
-							ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(255, 0, 0, 0.9f));
-							ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4(255, 0, 0, 1.f));
-							if (ImGui::Button("X"))
-							{
-								position[0] = 0.f;
-							}
-							ImGui::PopStyleColor(3);
-							ImGui::SameLine();
-							ImGui::PushItemWidth(50);
-							ImGui::DragFloat("##Position DraggerX", &position[0], 1.f, 0, 0, "%.2f");;
-							ImGui::PopItemWidth();
-							ImGui::PopStyleVar();
-							ImGui::SameLine();
-
-							ImGui::NextColumn();
-
-							ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2(0.f, 0.f));
-							ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0, 100, 0, 0.7f));
-							ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(0, 100, 0, 0.9f));
-							ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4(0, 100, 0, 1.f));
-							if (ImGui::Button("Y"))
-							{
-								position[1] = 0.f;
-							}
-							ImGui::PopStyleColor(3);
-							ImGui::SameLine();
-							ImGui::PushItemWidth(50);
-							ImGui::DragFloat("##Position DraggerY", &position[1], 1.f, 0, 0, "%.2f");
-							ImGui::PopItemWidth();
-							ImGui::PopStyleVar();
-
-
-							//Rotation
-							float rotation = tmp->GetRotation() * DEG_IN_RAD;
-
-							ImGui::Text("Rotation: ");
-							ImGui::SameLine();
-							ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2(0.f, 0.f));
-							ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0, 0, 255, 255.0f));
-							ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(0, 0, 255, 0.9f));
-							ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4(0, 0, 255, 1.f));
-							if (ImGui::Button("R"))
-							{
-								rotation = 0.f;
-							}
-							ImGui::PopStyleColor(3);
-							ImGui::SameLine();
-							ImGui::PushItemWidth(50);
-							ImGui::DragFloat("##Rotation DraggerX", &rotation, 1.0f, 0.f, 360.f, "%.0f");
-							ImGui::PopItemWidth();
-							ImGui::PopStyleVar();
-							ImGui::SameLine();
-
-
-
-							tmp->SetRotation(rotation / DEG_IN_RAD);
-							tmp->SetPosition({ position[0], position[1] });
-							ImGui::TreePop();
-						}
 					}
 					else if (dynamic_cast<GraphicsComponent*>(component) != nullptr)
 					{

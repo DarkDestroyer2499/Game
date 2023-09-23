@@ -195,13 +195,13 @@ namespace Oblivion
 
 			uintmax_t uuid = ent["Entity"].as<uintmax_t>();
 
-			entity->ecs.GetComponent<IDComponent>()->SetUUID(uuid);
+			entity->GetComponent<IDComponent>()->SetUUID(uuid);
 
-			entity->ecs.GetComponent<TagComponent>()->SetTag(ent["Tag"]["Tag"].as<std::string>());
+			entity->GetComponent<TagComponent>()->SetTag(ent["Tag"]["Tag"].as<std::string>());
 
 			if (ent["AnimatedGraphics"])
 			{
-				auto* animatedGraphics = entity->ecs.AddComponent<AnimatedGraphicsComponent>();
+				auto* animatedGraphics = entity->AddComponent<AnimatedGraphicsComponent>();
 
 				for (auto& node : ent["AnimatedGraphics"]["AnimationList"])
 				{	
@@ -222,7 +222,7 @@ namespace Oblivion
 
 			if (ent["Graphics"])
 			{
-				entity->ecs.AddComponent<GraphicsComponent>(*entity->rm->resources.GetComponent<TextureComponent>()->GetTexture(ent["Graphics"]["TexturePath"].as<std::string>()),
+				entity->AddComponent<GraphicsComponent>(*entity->rm->resources.GetComponent<TextureComponent>()->GetTexture(ent["Graphics"]["TexturePath"].as<std::string>()),
 					ent["Graphics"]["SpriteRect"].as<sf::IntRect>());
 			}
 
@@ -262,7 +262,7 @@ namespace Oblivion
 				Vec2 position = node["Position"].as<Vec2>();
 				float density = node["Density"].as<float>();
 
-				entity->ecs.AddComponent<PhysicsComponent>(mEngine->GetMainWorld(), objectType, bdef, size, position, density);
+				entity->AddComponent<PhysicsComponent>(mEngine->GetMainWorld(), objectType, bdef, size, position, density);
 
 			}
 		}
@@ -276,9 +276,9 @@ namespace Oblivion
 		using namespace YAML;
 
 		mEmitter << BeginMap;
-		mEmitter << Key << "Entity" << Value << (uintmax_t)entity.ecs.GetComponent<IDComponent>()->GetUUID();
+		mEmitter << Key << "Entity" << Value << (uintmax_t)entity.GetComponent<IDComponent>()->GetUUID();
 
-		for (auto& component : entity.ecs.GetComponentList())
+		for (auto& component : entity.GetComponentList())
 		{
 			if (dynamic_cast<TagComponent*>(component) != nullptr)
 			{

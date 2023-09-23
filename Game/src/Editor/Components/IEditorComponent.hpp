@@ -7,7 +7,7 @@ namespace Oblivion
 {
 	class Editor;
 
-	class IEditorComponent : public IObserver
+	class IEditorComponent : public EventSubscriber
 	{
 	public:
 		virtual ~IEditorComponent() = default;

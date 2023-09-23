@@ -23,14 +23,14 @@ namespace Oblivion
 
 	void TransformComponent::SetPosition(Vec2 newPosition)
 	{
-		auto physicsComponent = mOwner->ecs.GetComponent<PhysicsComponent>();
+		auto physicsComponent = mOwner->GetComponent<PhysicsComponent>();
 		if (physicsComponent)
 		{
 			physicsComponent->SetPosition(newPosition);
 		}
 		else
 		{
-			auto graphicsComponent = mOwner->ecs.GetComponent<GraphicsComponent>();
+			auto graphicsComponent = mOwner->GetComponent<GraphicsComponent>();
 			if (graphicsComponent)
 			{
 				graphicsComponent->GetSprite().setPosition(newPosition.ToSFMLVec2f());
@@ -44,14 +44,14 @@ namespace Oblivion
 
 	Vec2 TransformComponent::GetPosition()
 	{
-		auto physicsComponent = mOwner->ecs.GetComponent<PhysicsComponent>();
+		auto physicsComponent = mOwner->GetComponent<PhysicsComponent>();
 		if (physicsComponent)
 		{
 			return physicsComponent->GetPosition();
 		}
 		else
 		{
-			auto graphicsComponent = mOwner->ecs.GetComponent<GraphicsComponent>();
+			auto graphicsComponent = mOwner->GetComponent<GraphicsComponent>();
 			if (graphicsComponent)
 			{
 				return graphicsComponent->GetSprite().getPosition();
@@ -66,14 +66,14 @@ namespace Oblivion
 
 	void TransformComponent::SetRotation(float newRotation)
 	{
-		auto physicsComponent = mOwner->ecs.GetComponent<PhysicsComponent>();
+		auto physicsComponent = mOwner->GetComponent<PhysicsComponent>();
 		if (physicsComponent)
 		{
 			physicsComponent->SetRotation(newRotation);
 		}
 		else
 		{
-			auto graphicsComponent = mOwner->ecs.GetComponent<GraphicsComponent>();
+			auto graphicsComponent = mOwner->GetComponent<GraphicsComponent>();
 			if (graphicsComponent)
 			{
 				graphicsComponent->GetSprite().setRotation(newRotation);
@@ -87,14 +87,14 @@ namespace Oblivion
 
 	float TransformComponent::GetRotation()
 	{
-		auto physicsComponent = mOwner->ecs.GetComponent<PhysicsComponent>();
+		auto physicsComponent = mOwner->GetComponent<PhysicsComponent>();
 		if (physicsComponent)
 		{
 			return physicsComponent->GetRotation();
 		}
 		else
 		{
-			auto graphicsComponent = mOwner->ecs.GetComponent<GraphicsComponent>();
+			auto graphicsComponent = mOwner->GetComponent<GraphicsComponent>();
 			if (graphicsComponent)
 			{
 				return graphicsComponent->GetSprite().getRotation();
