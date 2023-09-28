@@ -8,7 +8,7 @@
 #include "Core/Entity.hpp"
 #include "Scene.hpp"
 #include "Core/ResourceManager.hpp"
-#include <Core/EventBroadcaster.hpp>
+#include <Core/EventSystem/EventBroadcaster.hpp>
 
 namespace Oblivion
 {
@@ -24,7 +24,7 @@ namespace Oblivion
         Fullscreen = 1 << 3,
     };
 
-    class Engine
+    class Engine : public EventSubscriber
     {
     public:
         Engine(sf::RenderTarget*, ScreenMode, unsigned int, unsigned int);
@@ -34,16 +34,19 @@ namespace Oblivion
         Entity* GetEntityByID(UUID uuid);
         sf::RenderTarget* GetRenderWindow();
         Entity* CreateObject(::std::string name = ::std::string("Uknown"));
+        Entity* CloneObject(Entity* entity);
         Entity* CreateObject(Scene& scene, ::std::string entityName = ::std::string("Uknown"));
         b2World* GetMainWorld();
         uint32_t GetRenderTime();
         Scene* GetCurrentScene();
 
+        void RemoveObject(Entity*);
+
         void SetCurrentScene(std::unique_ptr<Scene> newScene);
         void SetScreenMode(ScreenMode);
         void Run();
         void Stop();
-        void Update(sf::RenderTexture* window);
+        void Update(sf::RenderTexture* window);        
 
     public:
         ResourceManager resourceManager;

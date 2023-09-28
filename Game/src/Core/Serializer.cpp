@@ -195,7 +195,7 @@ namespace Oblivion
 
 			uintmax_t uuid = ent["Entity"].as<uintmax_t>();
 
-			entity->GetComponent<IDComponent>()->SetUUID(uuid);
+			entity->SetUUID(uuid);
 
 			entity->GetComponent<TagComponent>()->SetTag(ent["Tag"]["Tag"].as<std::string>());
 
@@ -276,7 +276,7 @@ namespace Oblivion
 		using namespace YAML;
 
 		mEmitter << BeginMap;
-		mEmitter << Key << "Entity" << Value << (uintmax_t)entity.GetComponent<IDComponent>()->GetUUID();
+		mEmitter << Key << "Entity" << Value << (uintmax_t)entity.GetUUID();
 
 		for (auto& component : entity.GetComponentList())
 		{

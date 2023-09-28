@@ -6,8 +6,8 @@
 
 namespace Oblivion
 {
-	constexpr float LENGHT_CORNER_MULT = 3.f;
-	constexpr float DEFAULT_LINE_WIDTH = 3.f;
+	static constexpr float LENGHT_CORNER_MULT = 3.f;
+	static constexpr float DEFAULT_LINE_WIDTH = 3.f;
 
 	enum class CornerType
 	{

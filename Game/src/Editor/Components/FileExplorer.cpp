@@ -24,8 +24,7 @@ namespace Oblivion
 		{
 			Log(WARNING, "Assets folder does not exist, and will be created! Path: " << ::std::filesystem::current_path().string() + "/" + ROOT_FOLDER_PATH);
 			::std::string path = ::std::filesystem::current_path().string() + "/" + ROOT_FOLDER_PATH;
-			const fs::path assetFolderPath{ path };
-			fs::create_directory(assetFolderPath);
+			fs::create_directory(sandbox);
 		}
 	}
 

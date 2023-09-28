@@ -43,15 +43,21 @@ namespace Oblivion
 			case sf::Event::TouchMoved: {observer->OnTouchMoved(event); break; }
 			case sf::Event::TouchEnded: {observer->OnTouchEnded(event); break; }
 			case sf::Event::SensorChanged: {observer->OnSensorChanged(event); break; }
+			default: {Log(ERROR, "Trying to call unregistered event!"); }
 			}
 		}
 	}
 
-	void EventBroadcaster::Notify(EventType event)
+	void EventBroadcaster::Notify(EventType event, void* data)
 	{
 		for (const auto& observer : mObserverList[event])
 		{
-
+			switch (event)
+			{
+			case EventType::OnAnyEntityCreated: {observer->OnAnyEntityCreated(static_cast<Entity*>(data)); break; }
+			case EventType::OnAnyEntityRemoved: {observer->OnAnyEntityRemoved(static_cast<Entity*>(data)); break; }
+			default: {Log(ERROR, "Trying to call unregistered event!"); }
+			}
 		}
 	}
 

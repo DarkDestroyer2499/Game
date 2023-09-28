@@ -10,7 +10,7 @@ namespace Oblivion
 	}
 
 	AnimatedGraphicsComponent::AnimatedGraphicsComponent(const AnimatedGraphicsComponent& other)
-		: mCurrentAnimation{ mCurrentAnimation }, mAnimList{ mAnimList }
+		: mCurrentAnimation{ other.mCurrentAnimation }, mAnimList{ other.mAnimList }
 	{
 	}
 

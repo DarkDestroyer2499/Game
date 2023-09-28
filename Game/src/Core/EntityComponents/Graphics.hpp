@@ -10,8 +10,9 @@ namespace Oblivion
 	{
 	public:
 		GraphicsComponent() = delete;
-		GraphicsComponent(sf::Texture& texture, const sf::IntRect&);
+		GraphicsComponent(const sf::Texture& texture, const sf::IntRect&);
 		GraphicsComponent(sf::Sprite);
+		GraphicsComponent(const GraphicsComponent& other);
 		~GraphicsComponent() = default;
 
 		::std::unique_ptr<IEntityComponent> Clone() const override;

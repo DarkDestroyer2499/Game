@@ -62,7 +62,6 @@ namespace Oblivion
 
 	private:
 		void OnWindowClosed() override;
-		void OnMouseButtonPressed(const sf::Event&) override;
 		void OnResized(const sf::Event&) override;
 
 	public:

@@ -1,7 +1,7 @@
 #ifndef IUI_COMPONENT_HPP
 #define IUI_COMPONENT_HPP
 
-#include <Core/EventBroadcaster.hpp>
+#include <Core/EventSystem/EventBroadcaster.hpp>
 
 namespace Oblivion
 {

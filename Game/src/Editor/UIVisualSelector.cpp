@@ -5,7 +5,6 @@ namespace Oblivion
 	Corner::Corner()
 		:mWidth{ DEFAULT_LINE_WIDTH }, mType{ CornerType::LEFT_DOWN }, mColor{ sf::Color::Green }
 	{
-
 	}
 
 	void Corner::SetParameters(CornerType type, float width, sf::Color color)

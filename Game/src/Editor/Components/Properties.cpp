@@ -6,6 +6,7 @@ namespace Oblivion
 	PropertiesComponent::PropertiesComponent(Editor* editor) :
 		mEditor{ editor }
 	{
+		mEditor->GetEngine()->eventBroadcaster.Attach(EventType::OnAnyEntityRemoved, this);
 	}
 
 	void PropertiesComponent::Update()
@@ -26,23 +27,24 @@ namespace Oblivion
 				return;
 			}
 
-			ImGuiTreeNodeFlags TreeNodeFlags = ImGuiTreeNodeFlags_SpanFullWidth | ImGuiTreeNodeFlags_Framed;
+			static ImGuiTreeNodeFlags TreeNodeFlags = ImGuiTreeNodeFlags_SpanFullWidth | ImGuiTreeNodeFlags_Framed;
 
 			ImGui::TableNextRow();
 			ImGui::TableNextColumn();
 
-
-			for (auto& selectedObject : selectionComponent->GetSelectedObjectList())
+			for (auto &selectedObject : selectionComponent->GetSelectedObjectList())
 			{
 				{//Render TransformComponent
 					ImGui::TableNextRow();
 					ImGui::TableNextColumn();
-					auto tmp = selectedObject.entity.transform.get();
-					bool open = ImGui::TreeNodeEx((::std::string(tmp->GetName()) + ::std::string(" component")).c_str(), TreeNodeFlags);
+					
+					auto transform = selectedObject.entity->transform.get();
+
+					bool open = ImGui::TreeNodeEx((::std::string(transform->GetName()) + ::std::string(" component")).c_str(), TreeNodeFlags);
 
 					if (open)
 					{
-						Vec2 pos = tmp->GetPosition();
+						Vec2 pos = transform->GetPosition();
 						float position[2]{ pos.x, pos.y };
 						ImGui::AlignTextToFramePadding();
 						ImGui::Text("Position: ");
@@ -84,7 +86,7 @@ namespace Oblivion
 
 
 						//Rotation
-						float rotation = tmp->GetRotation() * DEG_IN_RAD;
+						float rotation = transform->GetRotation() * DEG_IN_RAD;
 
 						ImGui::Text("Rotation: ");
 						ImGui::SameLine();
@@ -106,12 +108,12 @@ namespace Oblivion
 
 
 
-						tmp->SetRotation(rotation / DEG_IN_RAD);
-						tmp->SetPosition({ position[0], position[1] });
+						transform->SetRotation(rotation / DEG_IN_RAD);
+						transform->SetPosition({ position[0], position[1] });
 						ImGui::TreePop();
 					}
 				}
-				for (auto& component : selectedObject.entity.GetComponentList())
+				for (auto& component : selectedObject.entity->GetComponentList())
 				{
 					if (dynamic_cast<TagComponent*>(component) != nullptr)
 					{

@@ -8,14 +8,15 @@ namespace Oblivion
 {
 	struct SelectedObject
 	{
-		Entity& entity;
+		Entity* entity;
 		UIVisualSelector selector;
 		SelectedObject() = default;
-		SelectedObject(Entity& entity, UIVisualSelector selector)
-			:entity{ entity }, selector{ selector }
+		SelectedObject(const SelectedObject& other)
+			: entity{ other.entity }, selector{ UIVisualSelector() }
 		{
+
 		}
-		SelectedObject(Entity& entity)
+		SelectedObject(Entity* entity)
 			:entity{ entity }, selector{ UIVisualSelector() }
 		{
 		}
@@ -27,14 +28,18 @@ namespace Oblivion
 	public:
 		SelectionHandlerComponent(Editor*, Engine*);
 		~SelectionHandlerComponent() = default;
-		
+
 		void Update() override;
 		bool TrySelectObject(Vec2);
-		bool IsAlreadySelected(Entity& entity);
+		bool IsAlreadySelected(Entity* entity);
 		::std::vector<SelectedObject>& GetSelectedObjectList();
 		void ClearSelected();
-		void SelectObject(Entity&);
+		void SelectObject(Entity*);
 		bool IsInsideWorkspace(Vec2);
+
+	private:
+		//Events
+		void OnAnyEntityRemoved(Entity*) override;
 	private:
 		::std::vector<SelectedObject> mSelectedObjects;
 		Editor* mEditor;

@@ -3,6 +3,7 @@
 
 #include "IEditorComponent.hpp"
 #include "Editor/Editor.hpp"
+#include "Core/EventSystem/EventBroadcaster.hpp"
 
 namespace Oblivion
 {

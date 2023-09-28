@@ -8,6 +8,7 @@
 #include "Util/Log.hpp"
 #include "Core/ECS.hpp"
 #include "Core/ResourceComponents/ResourceComponentLinker.hpp"
+#include "Core/UUID.hpp"
 
 namespace Oblivion
 {
@@ -28,6 +29,10 @@ namespace Oblivion
 		void SetRotation(float);
 		float GetRotation() const;
 		Engine* GetEngine();
+
+		void SetUUID(UUID);
+
+		UUID GetUUID();
 
 		template<typename Component>
 		bool HasComponent()
@@ -53,6 +58,10 @@ namespace Oblivion
 			ecs.RemoveComponent<Component>();
 		}
 
+		ECS<IEntityComponent, Entity*>& GetEcs();
+
+		void LoadEcs(ECS<IEntityComponent, Entity*>& newEcs);
+
 		::std::vector<IEntityComponent*>& GetComponentList()
 		{
 			return ecs.GetComponentList();
@@ -69,6 +78,7 @@ namespace Oblivion
 		Vec2 mPosition;
 		Vec2 mSize;
 		float mRotation;
+		UUID mUUID;
 	};
 }
 #endif // !ENTITY_H

@@ -6,6 +6,5 @@
 #include "Tag.hpp"
 #include "AnimatedGraphics.h"
 #include "Transform.hpp"
-#include "ID.hpp"
 
 #endif // !COMPONENT_LINKER_H

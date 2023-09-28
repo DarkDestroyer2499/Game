@@ -34,7 +34,6 @@ namespace Oblivion
 		ImGui::SFML::UpdateFontTexture();
 
 		GetEngine()->eventBroadcaster.Attach(EventType::Closed, this);
-		GetEngine()->eventBroadcaster.Attach(EventType::MouseButtonPressed, this);
 		GetEngine()->eventBroadcaster.Attach(EventType::Resized, this);
 	}
 
@@ -60,57 +59,48 @@ namespace Oblivion
 			ImGui::SFML::Update(mWindow, mClock.restart());
 
 			mWindow.clear();
-			mTexture->clear(EDITOR_BG_COLOR);
 
 			ImGui::DockSpaceOverViewport();
 
+			mEngine.Update(mTexture);
 
 			for (auto& component : ecs.GetComponentList())
 			{
 				component->Update();
 			}
 
-			mEngine.Update(mTexture);
-
 			ImGui::ShowDemoWindow();
 			ImGui::SFML::Render(mWindow);
 
-			mTexture->display();
 			mWindow.display();
 		}
 	}
+
 	Engine* Editor::GetEngine()
 	{
 		return &mEngine;
 	}
+
 	sf::RenderTexture* Editor::GetRenderTexture()
 	{
 		return mTexture;
 	}
+
 	Vec2 Editor::GetMousePosition()
 	{
 		return sf::Mouse::getPosition(mWindow);
 	}
+
 	sf::RenderWindow& Editor::GetMainWindow()
 	{
 		return mWindow;
 	}
+
 	void Editor::OnWindowClosed()
 	{
-		Log(WARNING, "CLOSE");
 		mWindow.close();
 	}
-	void Editor::OnMouseButtonPressed(const sf::Event&)
-	{
-		//mMousePosition = sf::Mouse::getPosition(mWindow);
-		//auto tmpCoords = WindowToViewportCoords(Vec2((float)mMousePosition.x, (float)mMousePosition.y));
-		//auto translatedPos = mWindow.mapPixelToCoords(sf::Vector2i((int)tmpCoords.x, (int)tmpCoords.y));
-		//if (!ecs.GetComponent<SelectionHandlerComponent>()->IsInsideWorkspace(tmpCoords))
-		//	return;
-		//Serializer s(&mEngine, *mEngine.GetCurrentScene());
-		//s.Deserialize(*mEngine.GetCurrentScene(), mEngine.GetCurrentScene()->GetName() + ".yaml");
-		//ecs.GetComponent<SelectionHandlerComponent>()->TrySelectObject(translatedPos);
-	}
+
 	void Editor::OnResized(const sf::Event&)
 	{
 		sf::FloatRect visibleArea(0, 0, (float)mEvent.size.width, (float)mEvent.size.height);

@@ -5,22 +5,21 @@ namespace Oblivion
 	SelectionHandlerComponent::SelectionHandlerComponent(Editor* editor, Engine* engine)
 		: mEditor{editor}, mEngine{engine}
 	{
+		mEditor->GetEngine()->eventBroadcaster.Attach(EventType::OnAnyEntityRemoved, this);
 	}
 
 	void SelectionHandlerComponent::Update()
 	{
-		sf::RenderTarget* renderWindow = mEngine->GetRenderWindow();
-
 		for (auto&[entity, selector] : mSelectedObjects)
 		{
-			selector.Update(&entity);
-			selector.Draw(renderWindow);
+			selector.Update(entity);
+			selector.Draw(mEngine->GetRenderWindow());
 		}
 	}
 
-	void SelectionHandlerComponent::SelectObject(Entity& entity)
+	void SelectionHandlerComponent::SelectObject(Entity* entity)
 	{
-		mSelectedObjects.emplace_back(entity, UIVisualSelector());
+		mSelectedObjects.emplace_back(entity);
 	}
 
 	bool SelectionHandlerComponent::IsInsideWorkspace(Vec2 translatedMousePos)
@@ -33,12 +32,26 @@ namespace Oblivion
 			return false;
 	}
 
+	void SelectionHandlerComponent::OnAnyEntityRemoved(Entity* remEntity)
+	{
+		auto it = mSelectedObjects.begin();
+		while(it != mSelectedObjects.end())
+		{
+			if (it->entity->GetUUID() == remEntity->GetUUID())
+			{
+				mSelectedObjects.erase(it);
+				break;
+			}
+			it++;
+		}
+	}
 
-	bool SelectionHandlerComponent::IsAlreadySelected(Entity& entity)
+
+	bool SelectionHandlerComponent::IsAlreadySelected(Entity* entity)
 	{
 		for (auto& selectedEntity : mSelectedObjects)
 		{
-			if (&entity == &selectedEntity.entity)
+			if (entity == selectedEntity.entity)
 			{
 				return true;
 			}
@@ -71,10 +84,10 @@ namespace Oblivion
 				//Entity selected
 				isEmptySpaceClicked = false;
 
-				if (!IsAlreadySelected(entity))
+				if (!IsAlreadySelected(&entity))
 				{
 					mSelectedObjects.clear();
-					mSelectedObjects.emplace_back(entity);
+					mSelectedObjects.emplace_back(&entity);
 					return true;
 				}
 				else

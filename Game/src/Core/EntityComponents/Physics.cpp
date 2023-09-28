@@ -46,7 +46,7 @@ namespace Oblivion
 
 			this->mBody->CreateFixture(&shape, density);
 
-			this->mBody->SetTransform(b2Vec2((float)pos.x, (float)pos.y), 0);
+			this->mBody->SetTransform(b2Vec2(pos.x, pos.y), 0);
 
 			break;
 		}
@@ -58,7 +58,6 @@ namespace Oblivion
 	{
 		mBody->GetWorld()->DestroyBody(mBody);
 	}
-
 
 	void PhysicsComponent::Update(const float& ts)
 	{

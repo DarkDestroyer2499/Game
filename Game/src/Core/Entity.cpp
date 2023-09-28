@@ -12,7 +12,6 @@ namespace Oblivion
 		this->transform = std::make_unique<TransformComponent>();
 		this->transform->SetOwner(this);
 		//this->ecs.AddComponent<TransformComponent>();
-		this->ecs.AddComponent<IDComponent>();
 	}
 
 	Entity::Entity(Engine* engine, const char* newName) :
@@ -22,7 +21,6 @@ namespace Oblivion
 		//this->ecs.AddComponent<TransformComponent>();
 		this->transform = std::make_unique<TransformComponent>();
 		this->transform->SetOwner(this);
-		this->ecs.AddComponent<IDComponent>();
 
 		rm = &mEngine->resourceManager;
 	}
@@ -76,11 +74,31 @@ namespace Oblivion
 		return mEngine;
 	}
 
+	void Entity::SetUUID(UUID uuid)
+	{
+		mUUID = uuid;
+	}
+
+	UUID Entity::GetUUID()
+	{
+		return mUUID;
+	}
+
 	Entity::Entity(const Entity& other)
 	{
 		rm = other.rm;
 		ecs = other.ecs;
 		mEngine = other.mEngine;
+	}
+
+	ECS<IEntityComponent, Entity*>& Entity::GetEcs()
+	{
+		return ecs;
+	}
+
+	void Entity::LoadEcs(ECS<IEntityComponent, Entity*>& newEcs)
+	{
+		ecs = newEcs;
 	}
 
 	Entity& Entity::operator=(const Entity& other)

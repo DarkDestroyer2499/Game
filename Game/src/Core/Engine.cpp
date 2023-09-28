@@ -9,13 +9,15 @@ namespace Oblivion
 		mScnHeight{ sf::VideoMode::getDesktopMode().height / 2 }, mWorking{ true }, mLastRenderTime{ 1 }, mCurrentScene(std::make_unique<Scene>(this))
 	{
 		mWorld = ::std::make_unique<b2World>(b2Vec2(0.f, 9.8f));
+		eventBroadcaster.Attach(EventType::OnAnyEntityCreated, this);
+		eventBroadcaster.Attach(EventType::OnAnyEntityRemoved, this);
 	}
 
 	Entity* Engine::GetEntityByID(UUID uuid)
 	{
 		for (auto& entity : mCurrentScene->GetEntityList())
 		{
-			if (entity.GetComponent<IDComponent>()->GetUUID() == uuid)
+			if (entity.GetUUID() == uuid)
 				return &entity;
 		}
 
@@ -69,12 +71,19 @@ namespace Oblivion
 
 	void Engine::Update(sf::RenderTexture* window)
 	{
+		static const sf::Color gbColor(62, 66, 63); 
+
+		window->clear(gbColor);
+
 		for (auto& object : mCurrentScene->GetEntityList())
 		{
 			object.Update(1.f / (float)mLastRenderTime);
 		}
 
 		mWorld->Step(1.f / 400.f, 8, 3);
+
+		window->display();
+
 		mLastRenderTime = (uint32_t)mClock.getElapsedTime().asMicroseconds();
 		mClock.restart();
 	}
@@ -126,19 +135,54 @@ namespace Oblivion
 
 	Entity* Engine::CreateObject(::std::string name)
 	{
-
 		::std::list<Entity>& entityList = mCurrentScene->GetEntityList();
-		entityList.emplace_back(this, name.c_str());
-		Log(INFO, &entityList.back() << " Create entity with name: " << name);
-		return &entityList.back();
+		Entity& entity = entityList.emplace_back(this, name.c_str());
+		Log(INFO, entity.GetUUID() << " Create entity with name: " << name);
+		eventBroadcaster.Notify(EventType::OnAnyEntityCreated, &entity);
+		return &entity;
 	}
 
 	Entity* Engine::CreateObject(Scene& scene, ::std::string name)
 	{
 		::std::list<Entity>& entityList = scene.GetEntityList();
 		entityList.emplace_back(this, name.c_str());
-		Log(INFO, &entityList.back() << " Create entity with name: " << name);
+		Log(INFO, entityList.back().GetUUID() << " Create entity with name: " << name);
 		return &entityList.back();
+	}
+
+	Entity* Engine::CloneObject(Entity* entity)
+	{
+		std::string name = entity->GetComponent<TagComponent>()->GetTag();
+		Entity* cloneEnt = CreateObject(name);
+		
+		cloneEnt->GetEcs().GetComponentList().clear();
+
+		cloneEnt->LoadEcs(entity->GetEcs());
+
+		for (auto& component : cloneEnt->GetComponentList())
+		{
+			component->SetOwner(cloneEnt);
+		}
+
+		return cloneEnt;
+	}
+
+	void Engine::RemoveObject(Entity* entity)
+	{
+		UUID entId = entity->GetUUID();
+		auto& entityList = mCurrentScene.get()->GetEntityList();
+		auto it = entityList.begin();
+		while (it != entityList.end())
+		{
+			if (it->GetUUID() == entId)
+			{
+				eventBroadcaster.Notify(EventType::OnAnyEntityRemoved, &(*it));
+				entityList.erase(it);
+				return;
+			}
+			it++;
+		}
+		Log(ERROR, "Attempted to remove entity with non registered id!");
 	}
 
 	void Engine::Stop()
