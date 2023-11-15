@@ -64,6 +64,8 @@ namespace Oblivion
 		void OnWindowClosed() override;
 		void OnResized(const sf::Event&) override;
 
+		void SetupStyles();
+
 	public:
 		ECS<IEditorComponent, Editor*> ecs;
 
