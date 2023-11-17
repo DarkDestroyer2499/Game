@@ -29,6 +29,7 @@ int main()
 	editor.AddComponent<PropertiesComponent>(&editor);
 	editor.AddComponent<FileExplorerComponent>(&editor);
 	editor.AddComponent<SelectionHandlerComponent>(&editor, &engine);
+	editor.AddComponent<ToolbarComponent>(&editor);
 
 	auto textureComponent = engine.resourceManager.resources.GetComponent<TextureComponent>();
 	textureComponent->SetOwner(&engine.resourceManager);

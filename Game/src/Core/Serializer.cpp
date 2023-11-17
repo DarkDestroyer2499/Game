@@ -132,10 +132,10 @@ namespace Oblivion
 
 		if (mStream.is_open())
 		{
-			Log(SUCCESS, "Opened!");
+			Log(SUCCESS, "Opened! " << filePath);
 		}
 		else
-			Log(ERROR, "Not Opened!");
+			Log(ERROR, "Not Opened! " << filePath);
 
 		mEmitter << YAML::BeginMap;
 		mEmitter << YAML::Key << "Scene" << YAML::Value << scene.GetName();

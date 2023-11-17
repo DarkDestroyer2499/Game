@@ -1,13 +1,12 @@
 #include "FileExplorer.hpp"
 #include "IconFontCppHeaders/IconsFontAwesome5Pro.h"
+#include <Core/Path.h>
 
 #include <Windows.h>
 #include <Commdlg.h>
 
 namespace Oblivion
 {
-	constexpr const char* ROOT_FOLDER_PATH{ "Assets" };
-
 	FileExplorerComponent::FileExplorerComponent(Editor* editor) :
 		mEditor{ editor }, mSelectedFolderPath{ ROOT_FOLDER_PATH }
 	{
@@ -22,8 +21,8 @@ namespace Oblivion
 		}
 		else
 		{
-			Log(WARNING, "Assets folder does not exist, and will be created! Path: " << ::std::filesystem::current_path().string() + "/" + ROOT_FOLDER_PATH);
-			::std::string path = ::std::filesystem::current_path().string() + "/" + ROOT_FOLDER_PATH;
+			Log(WARNING, "Assets folder does not exist, and will be created! Path: " << ::std::filesystem::current_path() / ROOT_FOLDER_PATH);
+			::std::string path = (::std::filesystem::current_path() / ROOT_FOLDER_PATH).string();
 			fs::create_directory(sandbox);
 		}
 	}
@@ -141,7 +140,7 @@ namespace Oblivion
 	{
 		if (ImGui::Begin("File structure"))
 		{
-			bool isOpened = ImGui::TreeNodeEx(ROOT_FOLDER_PATH, ((mSelectedFolderPath.string() == ROOT_FOLDER_PATH) ? ImGuiTreeNodeFlags_Selected : 0) | sFolderFlags | IsNeedToPreopenTree(mSelectedFolderPath));
+			bool isOpened = ImGui::TreeNodeEx(ROOT_FOLDER_PATH.string().c_str(), ((mSelectedFolderPath == ROOT_FOLDER_PATH) ? ImGuiTreeNodeFlags_Selected : 0) | sFolderFlags | IsNeedToPreopenTree(mSelectedFolderPath));
 
 			if (ImGui::IsItemClicked())
 			{
@@ -150,7 +149,7 @@ namespace Oblivion
 
 			if (isOpened)
 			{
-				BuildFolderTree(ROOT_FOLDER_PATH);
+				BuildFolderTree(ROOT_FOLDER_PATH.string());
 
 				ImGui::TreePop();
 			}

@@ -10,5 +10,6 @@
 #include "SelectionHandler.hpp"
 #include "Font.hpp"
 #include "Camera.hpp"
+#include "Toolbar.hpp"
 
 #endif // !EDITOR_COMPONENTS_H

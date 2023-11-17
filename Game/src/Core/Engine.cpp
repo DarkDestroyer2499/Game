@@ -6,7 +6,7 @@ namespace Oblivion
 {
 	Engine::Engine(sf::RenderTarget* window, ScreenMode wMode, unsigned int width = 0, unsigned int height = 0) :
 		mWindow{ window }, mWindowMode{ wMode }, mScnWidht{ sf::VideoMode::getDesktopMode().width / 2 },
-		mScnHeight{ sf::VideoMode::getDesktopMode().height / 2 }, mWorking{ true }, mLastRenderTime{ 1 }, mCurrentScene(std::make_unique<Scene>(this))
+		mScnHeight{ sf::VideoMode::getDesktopMode().height / 2 }, mWorking{ true }, mLastRenderTime{ 1 }, mCurrentScene(std::make_unique<Scene>(this)), mIsSceneRunning{ false }
 	{
 		mWorld = ::std::make_unique<b2World>(b2Vec2(0.f, 9.8f));
 		eventBroadcaster.Attach(EventType::OnAnyEntityCreated, this);
@@ -71,21 +71,36 @@ namespace Oblivion
 
 	void Engine::Update(sf::RenderTexture* window)
 	{
-		static const sf::Color gbColor(62, 66, 63); 
+		static const sf::Color gbColor(62, 66, 63);
 
 		window->clear(gbColor);
 
-		for (auto& object : mCurrentScene->GetEntityList())
+		float time = 0;
+		if (mIsSceneRunning)
 		{
-			object.Update(1.f / (float)mLastRenderTime);
+			mWorld->Step(1.f / 400.f, 8, 3);
+			time = (1.f / (float)mLastRenderTime);
 		}
 
-		mWorld->Step(1.f / 400.f, 8, 3);
+		for (auto& object : mCurrentScene->GetEntityList())
+		{
+			object.Update(time);
+		}
 
 		window->display();
 
 		mLastRenderTime = (uint32_t)mClock.getElapsedTime().asMicroseconds();
 		mClock.restart();
+	}
+
+	void Engine::SetCurrentSceneState(bool newState)
+	{
+		mIsSceneRunning = newState;
+	}
+
+	bool Engine::GetCurrentSceneState()
+	{
+		return mIsSceneRunning;
 	}
 
 	Engine::~Engine()
@@ -154,7 +169,7 @@ namespace Oblivion
 	{
 		std::string name = entity->GetComponent<TagComponent>()->GetTag();
 		Entity* cloneEnt = CreateObject(name);
-		
+
 		cloneEnt->GetEcs().GetComponentList().clear();
 
 		cloneEnt->LoadEcs(entity->GetEcs());

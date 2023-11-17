@@ -12,8 +12,8 @@ namespace Oblivion
 
 #define ERROR "\033[1;31mERRR\033[0m"
 #define INFO "INFO"
-#define WARNING "\033[1;33mWARNING\033[0m"
-#define SUCCESS "\033[1;32mSUCCESS\033[0m"
+#define WARNING "\033[1;33mWARN\033[0m"
+#define SUCCESS "\033[1;32mSUCC\033[0m"
 
 #define __PRETTY_FILE_NAME__ (::std::string(__FILE__).substr(::std::string(__FILE__).find_last_of("/\\") + 1))
 

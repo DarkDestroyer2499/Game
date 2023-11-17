@@ -46,7 +46,10 @@ namespace Oblivion
         void SetScreenMode(ScreenMode);
         void Run();
         void Stop();
-        void Update(sf::RenderTexture* window);        
+        void Update(sf::RenderTexture* window);       
+
+        void SetCurrentSceneState(bool state);
+        bool GetCurrentSceneState();
 
     public:
         ResourceManager resourceManager;
@@ -59,7 +62,7 @@ namespace Oblivion
         sf::RenderTarget* mWindow;
         unsigned int mScnWidht, mScnHeight;
         ScreenMode mWindowMode;
-        bool mWorking;
+        bool mWorking, mIsSceneRunning;
         sf::Event mEvent;
         ::std::unique_ptr<::std::thread> mMainThread;
         ::std::unique_ptr<b2World> mWorld;

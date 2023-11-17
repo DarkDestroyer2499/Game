@@ -59,7 +59,6 @@ namespace Oblivion
 			return this->ecs.GetComponentList();
 		}
 
-
 	private:
 		void OnWindowClosed() override;
 		void OnResized(const sf::Event&) override;
