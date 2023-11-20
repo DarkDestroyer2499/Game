@@ -50,10 +50,9 @@ int main()
 	s1.setTextureRect(sf::IntRect(20, 20, 50, 50));
 
 	
-	//ent5->AddComponent<GraphicsComponent>(new GraphicsComponent(s1));
-	ent5->AddComponent<AnimatedGraphicsComponent>();
+	ent5->AddComponent<GraphicsComponent>();
+	auto* anim = ent5->AddComponent<AnimatedGraphicsComponent>();
 	ent5->AddComponent<PhysicsComponent>(engine.GetMainWorld(), PhysicsObjectType::POLYGON, bdef, Vec2(50, 50), Vec2(190, 0));
-	auto* anim = ent5->GetComponent<AnimatedGraphicsComponent>();
 
 	sf::Texture* playerTexture = textureComponent->AddTexture("../resources/fang.png");
 

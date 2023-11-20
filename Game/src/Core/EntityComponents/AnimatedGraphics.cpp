@@ -5,6 +5,7 @@
 namespace Oblivion
 {
 	AnimatedGraphicsComponent::AnimatedGraphicsComponent()
+		:mGraphicsComponent{nullptr}
 	{
 		mName = COMPONENT_NAME;
 	}
@@ -48,10 +49,22 @@ namespace Oblivion
 
 	void AnimatedGraphicsComponent::Update(const float& time)
 	{
-		mAnimList[mCurrentAnimation].Update(time);
-		mAnimList[mCurrentAnimation].mSprite.setPosition(mOwner->GetPosition().x, mOwner->GetPosition().y);
-		mAnimList[mCurrentAnimation].mSprite.setRotation(mOwner->GetRotation() * 57.2957795f);
-		mOwner->GetEngine()->GetRenderWindow()->draw(mAnimList[mCurrentAnimation].mSprite);
+		if (mGraphicsComponent != nullptr)
+		{
+			mAnimList[mCurrentAnimation].Update(time);
+			sf::Sprite& sprite = mGraphicsComponent->GetSprite();
+			sf::IntRect textureRect = mAnimList[mCurrentAnimation].GetTextureRect();
+			sprite.setTexture(*mAnimList[mCurrentAnimation].GetTexture());
+			sprite.setTextureRect(textureRect);
+			sprite.setOrigin({ (float)textureRect.width / 2, (float)textureRect.height / 2 });
+			sprite.setPosition(mOwner->GetPosition().x, mOwner->GetPosition().y);
+			sprite.setRotation(mOwner->GetRotation() * 57.2957795f);
+			mOwner->GetEngine()->GetRenderWindow()->draw(sprite);
+		}
+		else
+		{
+			mGraphicsComponent = mOwner->GetComponent<GraphicsComponent>();
+		}
 	}
 
 	void AnimatedGraphicsComponent::Pause()

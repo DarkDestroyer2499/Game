@@ -3,17 +3,59 @@
 namespace Oblivion
 {
 	SelectionHandlerComponent::SelectionHandlerComponent(Editor* editor, Engine* engine)
-		: mEditor{editor}, mEngine{engine}
+		: mEditor{ editor }, mEngine{ engine }, mIsCtrlButtonPressed{ false }
 	{
 		mEditor->GetEngine()->eventBroadcaster.Attach(EventType::OnAnyEntityRemoved, this);
+		mEditor->GetEngine()->eventBroadcaster.Attach(EventType::MouseButtonPressed, this);
+		mEditor->GetEngine()->eventBroadcaster.Attach(EventType::KeyPressed, this);
+		mEditor->GetEngine()->eventBroadcaster.Attach(EventType::KeyReleased, this);
 	}
+
 
 	void SelectionHandlerComponent::Update()
 	{
-		for (auto&[entity, selector] : mSelectedObjects)
+		for (auto& [entity, selector] : mSelectedObjects)
 		{
 			selector.Update(entity);
 			selector.Draw(mEngine->GetRenderWindow());
+		}
+	}
+
+	void SelectionHandlerComponent::OnMouseButtonPressed(const sf::Event& event)
+	{
+		if (event.mouseButton.button != sf::Mouse::Button::Left)
+			return;
+
+		Vec2 MouseInViewportPos = mEditor->WindowToViewportCoords({ (float)event.mouseButton.x, (float)event.mouseButton.y });
+		auto camera = mEditor->GetComponent<CameraComponent>();
+
+		Vec2 ViewportSize = mEditor->GetComponent<ViewportComponent>()->GetSize();
+
+		Vec2 center = camera->GetCameraPos() + (MouseInViewportPos - ViewportSize / 2);
+
+		if (IsInsideWorkspace(MouseInViewportPos))
+		{
+			for (auto& entity : mEditor->GetEngine()->GetCurrentScene()->GetEntityList())
+			{
+				TrySelectObject(center);
+			}
+		}
+	}
+
+	void SelectionHandlerComponent::OnKeyPressed(const sf::Event& event)
+	{
+		if (event.key.code == sf::Keyboard::LControl)
+		{
+			mIsCtrlButtonPressed = true;
+		}
+	}
+
+	void SelectionHandlerComponent::OnKeyReleased(const sf::Event& event)
+	{
+		if (event.key.code == sf::Keyboard::LControl)
+		{
+			mIsCtrlButtonPressed = false;
+			
 		}
 	}
 
@@ -35,7 +77,7 @@ namespace Oblivion
 	void SelectionHandlerComponent::OnAnyEntityRemoved(Entity* remEntity)
 	{
 		auto it = mSelectedObjects.begin();
-		while(it != mSelectedObjects.end())
+		while (it != mSelectedObjects.end())
 		{
 			if (it->entity->GetUUID() == remEntity->GetUUID())
 			{
@@ -45,7 +87,6 @@ namespace Oblivion
 			it++;
 		}
 	}
-
 
 	bool SelectionHandlerComponent::IsAlreadySelected(Entity* entity)
 	{
@@ -79,20 +120,23 @@ namespace Oblivion
 			if (!graphicsComponent)
 				continue;
 
-			if (graphicsComponent->GetSprite().getGlobalBounds().contains({ mousePosition.x, mousePosition.y}))
+			if (graphicsComponent->GetSprite().getGlobalBounds().contains({ mousePosition.x, mousePosition.y }))
 			{
 				//Entity selected
 				isEmptySpaceClicked = false;
 
 				if (!IsAlreadySelected(&entity))
 				{
-					mSelectedObjects.clear();
-					mSelectedObjects.emplace_back(&entity);
+					if (mIsCtrlButtonPressed == true)
+					{
+						mSelectedObjects.emplace_back(&entity);
+					}
+					else
+					{
+						mSelectedObjects.clear();
+						mSelectedObjects.emplace_back(&entity);
+					}
 					return true;
-				}
-				else
-				{
-					Log(INFO, "Already selected!");
 				}
 			}
 		}

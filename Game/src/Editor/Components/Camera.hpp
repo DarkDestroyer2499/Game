@@ -14,6 +14,8 @@ namespace Oblivion
 
 		void Update() override;
 
+		Vec2 GetCameraPos() const;
+
 	private:
 		void OnMouseWheelScrolled(const sf::Event&) override;
 		void OnMouseButtonPressed(const sf::Event&) override;

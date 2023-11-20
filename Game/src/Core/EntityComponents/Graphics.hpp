@@ -9,7 +9,7 @@ namespace Oblivion
 	class GraphicsComponent : public IEntityComponent
 	{
 	public:
-		GraphicsComponent() = delete;
+		GraphicsComponent();
 		GraphicsComponent(const sf::Texture& texture, const sf::IntRect&);
 		GraphicsComponent(sf::Sprite);
 		GraphicsComponent(const GraphicsComponent& other);

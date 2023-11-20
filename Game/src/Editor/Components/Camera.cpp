@@ -45,6 +45,11 @@ namespace Oblivion
 		mTexture->setView(mView);
 	}
 
+	Vec2 CameraComponent::GetCameraPos() const
+	{
+		return mView.getCenter();
+	}
+
 	void CameraComponent::OnMouseWheelScrolled(const sf::Event& event)
 	{
 		if (event.mouseWheelScroll.delta > 0)

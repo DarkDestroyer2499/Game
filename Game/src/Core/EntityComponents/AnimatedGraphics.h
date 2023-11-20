@@ -3,6 +3,7 @@
 
 #include "IEntityComponent.hpp"
 #include "Animation.h"
+#include "Graphics.hpp"
 
 namespace Oblivion
 {
@@ -25,6 +26,7 @@ namespace Oblivion
 	private:
 		::std::string mCurrentAnimation;
 		::std::map<::std::string, Animation> mAnimList;
+		GraphicsComponent* mGraphicsComponent;
 
 		friend Serializer;
 	};

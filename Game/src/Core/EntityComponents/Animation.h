@@ -17,13 +17,17 @@ namespace Oblivion
 		~Animation() = default;
 
 		void Update(const float&);
+
+		sf::IntRect GetTextureRect();
+
+		sf::Texture* GetTexture();
 		
 	private:
 		bool isFlipped, isPlaying;
 		float mCurrentFrame, mSpeed, mStep;
 		::std::vector<sf::IntRect> mFrames, mFramesFlipped;
-		sf::Sprite mSprite;
 		Vec2 mSize, mStartPos;
+		sf::Texture *mTexture;
 
 		friend AnimatedGraphicsComponent;
 		friend Serializer;

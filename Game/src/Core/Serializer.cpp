@@ -294,7 +294,7 @@ namespace Oblivion
 				mEmitter << Key << comp->GetName();
 				mEmitter << BeginMap;
 				mEmitter << Key << "CurrentAnimation" << Value << comp->mCurrentAnimation;
-				mEmitter << Key << "TexturePath" << Value << entity.rm->resources.GetComponent<TextureComponent>()->GetTexturePath(comp->mAnimList[comp->mCurrentAnimation].mSprite.getTexture());
+				mEmitter << Key << "TexturePath" << Value << entity.rm->resources.GetComponent<TextureComponent>()->GetTexturePath(comp->mAnimList[comp->mCurrentAnimation].GetTexture());
 				mEmitter << Key << "isFlipped" << Value << comp->mAnimList[comp->mCurrentAnimation].isFlipped;
 				mEmitter << Key << "isPlaying" << Value << comp->mAnimList[comp->mCurrentAnimation].isPlaying;
 				mEmitter << Key << "AnimationList";

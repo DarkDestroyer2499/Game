@@ -62,6 +62,21 @@ namespace Oblivion {
 			return sf::Vector2i((int)x, (int)y);
 		}
 
+		Vec2 operator/(float i)
+		{
+			return { x / i, y / i };
+		}
+
+		Vec2 operator-(Vec2 other)
+		{
+			return { x - other.x, y - other.y };
+		}
+
+		Vec2 operator+(Vec2 other)
+		{
+			return { x + other.x, y + other.y };
+		}
+
 		friend ::std::ostream& operator<<(::std::ostream& os, const Vec2& vec)
 		{
 			return os << '[' << vec.x << " : " << vec.y << ']';

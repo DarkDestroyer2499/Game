@@ -5,6 +5,11 @@
 
 namespace Oblivion
 {
+	GraphicsComponent::GraphicsComponent()
+	{
+		mName = COMPONENT_NAME;
+	}
+
 	GraphicsComponent::GraphicsComponent(const sf::Texture& texture, const sf::IntRect& rect)
 	{
 		mSprite.setTexture(texture);
