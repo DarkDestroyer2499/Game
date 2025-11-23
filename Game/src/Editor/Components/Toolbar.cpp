@@ -18,21 +18,39 @@ namespace Oblivion
 
 	void ToolbarComponent::Update()
 	{
+		ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(8.0f, 8.0f));
+		ImGui::PushStyleColor(ImGuiCol_WindowBg, ImVec4(0.12f, 0.12f, 0.13f, 1.00f));
 		ImGui::Begin("Toolbar", nullptr, ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove);
 
 		ImVec2 availableSpace = ImGui::GetContentRegionAvail();
-		float buttonWidth = 40.0f;
-		float spacing = (availableSpace.x - (2 * buttonWidth)) / 2.0f;
-		float maxButtonHeight = availableSpace.y > 20.f ? 20.f : availableSpace.y;
+		float buttonWidth = 60.0f;
+		float buttonHeight = 30.0f;
+		float spacing = (availableSpace.x - (2 * buttonWidth) - 8.0f) / 2.0f;
 
 		auto engine = mEditor->GetEngine();
+		bool isPlaying = engine->GetCurrentSceneState();
 
-		// Play button
+		// Center the buttons
 		ImGui::SetCursorPosX(spacing);
-		ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.349f, 0.349f, 0.349f, 1.0f));
-		ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(0.4f, 0.4f, 0.4f, 1.0f));
-		ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4(0.298f, 0.298f, 0.298f, 1.0f));
-		if (ImGui::Button(!engine->GetCurrentSceneState() ? "Play" : "Stop", ImVec2(buttonWidth, maxButtonHeight)))
+		ImGui::SetCursorPosY((availableSpace.y - buttonHeight) / 2.0f + 8.0f);
+
+		// Play/Stop button
+		if (isPlaying)
+		{
+			// Stop button (red theme)
+			ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.6f, 0.2f, 0.2f, 1.0f));
+			ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(0.7f, 0.3f, 0.3f, 1.0f));
+			ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4(0.8f, 0.4f, 0.4f, 1.0f));
+		}
+		else
+		{
+			// Play button (green theme)
+			ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.2f, 0.6f, 0.2f, 1.0f));
+			ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(0.3f, 0.7f, 0.3f, 1.0f));
+			ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4(0.4f, 0.8f, 0.4f, 1.0f));
+		}
+
+		if (ImGui::Button(!isPlaying ? "Play" : "Stop", ImVec2(buttonWidth, buttonHeight)))
 		{
 			Serializer serializer(engine);
 			if (!engine->GetCurrentSceneState())
@@ -58,20 +76,39 @@ namespace Oblivion
 		}
 		ImGui::PopStyleColor(3);
 
-		//Pause button
+		// Pause button
 		ImGui::SameLine();
-		ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.349f, 0.349f, 0.349f, 1.0f));
-		ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(0.4f, 0.4f, 0.4f, 1.0f));
-		ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4(0.298f, 0.298f, 0.298f, 1.0f));
-		if (ImGui::Button("Pause", ImVec2(buttonWidth, maxButtonHeight)) && mScenePaused == false) {
-			if (engine->GetCurrentSceneState())
-			{
-				mScenePaused = true;
-				engine->SetCurrentSceneState(false);
-			}
+		bool isPauseEnabled = engine->GetCurrentSceneState();
+
+		if (!isPauseEnabled)
+		{
+			// Disabled state
+			ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.15f, 0.15f, 0.16f, 1.0f));
+			ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(0.15f, 0.15f, 0.16f, 1.0f));
+			ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4(0.15f, 0.15f, 0.16f, 1.0f));
+			ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(0.4f, 0.4f, 0.4f, 1.0f));
 		}
-		ImGui::PopStyleColor(3);
+		else
+		{
+			// Active state (blue theme)
+			ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.26f, 0.59f, 0.98f, 0.6f));
+			ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(0.26f, 0.59f, 0.98f, 0.8f));
+			ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4(0.26f, 0.59f, 0.98f, 1.0f));
+		}
+
+		if (ImGui::Button("Pause", ImVec2(buttonWidth, buttonHeight)) && isPauseEnabled && !mScenePaused)
+		{
+			mScenePaused = true;
+			engine->SetCurrentSceneState(false);
+		}
+
+		if (!isPauseEnabled)
+			ImGui::PopStyleColor(4);
+		else
+			ImGui::PopStyleColor(3);
 
 		ImGui::End();
+		ImGui::PopStyleColor();
+		ImGui::PopStyleVar();
 	}
 }
