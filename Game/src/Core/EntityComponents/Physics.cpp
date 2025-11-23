@@ -59,11 +59,15 @@ namespace Oblivion
 		mBody->GetWorld()->DestroyBody(mBody);
 	}
 
-	void PhysicsComponent::Update(const float& ts)
+	void PhysicsComponent::Update(float ts)
 	{
 		b2Vec2 pos = mBody->GetPosition();
 		mOwner->SetPosition(Vec2(pos.x, pos.y));
 		mOwner->SetRotation(mBody->GetAngle());
+	}
+
+	void PhysicsComponent::Render(sf::RenderTarget* target)
+	{
 	}
 
 	Vec2 PhysicsComponent::GetSize() const

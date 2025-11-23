@@ -10,6 +10,8 @@ namespace Oblivion
 	class AnimatedGraphicsComponent : public IEntityComponent
 	{
 	public:
+		COMPONENT_TYPE_IMPL(AnimatedGraphicsComponent)
+
 		AnimatedGraphicsComponent();
 		AnimatedGraphicsComponent(const AnimatedGraphicsComponent& other);
 		AnimatedGraphicsComponent(AnimatedGraphicsComponent&& other) noexcept;
@@ -19,7 +21,10 @@ namespace Oblivion
 		void AddAnimation(const ::std::string& name, sf::Texture& t, Vec2 pos, Vec2 size, int countOfFrames, float speed, float step);
 		void SetFlip(bool);
 		void Set(const ::std::string&);
-		void Update(const float& time) override;
+		void Update(float) override;
+		void Render(sf::RenderTarget* target) override;
+
+
 		void Pause();
 		void Play();
 

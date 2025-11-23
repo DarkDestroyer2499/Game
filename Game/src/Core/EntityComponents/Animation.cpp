@@ -13,7 +13,7 @@ namespace Oblivion
 		}
 	}
 
-	void Animation::Update(const float& time)
+	void Animation::Update(float time)
 	{
 		if (!isPlaying) return;
 

@@ -9,6 +9,7 @@ namespace Oblivion
 	class ToolbarComponent : public IEditorComponent
 	{
 	public:
+		COMPONENT_TYPE_IMPL(ToolbarComponent)
 		ToolbarComponent(Editor*);
 		~ToolbarComponent() = default;
 

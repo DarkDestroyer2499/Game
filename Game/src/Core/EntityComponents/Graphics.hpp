@@ -9,6 +9,8 @@ namespace Oblivion
 	class GraphicsComponent : public IEntityComponent
 	{
 	public:
+		COMPONENT_TYPE_IMPL(GraphicsComponent)
+
 		GraphicsComponent();
 		GraphicsComponent(const sf::Texture& texture, const sf::IntRect&);
 		GraphicsComponent(sf::Sprite);
@@ -16,7 +18,11 @@ namespace Oblivion
 		~GraphicsComponent() = default;
 
 		::std::unique_ptr<IEntityComponent> Clone() const override;
-		void Update(const float&) override;
+		void Update(float) override;
+		void Render(sf::RenderTarget* target) override;
+
+
+
 		sf::Sprite& GetSprite();
 
 	private:

@@ -55,16 +55,17 @@ namespace Oblivion
 			//Draw sprite of all objects
 			window->clear();
 
+			float deltaTime = mClock.restart().asSeconds();
+			mLastRenderTime = (uint32_t)(deltaTime * 1000000.f);
+
 			for (auto& object : mCurrentScene->GetEntityList())
 			{
-				object.Update(1.f / (float)mLastRenderTime);
+				object.Update(deltaTime);
 			}
 
 			mWorld->Step(1 / 500.f, 8, 3);
 
 			window->display();
-			mLastRenderTime = (uint32_t)mClock.getElapsedTime().asMicroseconds();
-			mClock.restart();
 		}
 		window->close();
 	}
@@ -75,11 +76,14 @@ namespace Oblivion
 
 		window->clear(gbColor);
 
+		float deltaTime = mClock.restart().asSeconds();
+		mLastRenderTime = (uint32_t)(deltaTime * 1000000.f);
+
 		float time = 0;
 		if (mIsSceneRunning)
 		{
 			mWorld->Step(1.f / 400.f, 8, 3);
-			time = (1.f / (float)mLastRenderTime);
+			time = deltaTime;
 		}
 
 		for (auto& object : mCurrentScene->GetEntityList())
@@ -88,9 +92,6 @@ namespace Oblivion
 		}
 
 		window->display();
-
-		mLastRenderTime = (uint32_t)mClock.getElapsedTime().asMicroseconds();
-		mClock.restart();
 	}
 
 	void Engine::SetCurrentSceneState(bool newState)

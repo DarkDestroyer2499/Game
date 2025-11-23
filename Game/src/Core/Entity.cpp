@@ -89,6 +89,7 @@ namespace Oblivion
 		rm = other.rm;
 		ecs = other.ecs;
 		mEngine = other.mEngine;
+		mRotation = 0;
 	}
 
 	ECS<IEntityComponent, Entity*>& Entity::GetEcs()
@@ -109,11 +110,12 @@ namespace Oblivion
 		return *this;
 	}
 
-	void Entity::Update(const float& ts)
+	void Entity::Update(float ts)
 	{
 		for (auto& component : ecs.GetComponentList())
 		{
 			component->Update(ts);
+			component->Render(mEngine->GetRenderWindow());
 		}
 	}
 

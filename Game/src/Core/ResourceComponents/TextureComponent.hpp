@@ -11,6 +11,7 @@ namespace Oblivion
 	class TextureComponent : public IResourceComponent
 	{
 	public:
+		COMPONENT_TYPE_IMPL(TextureComponent)
 		TextureComponent();
 		virtual ~TextureComponent() = default;
 

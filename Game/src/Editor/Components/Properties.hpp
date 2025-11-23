@@ -10,6 +10,7 @@ namespace Oblivion
 	class PropertiesComponent : public IEditorComponent
 	{
 	public:
+		COMPONENT_TYPE_IMPL(PropertiesComponent)
 		PropertiesComponent(Editor*);
 		~PropertiesComponent() = default;
 

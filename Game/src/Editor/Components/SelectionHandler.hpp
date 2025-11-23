@@ -26,6 +26,7 @@ namespace Oblivion
 	class SelectionHandlerComponent : public IEditorComponent
 	{
 	public:
+		COMPONENT_TYPE_IMPL(SelectionHandlerComponent)
 		SelectionHandlerComponent(Editor*, Engine*);
 		~SelectionHandlerComponent() = default;
 

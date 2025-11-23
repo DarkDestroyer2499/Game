@@ -51,7 +51,7 @@ namespace Oblivion
 				component->Update();
 			}
 
-			ImGui::ShowDemoWindow();
+			//ImGui::ShowDemoWindow();
 			ImGui::SFML::Render(mWindow);
 
 			mWindow.display();

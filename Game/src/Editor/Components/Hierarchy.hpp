@@ -9,6 +9,7 @@ namespace Oblivion
 	class HierarchyComponent : public IEditorComponent
 	{
 	public:
+		COMPONENT_TYPE_IMPL(HierarchyComponent)
 		HierarchyComponent(Editor*);
 		~HierarchyComponent() = default;
 

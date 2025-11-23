@@ -9,6 +9,7 @@ namespace Oblivion
 	class MenuBarComponent : public IEditorComponent
 	{
 	public:
+		COMPONENT_TYPE_IMPL(MenuBarComponent)
 		MenuBarComponent(Editor*);
 		~MenuBarComponent() = default;
 

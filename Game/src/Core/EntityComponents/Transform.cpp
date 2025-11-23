@@ -17,7 +17,11 @@ namespace Oblivion
 		return ::std::make_unique<TransformComponent>();
 	}
 
-	void TransformComponent::Update(const float& ts)
+	void TransformComponent::Update(float ts)
+	{
+	}
+
+	void TransformComponent::Render(sf::RenderTarget* target)
 	{
 	}
 

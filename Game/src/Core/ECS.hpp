@@ -2,6 +2,8 @@
 #define ECS_HPP
 
 #include <vector>
+#include <unordered_map>
+#include "ComponentTypeID.hpp"
 
 namespace Oblivion
 {
@@ -11,63 +13,80 @@ namespace Oblivion
 	public:
 		ECS();
 		ECS(OwnerType owner);
-		ECS(ECS&& other);
+		ECS(ECS&& other) noexcept;
 		ECS(const ECS& other);
 		~ECS();
 
 		template<typename Component>
 		bool HasComponent()
 		{
-			for (auto& component : mComponentList)
-			{
-				if (dynamic_cast<Component*>(component))
-					return true;
-			}
-			return false;
+			ComponentTypeID typeID = GetComponentTypeID<Component>();
+			return mComponentMap.find(typeID) != mComponentMap.end();
 		}
 
 		template<typename Component>
 		Component* GetComponent()
 		{
-			for (auto& component : mComponentList)
-			{
-				Component* tmp = dynamic_cast<Component*>(component);
-				if (tmp)
-					return tmp;
-			}
+			ComponentTypeID typeID = GetComponentTypeID<Component>();
+			auto it = mComponentMap.find(typeID);
+			if (it != mComponentMap.end())
+				return static_cast<Component*>(it->second);
+
 			return nullptr;
 		}
 
 		template<typename Component, typename... Args>
 		Component* AddComponent(Args&&... args)
 		{
-			Component* tmpComponent = new Component(args...);
-			tmpComponent->SetOwner(mOwner);
-			mComponentList.push_back(tmpComponent);
-			return tmpComponent;
+			Component* newComponent = new Component(args...);
+			newComponent->SetOwner(mOwner);
+			mComponentList.push_back(newComponent);
+
+			ComponentTypeID typeID = newComponent->GetTypeID();
+			mComponentMap[typeID] = newComponent;
+
+			return newComponent;
 		}
 
 		template<typename Component>
 		void RemoveComponent()
 		{
-			Component* tmpComponent = this->GetComponent<Component>();
-			if (tmpComponent != nullptr)
+			ComponentTypeID typeID = GetComponentTypeID<Component>();
+
+			auto it = mComponentMap.find(typeID);
+			if (it != mComponentMap.end())
 			{
-				this->mComponentList.erase(::std::remove(this->mComponentList.begin(), this->mComponentList.end(), tmpComponent), this->mComponentList.end());
-				delete tmpComponent;
+				T* component = it->second;
+				mComponentList.erase(::std::remove(mComponentList.begin(), mComponentList.end(), component), mComponentList.end());
+				mComponentMap.erase(it);
+				delete component;
 			}
+
 		}
 
 		ECS& operator=(const ECS& other)
 		{
 			if (this == &other)
 				return *this;
+
+			for (auto* component : mComponentList)
+				delete component;
+
+			mComponentList.clear();
+			mComponentMap.clear();
+
 			mOwner = other.mOwner;
+
 			for (auto& component : other.mComponentList)
 			{
 				auto newComponent = component->Clone();
-				newComponent->SetOwner(other.mOwner);
-				mComponentList.push_back(newComponent.release());
+				newComponent->SetOwner(mOwner);
+
+				T* tmp = newComponent.release();
+				mComponentList.push_back(tmp);
+
+				ComponentTypeID typeID = tmp->GetTypeID();
+				mComponentMap[typeID] = tmp;
 			}
 			return *this;
 		}
@@ -75,8 +94,9 @@ namespace Oblivion
 		::std::vector<T*>& GetComponentList();
 
 	private:
-		::std::vector<T*> mComponentList;
 		OwnerType mOwner;
+		::std::vector<T*> mComponentList;
+		::std::unordered_map<ComponentTypeID, T*> mComponentMap;
 	};
 
 	template<typename T, typename OwnerType>
@@ -92,14 +112,11 @@ namespace Oblivion
 	}
 
 	template<typename T, typename OwnerType>
-	inline ECS<T, OwnerType>::ECS(ECS&& other)
-		: mOwner{ other.mOwner }, mComponentList{ other.mComponentList }
+	inline ECS<T, OwnerType>::ECS(ECS&& other) noexcept
+		: mOwner{ other.mOwner }, mComponentList{ std::move(other.mComponentList) },
+		mComponentMap{ std::move(other.mComponentMap) }
 	{
 		other.mOwner = nullptr;
-		for (auto& component : other.mComponentList)
-		{
-			component = nullptr;
-		}
 	}
 
 	template<typename T, typename OwnerType>
@@ -110,7 +127,13 @@ namespace Oblivion
 		{
 			auto newComponent = component->Clone();
 			newComponent->SetOwner(other.mOwner);
-			mComponentList.push_back(newComponent.release());
+
+			T* tmp = newComponent.release();
+
+			mComponentList.push_back(tmp);
+
+			ComponentTypeID typeID = tmp->GetTypeID();
+			mComponentMap[typeID] = tmp;
 		}
 	}
 

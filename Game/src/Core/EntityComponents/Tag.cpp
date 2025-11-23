@@ -17,7 +17,11 @@ namespace Oblivion
 		return ::std::make_unique<TagComponent>(*this);
 	}
 
-	void TagComponent::Update(const float& ts)
+	void TagComponent::Update(float ts)
+	{
+	}
+
+	void TagComponent::Render(sf::RenderTarget* target)
 	{
 	}
 

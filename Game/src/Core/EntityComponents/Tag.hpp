@@ -8,12 +8,16 @@ namespace Oblivion
 	class TagComponent : public IEntityComponent
 	{
 	public:
+		COMPONENT_TYPE_IMPL(TagComponent)
+
 		TagComponent() = delete;
 		TagComponent(const ::std::string& newTag);
 		~TagComponent();
 
 		::std::unique_ptr<IEntityComponent> Clone() const override;
-		void Update(const float&) override;
+		void Update(float) override;
+		void Render(sf::RenderTarget* target) override;
+
 		void SetTag(::std::string& newTag);
 		void SetTag(::std::string newTag);
 		void SetTag(char* newTag);

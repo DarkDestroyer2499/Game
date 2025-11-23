@@ -10,6 +10,8 @@ namespace Oblivion
 	class FileExplorerComponent : public IEditorComponent
 	{
 	public:
+		COMPONENT_TYPE_IMPL(FileExplorerComponent)
+
 		FileExplorerComponent(Editor*);
 		~FileExplorerComponent() = default;
 

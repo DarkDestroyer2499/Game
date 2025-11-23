@@ -9,11 +9,17 @@ namespace Oblivion
 	class TransformComponent : public IEntityComponent
 	{
 	public:
+
+		COMPONENT_TYPE_IMPL(TransformComponent)
+
 		TransformComponent();
 		~TransformComponent();
 
 		::std::unique_ptr<IEntityComponent> Clone() const override;
-		void Update(const float&) override;
+		void Update(float) override;
+		void Render(sf::RenderTarget* target) override;
+
+
 		void SetPosition(Vec2 newPosition);
 		Vec2 GetPosition();
 		void SetRotation(float newRotation);

@@ -9,6 +9,7 @@ namespace Oblivion
 	class ViewportComponent : public IEditorComponent
 	{
 	public:
+		COMPONENT_TYPE_IMPL(ViewportComponent)
 		ViewportComponent(Editor*);
 		~ViewportComponent() = default;
 

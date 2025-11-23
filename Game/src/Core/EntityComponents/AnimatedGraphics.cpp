@@ -5,7 +5,7 @@
 namespace Oblivion
 {
 	AnimatedGraphicsComponent::AnimatedGraphicsComponent()
-		:mGraphicsComponent{nullptr}
+		:mGraphicsComponent{ nullptr }
 	{
 		mName = COMPONENT_NAME;
 	}
@@ -47,7 +47,7 @@ namespace Oblivion
 		mCurrentAnimation = animName;
 	}
 
-	void AnimatedGraphicsComponent::Update(const float& time)
+	void AnimatedGraphicsComponent::Update(float time)
 	{
 		if (mGraphicsComponent != nullptr)
 		{
@@ -59,12 +59,20 @@ namespace Oblivion
 			sprite.setOrigin({ (float)textureRect.width / 2, (float)textureRect.height / 2 });
 			sprite.setPosition(mOwner->GetPosition().x, mOwner->GetPosition().y);
 			sprite.setRotation(mOwner->GetRotation() * 57.2957795f);
-			mOwner->GetEngine()->GetRenderWindow()->draw(sprite);
 		}
 		else
 		{
 			mGraphicsComponent = mOwner->GetComponent<GraphicsComponent>();
 		}
+	}
+
+	void AnimatedGraphicsComponent::Render(sf::RenderTarget* target)
+	{
+		sf::Sprite& sprite = mGraphicsComponent->GetSprite();
+
+
+
+		mOwner->GetEngine()->GetRenderWindow()->draw(sprite);
 	}
 
 	void AnimatedGraphicsComponent::Pause()

@@ -2,6 +2,7 @@
 #define IUI_COMPONENT_HPP
 
 #include <Core/EventSystem/EventBroadcaster.hpp>
+#include "../../Core/ComponentTypeID.hpp"
 
 namespace Oblivion
 {
@@ -11,6 +12,7 @@ namespace Oblivion
 	{
 	public:
 		virtual ~IEditorComponent() = default;
+		virtual ComponentTypeID GetTypeID() const = 0;
 		virtual void SetOwner(Editor* newOwner) { mOwner = newOwner; }
 		virtual void Update() = 0;
 	protected:

@@ -16,7 +16,7 @@ namespace Oblivion
 		Animation(sf::Texture&, Vec2 pos, Vec2 size, int countOfFrames, float speed, float step);
 		~Animation() = default;
 
-		void Update(const float&);
+		void Update(float);
 
 		sf::IntRect GetTextureRect();
 

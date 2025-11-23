@@ -9,6 +9,7 @@ namespace Oblivion
 	class FontComponent : public IEditorComponent
 	{
 	public:
+		COMPONENT_TYPE_IMPL(FontComponent)
 		FontComponent(Editor*);
 		~FontComponent() = default;
 

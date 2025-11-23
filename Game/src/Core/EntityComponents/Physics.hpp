@@ -18,13 +18,18 @@ namespace Oblivion
 	class PhysicsComponent : public IEntityComponent
 	{
 	public:
+		COMPONENT_TYPE_IMPL(PhysicsComponent)
+
 		PhysicsComponent() = delete;
 		PhysicsComponent(b2World*, const PhysicsObjectType&, b2BodyDef&, Vec2 size = Vec2(30.f, 30.f), Vec2 pos = Vec2(), float density = 1.f);
 		PhysicsComponent(b2World*, const PhysicsObjectType&, b2BodyDef, b2FixtureDef fdef, Vec2 size = Vec2(30.f, 30.f), Vec2 pos = Vec2(), float density = 1.f);
 		~PhysicsComponent() override;
 
 		::std::unique_ptr<IEntityComponent> Clone() const override;
-		void Update(const float&) override;
+		void Update(float) override;
+		void Render(sf::RenderTarget* target) override;
+
+
 		Vec2 GetSize() const;
 		void SetPosition(Vec2 newPosition);
 		Vec2 GetPosition() const;

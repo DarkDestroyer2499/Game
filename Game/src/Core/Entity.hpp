@@ -22,7 +22,7 @@ namespace Oblivion
 		Entity(const Entity& other);
 		virtual ~Entity();
 
-		virtual void Update(const float&);
+		virtual void Update(float);
 		void SetPosition(const Vec2&);
 		Vec2 GetPosition() const;
 		Vec2 GetSize();
@@ -37,7 +37,7 @@ namespace Oblivion
 		template<typename Component>
 		bool HasComponent()
 		{
-			return this.ecs.GetComponent<Component>();
+			return this->ecs.HasComponent<Component>();
 		}
 
 		template<typename Component>

@@ -35,11 +35,17 @@ namespace Oblivion
 		return ::std::make_unique<GraphicsComponent>(*this);
 	}
 
-	void GraphicsComponent::Update(const float& time)
+	void GraphicsComponent::Update(float time)
 	{
 		mSprite.setPosition(mOwner->GetPosition().x, mOwner->GetPosition().y);
 		mSprite.setRotation(mOwner->GetRotation() * 57.2957795f);
-		mOwner->GetEngine()->GetRenderWindow()->draw(mSprite);
+	}
+	void GraphicsComponent::Render(sf::RenderTarget* target)
+	{
+		if (mSprite.getTexture() == nullptr)
+			return;
+
+		target->draw(mSprite);
 	}
 	sf::Sprite& GraphicsComponent::GetSprite()
 	{

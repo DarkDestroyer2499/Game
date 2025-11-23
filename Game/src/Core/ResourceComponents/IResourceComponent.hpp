@@ -2,6 +2,7 @@
 #define I_RESOURCE_COMPONENT_HPP
 
 #include <string>
+#include "../ComponentTypeID.hpp"
 
 namespace Oblivion
 {
@@ -13,6 +14,8 @@ namespace Oblivion
 	{
 	public:
 		virtual ~IResourceComponent() = default;
+
+		virtual ComponentTypeID GetTypeID() const = 0;
 
 		virtual void SetOwner(ResourceManager* newOwner) { mOwner = newOwner; }
 		virtual const char* GetName() { return mName.c_str(); };

@@ -9,6 +9,7 @@ namespace Oblivion
 	class CameraComponent : public IEditorComponent
 	{
 	public:
+		COMPONENT_TYPE_IMPL(CameraComponent)
 		CameraComponent(Editor*);
 		~CameraComponent() = default;
 
