@@ -48,9 +48,9 @@ namespace Oblivion
 					ImGui::TableNextRow();
 					ImGui::TableNextColumn();
 
-					auto transform = selectedObject.entity->transform.get();
+					auto &transform = selectedObject.entity->transform;
 
-					bool open = ImGui::TreeNodeEx((::std::string(transform->GetName()) + ::std::string(" component")).c_str(), TreeNodeFlags);
+					bool open = ImGui::TreeNodeEx((::std::string(transform.GetName()) + ::std::string(" component")).c_str(), TreeNodeFlags);
 
 					if (open)
 					{
@@ -58,7 +58,7 @@ namespace Oblivion
 						ImGui::Spacing();
 
 						// Position
-						Vec2 pos = transform->GetPosition();
+						Vec2 pos = transform.position;
 						float position[2]{ pos.x, pos.y };
 
 						ImGui::Columns(2, nullptr, false);
@@ -100,7 +100,7 @@ namespace Oblivion
 						ImGui::Spacing();
 
 						// Rotation
-						float rotation = transform->GetRotation() * DEG_IN_RAD;
+						float rotation = transform.rotation * DEG_IN_RAD;
 
 						ImGui::Columns(2, nullptr, false);
 						ImGui::SetColumnWidth(0, 80.f);
@@ -126,8 +126,8 @@ namespace Oblivion
 						ImGui::Spacing();
 						ImGui::PopStyleVar();
 
-						transform->SetRotation(rotation / DEG_IN_RAD);
-						transform->SetPosition({ position[0], position[1] });
+						transform.SetRotation(rotation / DEG_IN_RAD);
+						transform.SetPosition({ position[0], position[1] });
 						ImGui::TreePop();
 					}
 				}

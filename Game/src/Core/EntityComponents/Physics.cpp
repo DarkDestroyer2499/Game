@@ -61,9 +61,18 @@ namespace Oblivion
 
 	void PhysicsComponent::Update(float ts)
 	{
-		b2Vec2 pos = mBody->GetPosition();
-		mOwner->SetPosition(Vec2(pos.x, pos.y));
-		mOwner->SetRotation(mBody->GetAngle());
+		Vec2 physicsPosition = Vec2(mBody->GetPosition());
+		float physicsRotation = mBody->GetAngle();
+
+		if (mOwner->transform.position != physicsPosition)
+		{
+			mOwner->transform.SetPositionSilent(physicsPosition);
+		}
+
+		if (mOwner->transform.rotation != physicsRotation)
+		{
+			mOwner->transform.SetRotationSilent(physicsRotation);
+		}
 	}
 
 	void PhysicsComponent::Render(sf::RenderTarget* target)
@@ -111,5 +120,16 @@ namespace Oblivion
 	b2FixtureDef PhysicsComponent::GetFixtureDef()
 	{
 		return mFixtureDef;
+	}
+	void PhysicsComponent::OnComponentAdded()
+	{
+		mOwner->transform.SubscribeToTransformChanged([this](const Vec2& newPosition, float newRotation)
+			{
+				this->SetPosition(newPosition);
+				this->SetRotation(newRotation);
+			});
+
+		SetPosition(mOwner->transform.position);
+		SetRotation(mOwner->transform.rotation);
 	}
 }

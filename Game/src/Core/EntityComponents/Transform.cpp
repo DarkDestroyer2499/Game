@@ -4,6 +4,7 @@
 namespace Oblivion
 {
 	TransformComponent::TransformComponent()
+		: position{}, rotation{}, mLastPosition{}, mLastRotation{}
 	{
 		mName = COMPONENT_NAME;
 	}
@@ -19,95 +20,60 @@ namespace Oblivion
 
 	void TransformComponent::Update(float ts)
 	{
+		if (position != mLastPosition || rotation != mLastRotation)
+		{
+			NotifyTransformChanged();
+			mLastPosition = position;
+			mLastRotation = rotation;
+		}
 	}
 
 	void TransformComponent::Render(sf::RenderTarget* target)
 	{
 	}
 
-	void TransformComponent::SetPosition(Vec2 newPosition)
+	void TransformComponent::SubscribeToTransformChanged(const TransformChangedCallback& callback)
 	{
-		auto physicsComponent = mOwner->GetComponent<PhysicsComponent>();
-		if (physicsComponent)
+		mTransformChangedCallbacks.push_back(callback);
+	}
+
+	void TransformComponent::SetPosition(const Vec2& pos)
+	{
+		if (position != pos)
 		{
-			physicsComponent->SetPosition(newPosition);
-		}
-		else
-		{
-			auto graphicsComponent = mOwner->GetComponent<GraphicsComponent>();
-			if (graphicsComponent)
-			{
-				graphicsComponent->GetSprite().setPosition(newPosition.ToSFMLVec2f());
-			}
-			else
-			{
-				Log(ERROR, "No components to set position!");
-			}
+			position = pos;
+			mLastPosition = pos;
+			NotifyTransformChanged();
 		}
 	}
 
-	Vec2 TransformComponent::GetPosition()
+	void TransformComponent::SetRotation(float rot)
 	{
-		auto physicsComponent = mOwner->GetComponent<PhysicsComponent>();
-		if (physicsComponent)
+		if (rotation != rot)
 		{
-			return physicsComponent->GetPosition();
-		}
-		else
-		{
-			auto graphicsComponent = mOwner->GetComponent<GraphicsComponent>();
-			if (graphicsComponent)
-			{
-				return graphicsComponent->GetSprite().getPosition();
-			}
-			else
-			{
-				Log(ERROR, "No components to get position!");
-				return Vec2();
-			}
+			rotation = rot;
+			mLastRotation = rot;
+			NotifyTransformChanged();
 		}
 	}
 
-	void TransformComponent::SetRotation(float newRotation)
+	void TransformComponent::SetPositionSilent(const Vec2& pos)
 	{
-		auto physicsComponent = mOwner->GetComponent<PhysicsComponent>();
-		if (physicsComponent)
-		{
-			physicsComponent->SetRotation(newRotation);
-		}
-		else
-		{
-			auto graphicsComponent = mOwner->GetComponent<GraphicsComponent>();
-			if (graphicsComponent)
-			{
-				graphicsComponent->GetSprite().setRotation(newRotation);
-			}
-			else
-			{
-				Log(ERROR, "No components to set rotation!");
-			}
-		}
+		position = pos;
+		mLastPosition = pos;
 	}
 
-	float TransformComponent::GetRotation()
+	void TransformComponent::SetRotationSilent(float rot)
 	{
-		auto physicsComponent = mOwner->GetComponent<PhysicsComponent>();
-		if (physicsComponent)
+		rotation = rot;
+		mLastRotation = rot;
+	}
+
+	void TransformComponent::NotifyTransformChanged()
+	{
+		for (const auto& callback : mTransformChangedCallbacks)
 		{
-			return physicsComponent->GetRotation();
-		}
-		else
-		{
-			auto graphicsComponent = mOwner->GetComponent<GraphicsComponent>();
-			if (graphicsComponent)
-			{
-				return graphicsComponent->GetSprite().getRotation();
-			}
-			else
-			{
-				Log(ERROR, "No components to get rotation!");
-				return 0.f;
-			}
+			callback(position, rotation);
 		}
 	}
 }

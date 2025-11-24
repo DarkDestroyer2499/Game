@@ -1,8 +1,14 @@
 #ifndef TRANSFORM_H
 #define TRANSFORM_H
 
+#include <functional>
+#include <vector>
+
+
 #include "IEntityComponent.hpp"
 #include "Util/Util.hpp"
+
+
 
 namespace Oblivion
 {
@@ -19,11 +25,27 @@ namespace Oblivion
 		void Update(float) override;
 		void Render(sf::RenderTarget* target) override;
 
+		using TransformChangedCallback = ::std::function<void(const Vec2&, float)>;
 
-		void SetPosition(Vec2 newPosition);
-		Vec2 GetPosition();
-		void SetRotation(float newRotation);
-		float GetRotation();
+		void SubscribeToTransformChanged(const TransformChangedCallback& callback);
+
+		void SetPosition(const Vec2& pos);
+		void SetRotation(float rot);
+
+		void SetPositionSilent(const Vec2& pos);
+		void SetRotationSilent(float rot);
+
+	private:
+		void NotifyTransformChanged();
+
+	public:
+		Vec2 position;
+		float rotation;
+
+	private:
+		std::vector<TransformChangedCallback> mTransformChangedCallbacks;
+		Vec2 mLastPosition;
+		float mLastRotation;
 	};
 }
 #endif // !TRANSFORM_H

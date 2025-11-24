@@ -80,7 +80,13 @@ namespace Oblivion {
 		friend ::std::ostream& operator<<(::std::ostream& os, const Vec2& vec)
 		{
 			return os << '[' << vec.x << " : " << vec.y << ']';
+		}		
+		
+		bool operator!=(const Vec2& other) const
+		{
+			return x != other.x || y != other.y;
 		}
+
 	};
 
 #define PVARIABLE_GET_SET(type, name)\

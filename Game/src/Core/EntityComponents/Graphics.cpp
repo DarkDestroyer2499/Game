@@ -37,8 +37,8 @@ namespace Oblivion
 
 	void GraphicsComponent::Update(float time)
 	{
-		mSprite.setPosition(mOwner->GetPosition().x, mOwner->GetPosition().y);
-		mSprite.setRotation(mOwner->GetRotation() * 57.2957795f);
+		mSprite.setPosition(mOwner->transform.position.x, mOwner->transform.position.y);
+		mSprite.setRotation(mOwner->transform.rotation * 57.2957795f);
 	}
 	void GraphicsComponent::Render(sf::RenderTarget* target)
 	{

@@ -5,22 +5,20 @@
 namespace Oblivion
 {
 	Entity::Entity()
-		: mEngine{ nullptr }, mPosition{}, ecs{ nullptr }, mRotation{}, rm{ nullptr }
-
+		: mEngine{ nullptr }, mPosition{}, ecs{ this }, mRotation{}, rm{ nullptr }
 	{
 		this->ecs.AddComponent<TagComponent>("");
-		this->transform = std::make_unique<TransformComponent>();
-		this->transform->SetOwner(this);
-		//this->ecs.AddComponent<TransformComponent>();
+
+		this->transform = *(this->ecs.AddComponent<TransformComponent>());
+		
+		
 	}
 
 	Entity::Entity(Engine* engine, const char* newName) :
 		mEngine{ engine }, mPosition{}, ecs{ this }, mRotation{}
 	{
-		this->ecs.AddComponent<TagComponent>(newName);
-		//this->ecs.AddComponent<TransformComponent>();
-		this->transform = std::make_unique<TransformComponent>();
-		this->transform->SetOwner(this);
+		this->ecs.AddComponent<TagComponent>("");
+		this->transform = *(this->ecs.AddComponent<TransformComponent>());
 
 		rm = &mEngine->resourceManager;
 	}
@@ -33,12 +31,12 @@ namespace Oblivion
 
 	void Entity::SetPosition(const Vec2& newPosition)
 	{
-		mPosition = newPosition;
+		transform.position = newPosition;
 	}
 
 	Vec2 Entity::GetPosition() const
 	{
-		return mPosition;
+		return transform.position;
 	}
 
 	Vec2 Entity::GetSize()
@@ -66,7 +64,7 @@ namespace Oblivion
 
 	float Entity::GetRotation() const
 	{
-		return mRotation;
+		return transform.rotation;
 	}
 
 	Engine* Entity::GetEngine()
@@ -85,11 +83,15 @@ namespace Oblivion
 	}
 
 	Entity::Entity(const Entity& other)
+		: rm(other.rm)
+		, ecs(this)
+		, mEngine(other.mEngine)
+		, mPosition(other.mPosition)
+		, mRotation(other.mRotation)
+		, mSize(other.mSize)
+		, mUUID()
 	{
-		rm = other.rm;
 		ecs = other.ecs;
-		mEngine = other.mEngine;
-		mRotation = 0;
 	}
 
 	ECS<IEntityComponent, Entity*>& Entity::GetEcs()
@@ -104,9 +106,17 @@ namespace Oblivion
 
 	Entity& Entity::operator=(const Entity& other)
 	{
+		if (this == &other)
+			return *this;
+
 		rm = other.rm;
-		ecs = other.ecs;
 		mEngine = other.mEngine;
+		mPosition = other.mPosition;
+		mRotation = other.mRotation;
+		mSize = other.mSize;
+
+		ecs = other.ecs;
+
 		return *this;
 	}
 
@@ -121,6 +131,6 @@ namespace Oblivion
 
 	void Entity::SetRotation(float newRotation)
 	{
-		mRotation = newRotation;
+		transform.rotation = newRotation;
 	}
 }

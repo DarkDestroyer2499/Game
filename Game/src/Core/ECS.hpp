@@ -45,6 +45,8 @@ namespace Oblivion
 			ComponentTypeID typeID = newComponent->GetTypeID();
 			mComponentMap[typeID] = newComponent;
 
+			newComponent->OnComponentAdded();
+
 			return newComponent;
 		}
 
@@ -57,8 +59,10 @@ namespace Oblivion
 			if (it != mComponentMap.end())
 			{
 				T* component = it->second;
+				component->OnComponentRemoved();
 				mComponentList.erase(::std::remove(mComponentList.begin(), mComponentList.end(), component), mComponentList.end());
 				mComponentMap.erase(it);
+
 				delete component;
 			}
 
@@ -74,8 +78,6 @@ namespace Oblivion
 
 			mComponentList.clear();
 			mComponentMap.clear();
-
-			mOwner = other.mOwner;
 
 			for (auto& component : other.mComponentList)
 			{

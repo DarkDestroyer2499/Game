@@ -71,7 +71,7 @@ namespace Oblivion
 	
 	public:
 		ResourceManager* rm;
-		std::unique_ptr<TransformComponent> transform;
+		TransformComponent transform;
 	private:
 		ECS<IEntityComponent, Entity*> ecs;
 		Engine* mEngine;

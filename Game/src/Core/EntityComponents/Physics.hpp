@@ -40,6 +40,9 @@ namespace Oblivion
 		b2BodyDef GetBodyDef();
 		float GetDensity();
 		b2FixtureDef GetFixtureDef();
+
+		void OnComponentAdded() override;	
+
 	private:
 		PhysicsObjectType mType;
 		b2Body* mBody;

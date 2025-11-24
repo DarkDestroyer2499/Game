@@ -25,6 +25,11 @@ namespace Oblivion
 
 		virtual void SetOwner(Entity* newOwner) { mOwner = newOwner; }
 		virtual const char* GetName() { return mName.c_str(); };
+
+		virtual void OnComponentAdded() {}
+		virtual void OnComponentRemoved() {}
+
+
 	protected:
 		Entity* mOwner;
 		::std::string mName;

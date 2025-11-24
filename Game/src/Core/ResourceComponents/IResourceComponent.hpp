@@ -19,6 +19,10 @@ namespace Oblivion
 
 		virtual void SetOwner(ResourceManager* newOwner) { mOwner = newOwner; }
 		virtual const char* GetName() { return mName.c_str(); };
+
+		virtual void OnComponentAdded() {}
+		virtual void OnComponentRemoved() {}
+
 	protected:
 		ResourceManager* mOwner;
 		::std::string mName;

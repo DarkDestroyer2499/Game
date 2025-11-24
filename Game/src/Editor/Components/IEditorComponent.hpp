@@ -15,6 +15,10 @@ namespace Oblivion
 		virtual ComponentTypeID GetTypeID() const = 0;
 		virtual void SetOwner(Editor* newOwner) { mOwner = newOwner; }
 		virtual void Update() = 0;
+
+		virtual void OnComponentAdded() {}
+		virtual void OnComponentRemoved() {}
+
 	protected:
 		Editor* mOwner;
 	};
