@@ -2,8 +2,8 @@
 
 namespace Oblivion
 {
-	SelectionHandlerComponent::SelectionHandlerComponent(Editor* editor, Engine* engine)
-		: mEditor{ editor }, mEngine{ engine }, mIsCtrlButtonPressed{ false }
+	SelectionHandlerComponent::SelectionHandlerComponent(Editor* editor)
+		: mEditor{ editor }, mIsCtrlButtonPressed{ false }
 	{
 		mEditor->GetEngine()->eventBroadcaster.Attach(EventType::OnAnyEntityRemoved, this);
 		mEditor->GetEngine()->eventBroadcaster.Attach(EventType::MouseButtonPressed, this);
@@ -17,7 +17,7 @@ namespace Oblivion
 		for (auto& [entity, selector] : mSelectedObjects)
 		{
 			selector.Update(entity);
-			selector.Draw(mEngine->GetRenderWindow());
+			selector.Draw(mEditor->GetRenderTexture());
 		}
 	}
 

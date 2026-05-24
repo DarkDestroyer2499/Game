@@ -4,13 +4,14 @@
 
 namespace Oblivion
 {
-	Engine::Engine(sf::RenderTarget* window, ScreenMode wMode, unsigned int width = 0, unsigned int height = 0) :
-		mWindow{ window }, mWindowMode{ wMode }, mScnWidht{ sf::VideoMode::getDesktopMode().width / 2 },
-		mScnHeight{ sf::VideoMode::getDesktopMode().height / 2 }, mWorking{ true }, mLastRenderTime{ 1 }, mCurrentScene(std::make_unique<Scene>(this)), mIsSceneRunning{ false }
+	Engine::Engine() :
+		mWorking{ true }, mLastRenderTime{ 1 }, mCurrentScene(std::make_unique<Scene>(this)), mIsSceneRunning{ false }
 	{
 		mWorld = ::std::make_unique<b2World>(b2Vec2(0.f, 9.8f));
 		eventBroadcaster.Attach(EventType::OnAnyEntityCreated, this);
 		eventBroadcaster.Attach(EventType::OnAnyEntityRemoved, this);
+
+		resourceManager.resources.AddComponent<TextureComponent>();
 	}
 
 	Entity* Engine::GetEntityByID(UUID uuid)
@@ -24,36 +25,21 @@ namespace Oblivion
 		return nullptr;
 	}
 
-	void Engine::Run()
+	void Engine::RunStandalone()
 	{
 		Log(SUCCESS, "Engine has been started");
 
-		auto tmpWindow = dynamic_cast<sf::RenderWindow*>(mWindow);
-		if (!tmpWindow)
-		{
-			Log(WARNING, "External texture will be rendered!");
-		}
-		else
-		{
-			Log(WARNING, "Engine runned in window mode!");
-			mMainThread = ::std::make_unique<::std::thread>(::std::thread([this]() {
-				Update(static_cast<sf::RenderWindow*>(mWindow));
-				}));
-		}
-	}
+		sf::RenderWindow window = sf::RenderWindow(sf::VideoMode(1920, 1080), WINDOW_NAME, ScreenMode::Resize);
 
-	void Engine::Update(sf::RenderWindow* window)
-	{
-		window->create(sf::VideoMode(mScnWidht, mScnHeight), WINDOW_NAME, mWindowMode);
-		while (window->isOpen() && mWorking == true)
+		while (window.isOpen() && mWorking == true)
 		{
-			while (window->pollEvent(mEvent))
+			while (window.pollEvent(mEvent))
 			{
 				if (mEvent.type == sf::Event::Closed || mWorking == false)
-					window->close();
+					window.close();
 			}
 			//Draw sprite of all objects
-			window->clear();
+			window.clear();
 
 			float deltaTime = mClock.restart().asSeconds();
 			mLastRenderTime = (uint32_t)(deltaTime * 1000000.f);
@@ -65,9 +51,14 @@ namespace Oblivion
 
 			mWorld->Step(1 / 500.f, 8, 3);
 
-			window->display();
+			window.display();
 		}
-		window->close();
+		window.close();
+	}
+
+	void Engine::Tick(float time)
+	{
+
 	}
 
 	void Engine::Update(sf::RenderTexture* window)
@@ -113,14 +104,14 @@ namespace Oblivion
 
 	sf::RenderTarget* Engine::GetRenderWindow()
 	{
-		auto tmpWindow = dynamic_cast<sf::RenderWindow*>(mWindow);
+		auto tmpWindow = dynamic_cast<sf::RenderWindow*>(mRenderTarget);
 		if (!tmpWindow)
 		{
-			return static_cast<sf::RenderTexture*>(mWindow);
+			return static_cast<sf::RenderTexture*>(mRenderTarget);
 		}
 		else
 		{
-			return static_cast<sf::RenderWindow*>(mWindow);
+			return static_cast<sf::RenderWindow*>(mRenderTarget);
 		}
 	}
 

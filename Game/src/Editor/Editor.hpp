@@ -18,7 +18,7 @@ namespace Oblivion
 	class Editor : public EventSubscriber
 	{
 	public:
-		Editor(sf::RenderTexture*, Engine&);
+		Editor();
 		Editor(Editor&&) = delete;
 		Editor(Editor&) = delete;
 		~Editor();
@@ -72,8 +72,8 @@ namespace Oblivion
 		sf::RenderWindow mWindow;
 		sf::Clock mClock;
 		sf::Event mEvent;
-		sf::RenderTexture* mTexture;
-		Engine& mEngine;
+		sf::RenderTexture mTexture;
+		std::unique_ptr<Engine> mEngine;
 		sf::Vector2i mMousePosition;
 		sf::View mView;
 	};

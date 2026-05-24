@@ -27,10 +27,9 @@ namespace Oblivion
     class Engine : public EventSubscriber
     {
     public:
-        Engine(sf::RenderTarget*, ScreenMode, unsigned int, unsigned int);
-        Engine() = delete;
+        Engine();
         ~Engine();
-
+        
         Entity* GetEntityByID(UUID uuid);
         sf::RenderTarget* GetRenderWindow();
         Entity* CreateObject(::std::string name = ::std::string("Uknown"));
@@ -44,7 +43,11 @@ namespace Oblivion
 
         void SetCurrentScene(std::unique_ptr<Scene> newScene);
         void SetScreenMode(ScreenMode);
-        void Run();
+
+        void RunStandalone();
+
+        void Tick(float time);
+
         void Stop();
         void Update(sf::RenderTexture* window);       
 
@@ -56,12 +59,7 @@ namespace Oblivion
         EventBroadcaster eventBroadcaster;
 
     private:
-        void Update(sf::RenderWindow* window);
-
-    private:
-        sf::RenderTarget* mWindow;
-        unsigned int mScnWidht, mScnHeight;
-        ScreenMode mWindowMode;
+        sf::RenderTarget* mRenderTarget;
         bool mWorking, mIsSceneRunning;
         sf::Event mEvent;
         ::std::unique_ptr<::std::thread> mMainThread;

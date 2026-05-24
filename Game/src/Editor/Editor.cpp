@@ -4,16 +4,36 @@
 
 namespace Oblivion
 {
-	Editor::Editor(sf::RenderTexture* newTexture, Engine& engine) :
-		mTexture{ newTexture }, mEngine{ engine }, mEvent{}, ecs{ this }
+	Editor::Editor()
+		: mEvent{}, ecs{ this }
 	{
 		mWindow.create(sf::VideoMode(1200, 900), "Oblivion Engine", ScreenMode::Resize | ScreenMode::Close);
+
+		mTexture.create(1920, 1080);
+
+		mEngine = std::make_unique<Engine>();
+
 
 		mView = mWindow.getDefaultView();
 
 		ImGui::SFML::Init(mWindow, false);
 
 		SetupStyles();
+
+
+		ecs.AddComponent<ViewportComponent>(this);
+		ecs.AddComponent<CameraComponent>(this);
+
+
+		ecs.AddComponent<HierarchyComponent>(this);
+		ecs.AddComponent<MenuBarComponent>(this);
+		ecs.AddComponent<PropertiesComponent>(this);
+		ecs.AddComponent<FileExplorerComponent>(this);
+		ecs.AddComponent<SelectionHandlerComponent>(this);
+		ecs.AddComponent<ToolbarComponent>(this);
+
+
+
 
 		GetEngine()->eventBroadcaster.Attach(EventType::Closed, this);
 		GetEngine()->eventBroadcaster.Attach(EventType::Resized, this);
@@ -44,7 +64,7 @@ namespace Oblivion
 
 			ImGui::DockSpaceOverViewport();
 
-			mEngine.Update(mTexture);
+			mEngine->Update(&mTexture);
 
 			for (auto& component : ecs.GetComponentList())
 			{
@@ -60,12 +80,12 @@ namespace Oblivion
 
 	Engine* Editor::GetEngine()
 	{
-		return &mEngine;
+		return mEngine.get();
 	}
 
 	sf::RenderTexture* Editor::GetRenderTexture()
 	{
-		return mTexture;
+		return &mTexture;
 	}
 
 	Vec2 Editor::GetMousePosition()
