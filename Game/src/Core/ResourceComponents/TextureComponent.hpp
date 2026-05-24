@@ -17,6 +17,8 @@ namespace Oblivion
 
 		sf::Texture* AddTexture(::std::filesystem::path path);
 
+		sf::Texture* GetOrLoadTexture(::std::filesystem::path path);
+
 		::std::string GetTexturePath(const sf::Texture* texture);
 
 		sf::Texture* GetTexture(::std::string name);

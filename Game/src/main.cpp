@@ -15,7 +15,7 @@ int main(int argc, char** argv)
 		}
 	);
 
-	isEditorMode = false;
+	isEditorMode = true;
 
 	if (isEditorMode)
 	{

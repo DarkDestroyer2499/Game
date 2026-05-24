@@ -64,14 +64,14 @@ namespace Oblivion
 		Vec2 physicsPosition = Vec2(mBody->GetPosition());
 		float physicsRotation = mBody->GetAngle();
 
-		if (mOwner->transform.position != physicsPosition)
+		if (mOwner->GetTransform()->position != physicsPosition)
 		{
-			mOwner->transform.SetPositionSilent(physicsPosition);
+			mOwner->GetTransform()->SetPositionSilent(physicsPosition);
 		}
 
-		if (mOwner->transform.rotation != physicsRotation)
+		if (mOwner->GetTransform()->rotation != physicsRotation)
 		{
-			mOwner->transform.SetRotationSilent(physicsRotation);
+			mOwner->GetTransform()->SetRotationSilent(physicsRotation);
 		}
 	}
 
@@ -123,13 +123,13 @@ namespace Oblivion
 	}
 	void PhysicsComponent::OnComponentAdded()
 	{
-		mOwner->transform.SubscribeToTransformChanged([this](const Vec2& newPosition, float newRotation)
+		mOwner->GetTransform()->SubscribeToTransformChanged([this](const Vec2& newPosition, float newRotation)
 			{
 				this->SetPosition(newPosition);
 				this->SetRotation(newRotation);
 			});
 
-		SetPosition(mOwner->transform.position);
-		SetRotation(mOwner->transform.rotation);
+		SetPosition(mOwner->GetTransform()->position);
+		SetRotation(mOwner->GetTransform()->rotation);
 	}
 }

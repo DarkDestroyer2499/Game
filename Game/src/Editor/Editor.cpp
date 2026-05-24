@@ -7,12 +7,13 @@ namespace Oblivion
 	Editor::Editor()
 		: mEvent{}, ecs{ this }
 	{
-		mWindow.create(sf::VideoMode(1200, 900), "Oblivion Engine", ScreenMode::Resize | ScreenMode::Close);
+		mWindow.create(sf::VideoMode(1200, 900), "Oblivion Engine", sf::Style::Resize | sf::Style::Close);
 
 		mTexture.create(1920, 1080);
 
 		mEngine = std::make_unique<Engine>();
 
+		mEngine->SetRenderTarget(&mTexture);
 
 		mView = mWindow.getDefaultView();
 
@@ -65,6 +66,8 @@ namespace Oblivion
 			ImGui::DockSpaceOverViewport();
 
 			mEngine->Update(&mTexture);
+
+			mTexture.display();
 
 			for (auto& component : ecs.GetComponentList())
 			{

@@ -5,7 +5,7 @@
 namespace Oblivion
 {
 	Engine::Engine() :
-		mWorking{ true }, mLastRenderTime{ 1 }, mCurrentScene(std::make_unique<Scene>(this)), mIsSceneRunning{ false }
+		mWorking{ true }, mLastRenderTime{ 1 }, mCurrentScene(std::make_unique<Scene>(this)), mIsSceneRunning{ false }, mRenderTarget{nullptr}
 	{
 		mWorld = ::std::make_unique<b2World>(b2Vec2(0.f, 9.8f));
 		eventBroadcaster.Attach(EventType::OnAnyEntityCreated, this);
@@ -29,7 +29,9 @@ namespace Oblivion
 	{
 		Log(SUCCESS, "Engine has been started");
 
-		sf::RenderWindow window = sf::RenderWindow(sf::VideoMode(1920, 1080), WINDOW_NAME, ScreenMode::Resize);
+		sf::RenderWindow window = sf::RenderWindow(sf::VideoMode(1920, 1080), WINDOW_NAME, sf::Style::Resize | sf::Style::Close);
+
+		mRenderTarget = &window;
 
 		while (window.isOpen() && mWorking == true)
 		{
@@ -38,18 +40,8 @@ namespace Oblivion
 				if (mEvent.type == sf::Event::Closed || mWorking == false)
 					window.close();
 			}
-			//Draw sprite of all objects
-			window.clear();
-
-			float deltaTime = mClock.restart().asSeconds();
-			mLastRenderTime = (uint32_t)(deltaTime * 1000000.f);
-
-			for (auto& object : mCurrentScene->GetEntityList())
-			{
-				object.Update(deltaTime);
-			}
-
-			mWorld->Step(1 / 500.f, 8, 3);
+			
+			Update(mRenderTarget);
 
 			window.display();
 		}
@@ -61,7 +53,7 @@ namespace Oblivion
 
 	}
 
-	void Engine::Update(sf::RenderTexture* window)
+	void Engine::Update(sf::RenderTarget* window)
 	{
 		static const sf::Color gbColor(62, 66, 63);
 
@@ -81,8 +73,11 @@ namespace Oblivion
 		{
 			object.Update(time);
 		}
+	}
 
-		window->display();
+	void Engine::SetRenderTarget(sf::RenderTarget* target)
+	{
+		mRenderTarget = target;
 	}
 
 	void Engine::SetCurrentSceneState(bool newState)
@@ -98,21 +93,11 @@ namespace Oblivion
 	Engine::~Engine()
 	{
 		Stop();
-		if (mMainThread != nullptr && mMainThread->joinable())
-			mMainThread->join();
 	}
 
 	sf::RenderTarget* Engine::GetRenderWindow()
 	{
-		auto tmpWindow = dynamic_cast<sf::RenderWindow*>(mRenderTarget);
-		if (!tmpWindow)
-		{
-			return static_cast<sf::RenderTexture*>(mRenderTarget);
-		}
-		else
-		{
-			return static_cast<sf::RenderWindow*>(mRenderTarget);
-		}
+		return mRenderTarget;
 	}
 
 	b2World* Engine::GetMainWorld()
@@ -133,11 +118,6 @@ namespace Oblivion
 	void Engine::SetCurrentScene(std::unique_ptr<Scene> newScene)
 	{
 		mCurrentScene = std::move(newScene);
-	}
-
-	void Engine::SetScreenMode(ScreenMode newMode)
-	{
-		//mWindow.create(sf::VideoMode(mScnWidht, mScnHeight), WINDOW_NAME, newMode);
 	}
 
 	Entity* Engine::CreateObject(::std::string name)

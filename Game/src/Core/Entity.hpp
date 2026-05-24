@@ -24,15 +24,17 @@ namespace Oblivion
 
 		virtual void Update(float);
 		void SetPosition(const Vec2&);
-		Vec2 GetPosition() const;
+		Vec2 GetPosition() ;
 		Vec2 GetSize();
 		void SetRotation(float);
-		float GetRotation() const;
+		float GetRotation();
 		Engine* GetEngine();
 
 		void SetUUID(UUID);
 
 		UUID GetUUID();
+
+		TransformComponent* GetTransform(); 
 
 		template<typename Component>
 		bool HasComponent()
@@ -71,13 +73,9 @@ namespace Oblivion
 	
 	public:
 		ResourceManager* rm;
-		TransformComponent transform;
 	private:
 		ECS<IEntityComponent, Entity*> ecs;
 		Engine* mEngine;
-		Vec2 mPosition;
-		Vec2 mSize;
-		float mRotation;
 		UUID mUUID;
 	};
 }

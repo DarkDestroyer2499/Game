@@ -5,20 +5,17 @@
 namespace Oblivion
 {
 	Entity::Entity()
-		: mEngine{ nullptr }, mPosition{}, ecs{ this }, mRotation{}, rm{ nullptr }
+		: mEngine{ nullptr }, ecs{ this }, rm{ nullptr }
 	{
 		this->ecs.AddComponent<TagComponent>("");
-
-		this->transform = *(this->ecs.AddComponent<TransformComponent>());
-		
-		
+		this->ecs.AddComponent<TransformComponent>();
 	}
 
 	Entity::Entity(Engine* engine, const char* newName) :
-		mEngine{ engine }, mPosition{}, ecs{ this }, mRotation{}
+		mEngine{ engine }, ecs{ this }
 	{
 		this->ecs.AddComponent<TagComponent>("");
-		this->transform = *(this->ecs.AddComponent<TransformComponent>());
+		this->ecs.AddComponent<TransformComponent>();
 
 		rm = &mEngine->resourceManager;
 	}
@@ -31,12 +28,12 @@ namespace Oblivion
 
 	void Entity::SetPosition(const Vec2& newPosition)
 	{
-		transform.position = newPosition;
+		GetTransform()->position = newPosition;
 	}
 
-	Vec2 Entity::GetPosition() const
+	Vec2 Entity::GetPosition()
 	{
-		return transform.position;
+		return GetTransform()->position;
 	}
 
 	Vec2 Entity::GetSize()
@@ -62,9 +59,9 @@ namespace Oblivion
 		return Vec2();
 	}
 
-	float Entity::GetRotation() const
+	float Entity::GetRotation()
 	{
-		return transform.rotation;
+		return GetTransform()->rotation;
 	}
 
 	Engine* Entity::GetEngine()
@@ -82,13 +79,15 @@ namespace Oblivion
 		return mUUID;
 	}
 
+	TransformComponent* Entity::GetTransform()
+	{
+		return ecs.GetComponent<TransformComponent>();
+	}
+
 	Entity::Entity(const Entity& other)
 		: rm(other.rm)
 		, ecs(this)
 		, mEngine(other.mEngine)
-		, mPosition(other.mPosition)
-		, mRotation(other.mRotation)
-		, mSize(other.mSize)
 		, mUUID()
 	{
 		ecs = other.ecs;
@@ -111,9 +110,6 @@ namespace Oblivion
 
 		rm = other.rm;
 		mEngine = other.mEngine;
-		mPosition = other.mPosition;
-		mRotation = other.mRotation;
-		mSize = other.mSize;
 
 		ecs = other.ecs;
 
@@ -131,6 +127,6 @@ namespace Oblivion
 
 	void Entity::SetRotation(float newRotation)
 	{
-		transform.rotation = newRotation;
+		GetTransform()->rotation = newRotation;
 	}
 }

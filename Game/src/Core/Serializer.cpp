@@ -202,11 +202,13 @@ namespace Oblivion
 			if (ent["AnimatedGraphics"])
 			{
 				auto* animatedGraphics = entity->AddComponent<AnimatedGraphicsComponent>();
+				auto* texComp = entity->rm->resources.GetComponent<TextureComponent>();
+				sf::Texture* tex = texComp->GetOrLoadTexture(ent["AnimatedGraphics"]["TexturePath"].as<std::string>());
 
 				for (auto& node : ent["AnimatedGraphics"]["AnimationList"])
-				{	
+				{
 					animatedGraphics->AddAnimation(node.first.as<std::string>(),
-						*entity->rm->resources.GetComponent<TextureComponent>()->GetTexture("../resources/fang.png"),
+						*tex,
 						node.second["StartPos"].as<Vec2>(),
 						node.second["Size"].as<Vec2>(),
 						node.second["FramesCount"].as<int>(),
@@ -428,8 +430,6 @@ namespace Oblivion
 			Log(ERROR, "Tried to deserialize with no data!");
 			return fdef;
 		}
-
-		fdef.density = data["b2FixtureDef"]["fdef.density"].as<float>();
 
 		fdef.density = data["b2FixtureDef"]["fdef.density"].as<float>();
 

@@ -27,6 +27,13 @@ namespace Oblivion
 		return &tex;
 	}
 
+	sf::Texture* TextureComponent::GetOrLoadTexture(::std::filesystem::path path)
+	{
+		if (sf::Texture* existing = GetTexture(path.string()))
+			return existing;
+		return AddTexture(path);
+	}
+
 	::std::string TextureComponent::GetTexturePath(const sf::Texture* textureToFind)
 	{
 		for (const auto& [key, texture] : mTexture) {
