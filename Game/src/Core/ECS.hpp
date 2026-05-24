@@ -14,7 +14,7 @@ namespace Oblivion
 		ECS();
 		ECS(OwnerType owner);
 		ECS(ECS&& other) noexcept;
-		ECS(const ECS& other);
+		//ECS(const ECS& other) = delete;
 		~ECS();
 
 		template<typename Component>
@@ -119,24 +119,6 @@ namespace Oblivion
 		mComponentMap{ std::move(other.mComponentMap) }
 	{
 		other.mOwner = nullptr;
-	}
-
-	template<typename T, typename OwnerType>
-	inline ECS<T, OwnerType>::ECS(const ECS& other)
-		: mOwner{ other.mOwner }
-	{
-		for (auto& component : other.mComponentList)
-		{
-			auto newComponent = component->Clone();
-			newComponent->SetOwner(other.mOwner);
-
-			T* tmp = newComponent.release();
-
-			mComponentList.push_back(tmp);
-
-			ComponentTypeID typeID = tmp->GetTypeID();
-			mComponentMap[typeID] = tmp;
-		}
 	}
 
 	template<typename T, typename OwnerType>

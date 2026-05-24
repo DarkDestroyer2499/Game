@@ -146,11 +146,6 @@ namespace Oblivion
 
 		cloneEnt->LoadEcs(entity->GetEcs());
 
-		for (auto& component : cloneEnt->GetComponentList())
-		{
-			component->SetOwner(cloneEnt);
-		}
-
 		return cloneEnt;
 	}
 
