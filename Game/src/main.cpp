@@ -20,6 +20,9 @@ int main(int argc, char** argv)
 	if (isEditorMode)
 	{
 		Oblivion::Editor editor;
+
+		editor.GetEngine()->CreateObject("Test Object 1");
+
 		editor.Run();
 	}
 	else

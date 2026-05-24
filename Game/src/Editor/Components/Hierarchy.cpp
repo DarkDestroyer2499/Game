@@ -1,10 +1,20 @@
 #include "Hierarchy.hpp"
 
+#include "../../Core/EventSystem/Events.hpp"
+
 namespace Oblivion
 {
 	HierarchyComponent::HierarchyComponent(Editor* editor) :
 		mEditor{ editor }
 	{
+		mEntityCreatedSubscription = mEditor->GetEngine()->mEventBus.Subscribe<EntityCreatedEvent>([this](const EntityCreatedEvent& event)
+			{
+				Log(INFO, "Entity created: " << event.entity->GetUUID());
+			});
+		mEntityRemovedSubscription = mEditor->GetEngine()->mEventBus.Subscribe<EntityRemovedEvent>([this](const EntityRemovedEvent& event)
+			{
+				Log(INFO, "Entity removed: " << event.entity->GetUUID());
+			});
 	}
 
 	void HierarchyComponent::Update()
@@ -112,19 +122,19 @@ namespace Oblivion
 						for (auto Component : entity->GetComponentList())
 						{
 							ImGui::TreeNodeEx((std::string(Component->GetName()) + "##" + entityStringId).c_str(), ImGuiTreeNodeFlags_Leaf | ImGuiTreeNodeFlags_Bullet | ImGuiTreeNodeFlags_NoTreePushOnOpen | ImGuiTreeNodeFlags_SpanFullWidth);
-							
+
 						}
 						ImGui::TreePop();
 					}
 					entity++;
 				}
-				ImGui::EndTable();				
+				ImGui::EndTable();
 			}
 			ImGui::PopStyleVar();
 
 			ImGui::End();
 		}
-		
+
 	}
 
 	bool HierarchyComponent::IsNeedToSelect(Entity& entity)

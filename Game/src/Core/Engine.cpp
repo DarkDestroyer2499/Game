@@ -2,6 +2,8 @@
 #include "Util/Log.hpp"
 #include "EntityComponents/ComponentLinker.hpp"
 
+#include "EventSystem/Events.hpp"
+
 namespace Oblivion
 {
 	Engine::Engine() :
@@ -126,6 +128,7 @@ namespace Oblivion
 		Entity& entity = entityList.emplace_back(this, name.c_str());
 		Log(INFO, entity.GetUUID() << " Create entity with name: " << name);
 		eventBroadcaster.Notify(EventType::OnAnyEntityCreated, &entity);
+		mEventBus.Publish(EntityCreatedEvent{ &entity });
 		return &entity;
 	}
 
@@ -159,6 +162,7 @@ namespace Oblivion
 			if (it->GetUUID() == entId)
 			{
 				eventBroadcaster.Notify(EventType::OnAnyEntityRemoved, &(*it));
+				mEventBus.Publish(EntityRemovedEvent{ &(*it) });
 				entityList.erase(it);
 				return;
 			}

@@ -4,6 +4,8 @@
 #include "IEditorComponent.hpp"
 #include "Editor/Editor.hpp"
 
+#include "../../Core/EventSystem/EventBus.hpp"
+
 namespace Oblivion
 {
 	class HierarchyComponent : public IEditorComponent
@@ -20,6 +22,9 @@ namespace Oblivion
 
 	private:
 		Editor* mEditor;
+		Subscription mEntityCreatedSubscription;
+		Subscription mEntityRemovedSubscription;
+
 	};
 }
 #endif // !HIERARCHY_H

@@ -2,24 +2,18 @@
 #define ENGINE_H
 
 #include <SFML/Graphics.hpp>
+
 #include "Core/Entity.hpp"
 #include "Scene.hpp"
 #include "Core/ResourceManager.hpp"
-#include <Core/EventSystem/EventBroadcaster.hpp>
+#include "Core/EventSystem/EventBroadcaster.hpp"
+
+#include "Core/EventSystem/EventBus.hpp"
 
 namespace Oblivion
 {
 
 #define WINDOW_NAME "SUPER GAME"
-
-	enum ScreenMode
-	{
-		None = 0,      ///< No border / title bar (this flag and all others are mutually exclusive)
-		Titlebar = 1 << 0, ///< Title bar + fixed border
-		Resize = 1 << 1, ///< Title bar + resizable border + maximize button
-		Close = 1 << 2, ///< Title bar + close button
-		Fullscreen = 1 << 3,
-	};
 
 	class Engine : public EventSubscriber
 	{
@@ -55,6 +49,7 @@ namespace Oblivion
 	public:
 		ResourceManager resourceManager;
 		EventBroadcaster eventBroadcaster;
+		EventBus mEventBus;
 
 	private:
 		sf::RenderTarget* mRenderTarget;
