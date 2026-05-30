@@ -8,7 +8,7 @@ namespace Oblivion
 	static float CAMERA_ZOOM_IN_LIMIT = 0.1f;
 	static float CAMERA_ZOOM_OUT_LIMIT = 3.f;
 
-	
+
 
 	CameraComponent::CameraComponent(Editor* editor) :
 		mEditor{ editor }, mIsPrimary{ true }, mMiddleButtonHold{ false }
@@ -17,9 +17,21 @@ namespace Oblivion
 		mCurrentZoom = mZoomDefault;
 		mView = mEditor->GetRenderTexture()->getView();
 		mView.setCenter(0, 0);
-		mEditor->GetEngine()->eventBroadcaster.Attach(EventType::MouseWheelScrolled, this);
-		mEditor->GetEngine()->eventBroadcaster.Attach(EventType::MouseButtonPressed, this);
-		mEditor->GetEngine()->eventBroadcaster.Attach(EventType::MouseButtonReleased, this);
+
+		mMouseWheelScrolledEvent = mEditor->GetEngine()->mEventBus.Subscribe<MouseWheelScrolledEvent>([this](const MouseWheelScrolledEvent& event)
+			{
+				OnMouseWheelScrolled(event);
+			});
+
+		mMouseButtonPressedEvent = mEditor->GetEngine()->mEventBus.Subscribe<MouseButtonPressedEvent>([this](const MouseButtonPressedEvent& event)
+			{
+				OnMouseButtonPressed(event);
+			});
+
+		mMouseButtonReleasedEvent = mEditor->GetEngine()->mEventBus.Subscribe<MouseButtonReleasedEvent>([this](const MouseButtonReleasedEvent& event)
+			{
+				OnMouseButtonReleased(event);
+			});
 	}
 
 	void CameraComponent::Update()
@@ -27,18 +39,18 @@ namespace Oblivion
 		mView = mTexture->getView();
 		mView.setSize((float)mTexture->getSize().x, (float)mTexture->getSize().y);
 		mView.zoom(mCurrentZoom);
-		
+
 		if (mMiddleButtonHold == true)
 		{
 			Vec2 currentMousePos = mEditor->GetMousePosition();
-			
+
 			Vec2 tmpPos = mTexture->mapPixelToCoords(currentMousePos.ToSFMLVec2i());
 			Vec2 positionDelta = { mLastClickedPos.x - currentMousePos.x,
 								   mLastClickedPos.y - currentMousePos.y };
 
 			Vec2 positionDelta1 = { mPosition.x + positionDelta.x * CAMERA_MOVEMENT_SPEED_MULTIPLIER, mPosition.y + positionDelta.y * CAMERA_MOVEMENT_SPEED_MULTIPLIER };
 			mPosition = positionDelta1;
-			
+
 			mLastClickedPos = currentMousePos;
 		}
 		mView.setCenter(mPosition.x, mPosition.y);
@@ -50,9 +62,9 @@ namespace Oblivion
 		return mView.getCenter();
 	}
 
-	void CameraComponent::OnMouseWheelScrolled(const sf::Event& event)
+	void CameraComponent::OnMouseWheelScrolled(const MouseWheelScrolledEvent& event)
 	{
-		if (event.mouseWheelScroll.delta > 0)
+		if (event.delta > 0)
 			mCurrentZoom -= mCurrentZoom > CAMERA_ZOOM_IN_LIMIT ? CAMERA_SCROLL_SPEED : 0;
 		else
 			mCurrentZoom += mCurrentZoom < CAMERA_ZOOM_OUT_LIMIT ? CAMERA_SCROLL_SPEED : 0;
@@ -60,20 +72,20 @@ namespace Oblivion
 		mView.zoom(mCurrentZoom);
 	}
 
-	void CameraComponent::OnMouseButtonPressed(const sf::Event& event)
+	void CameraComponent::OnMouseButtonPressed(const MouseButtonPressedEvent& event)
 	{
-		if (event.mouseButton.button == sf::Mouse::Button::Middle)
+		if (event.button == sf::Mouse::Button::Middle)
 		{
-			mLastClickedPos = { (float)event.mouseButton.x, (float)event.mouseButton.y };
+			mLastClickedPos = { (float)event.x, (float)event.y };
 			mMiddleButtonHold = true;
 		}
 	}
 
-	void CameraComponent::OnMouseButtonReleased(const sf::Event& event)
+	void CameraComponent::OnMouseButtonReleased(const MouseButtonReleasedEvent& event)
 	{
 		//Log(SUCCESS, "Mouse has been pressed " << lastClickedPos << " MiddlePressed: " << mMiddleButtonHold);
-		if (event.mouseButton.button == sf::Mouse::Button::Middle)
-		{			
+		if (event.button == sf::Mouse::Button::Middle)
+		{
 			mMiddleButtonHold = false;
 		}
 	}

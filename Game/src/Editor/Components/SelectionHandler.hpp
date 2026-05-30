@@ -3,6 +3,7 @@
 
 #include "IEditorComponent.hpp"
 #include "Editor/Editor.hpp"
+#include "../../Core/EventSystem/Events.hpp"
 
 namespace Oblivion
 {
@@ -40,15 +41,21 @@ namespace Oblivion
 
 	private:
 		//Events
-		void OnAnyEntityRemoved(Entity*) override;
-		void OnMouseButtonPressed(const sf::Event&) override;
-		void OnKeyPressed(const sf::Event&) override;
-		void OnKeyReleased(const sf::Event&) override;
+		void OnAnyEntityRemoved(const EntityRemovedEvent&);
+		void OnMouseButtonPressed(const MouseButtonPressedEvent&);
+		void OnKeyPressed(const KeyPressedEvent&);
+		void OnKeyReleased(const KeyReleasedEvent&);
 	private:
 		::std::vector<SelectedObject> mSelectedObjects;
 		Editor* mEditor;
 		Engine* mEngine;
 		bool mIsCtrlButtonPressed;
+
+	private:
+		Subscription mEntityRemovedEvent;
+		Subscription mMouseButtonPressedEvent;
+		Subscription mKeyPressedEvent;
+		Subscription mKeyReleasedEvent;
 	};
 }
 #endif // !SELECTION_HANDLER_HPP

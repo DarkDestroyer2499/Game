@@ -1,6 +1,8 @@
 #include "Editor.hpp"
 #include "Util/Log.hpp"
-#include <Core/Serializer.hpp>
+#include "Core/Serializer.hpp"
+#include "Core/EventSystem/SFMLEventTranslator.hpp"
+#include "Core/EventSystem/Events.hpp"
 
 namespace Oblivion
 {
@@ -35,9 +37,22 @@ namespace Oblivion
 
 
 
+		mWindowClosedSubscription = mEngine->mEventBus.Subscribe<WindowClosedEvent>(
+			[this](const WindowClosedEvent& e)
+			{
+				OnWindowClosed();
+				Log(INFO, "Window closed event received");
+			}
+		);
 
-		GetEngine()->eventBroadcaster.Attach(EventType::Closed, this);
-		GetEngine()->eventBroadcaster.Attach(EventType::Resized, this);
+		mResizedSubscription = mEngine->mEventBus.Subscribe<WindowResizedEvent>(
+			[this](const WindowResizedEvent& e)
+			{
+				Log(INFO, "Window resized event received: " << e.width << "x" << e.height);
+	
+				OnResized(e);
+			}
+		);
 	}
 
 	Editor::~Editor()
@@ -56,7 +71,7 @@ namespace Oblivion
 		while (mWindow.isOpen()) {
 			while (mWindow.pollEvent(mEvent)) {
 				ImGui::SFML::ProcessEvent(mWindow, mEvent);
-				GetEngine()->eventBroadcaster.Notify(mEvent);
+				SFMLEventTranslator::TranslateEvent(mEvent, GetEngine()->mEventBus);
 			}
 
 			ImGui::SFML::Update(mWindow, mClock.restart());
@@ -106,9 +121,9 @@ namespace Oblivion
 		mWindow.close();
 	}
 
-	void Editor::OnResized(const sf::Event&)
+	void Editor::OnResized(const WindowResizedEvent& e)
 	{
-		sf::FloatRect visibleArea(0, 0, (float)mEvent.size.width, (float)mEvent.size.height);
+		sf::FloatRect visibleArea(0, 0, (float)e.width, (float)e.height);
 		mWindow.setView(sf::View(visibleArea));
 
 		Log(INFO, "RESIZED!");

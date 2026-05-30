@@ -3,12 +3,27 @@
 namespace Oblivion
 {
 	SelectionHandlerComponent::SelectionHandlerComponent(Editor* editor)
-		: mEditor{ editor }, mIsCtrlButtonPressed{ false }
+		: mEditor{ editor }, mEngine{ editor->GetEngine() }, mIsCtrlButtonPressed{ false }
 	{
-		mEditor->GetEngine()->eventBroadcaster.Attach(EventType::OnAnyEntityRemoved, this);
-		mEditor->GetEngine()->eventBroadcaster.Attach(EventType::MouseButtonPressed, this);
-		mEditor->GetEngine()->eventBroadcaster.Attach(EventType::KeyPressed, this);
-		mEditor->GetEngine()->eventBroadcaster.Attach(EventType::KeyReleased, this);
+		mEntityRemovedEvent = mEngine->mEventBus.Subscribe<EntityRemovedEvent>([this](const EntityRemovedEvent& event)
+			{
+				OnAnyEntityRemoved(event);
+			});
+
+		mMouseButtonPressedEvent = mEngine->mEventBus.Subscribe<MouseButtonPressedEvent>([this](const MouseButtonPressedEvent& event)
+			{
+				OnMouseButtonPressed(event);
+			});
+
+		mKeyPressedEvent = mEngine->mEventBus.Subscribe<KeyPressedEvent>([this](const KeyPressedEvent& event)
+			{
+				OnKeyPressed(event);
+			});
+
+		mKeyReleasedEvent = mEngine->mEventBus.Subscribe<KeyReleasedEvent>([this](const KeyReleasedEvent& event)
+			{
+				OnKeyReleased(event);
+			});
 	}
 
 
@@ -21,12 +36,12 @@ namespace Oblivion
 		}
 	}
 
-	void SelectionHandlerComponent::OnMouseButtonPressed(const sf::Event& event)
+	void SelectionHandlerComponent::OnMouseButtonPressed(const MouseButtonPressedEvent& event)
 	{
-		if (event.mouseButton.button != sf::Mouse::Button::Left)
+		if (event.button != sf::Mouse::Button::Left)
 			return;
 
-		Vec2 MouseInViewportPos = mEditor->WindowToViewportCoords({ (float)event.mouseButton.x, (float)event.mouseButton.y });
+		Vec2 MouseInViewportPos = mEditor->WindowToViewportCoords({ (float)event.x, (float)event.y });
 		auto camera = mEditor->GetComponent<CameraComponent>();
 
 		Vec2 ViewportSize = mEditor->GetComponent<ViewportComponent>()->GetSize();
@@ -42,20 +57,20 @@ namespace Oblivion
 		}
 	}
 
-	void SelectionHandlerComponent::OnKeyPressed(const sf::Event& event)
+	void SelectionHandlerComponent::OnKeyPressed(const KeyPressedEvent& event)
 	{
-		if (event.key.code == sf::Keyboard::LControl)
+		if (event.code == sf::Keyboard::LControl)
 		{
 			mIsCtrlButtonPressed = true;
 		}
 	}
 
-	void SelectionHandlerComponent::OnKeyReleased(const sf::Event& event)
+	void SelectionHandlerComponent::OnKeyReleased(const KeyReleasedEvent& event)
 	{
-		if (event.key.code == sf::Keyboard::LControl)
+		if (event.code == sf::Keyboard::LControl)
 		{
 			mIsCtrlButtonPressed = false;
-			
+
 		}
 	}
 
@@ -74,12 +89,12 @@ namespace Oblivion
 			return false;
 	}
 
-	void SelectionHandlerComponent::OnAnyEntityRemoved(Entity* remEntity)
+	void SelectionHandlerComponent::OnAnyEntityRemoved(const EntityRemovedEvent& event)
 	{
 		auto it = mSelectedObjects.begin();
 		while (it != mSelectedObjects.end())
 		{
-			if (it->entity->GetUUID() == remEntity->GetUUID())
+			if (it->entity->GetUUID() == event.entity->GetUUID())
 			{
 				mSelectedObjects.erase(it);
 				break;

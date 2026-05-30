@@ -3,6 +3,7 @@
 
 #include "IEditorComponent.hpp"
 #include "Editor/Editor.hpp"
+#include "../../Core/EventSystem/Events.hpp"
 
 namespace Oblivion
 {
@@ -18,9 +19,9 @@ namespace Oblivion
 		Vec2 GetCameraPos() const;
 
 	private:
-		void OnMouseWheelScrolled(const sf::Event&) override;
-		void OnMouseButtonPressed(const sf::Event&) override;
-		void OnMouseButtonReleased(const sf::Event&) override;
+		void OnMouseWheelScrolled(const MouseWheelScrolledEvent&);
+		void OnMouseButtonPressed(const MouseButtonPressedEvent&);
+		void OnMouseButtonReleased(const MouseButtonReleasedEvent&);
 
 	private:
 		bool mIsPrimary, mMiddleButtonHold;
@@ -29,6 +30,11 @@ namespace Oblivion
 		sf::View mView;
 		sf::RenderTexture* mTexture;
 		Vec2 mPosition, mLastClickedPos;
+
+	private:
+		Subscription mMouseWheelScrolledEvent;
+		Subscription mMouseButtonPressedEvent;
+		Subscription mMouseButtonReleasedEvent;
 	};
 }
 #endif // !CAMERA_HPP

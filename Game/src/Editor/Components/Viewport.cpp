@@ -5,7 +5,6 @@ namespace Oblivion
 	ViewportComponent::ViewportComponent(Editor* editor) :
 		mEditor{ editor }
 	{
-		mEditor->GetEngine()->eventBroadcaster.Attach(EventType::MouseButtonPressed, this);
 	}
 
 	Vec2 ViewportComponent::GetPosition()

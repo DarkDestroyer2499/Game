@@ -6,7 +6,6 @@ namespace Oblivion
 	PropertiesComponent::PropertiesComponent(Editor* editor) :
 		mEditor{ editor }
 	{
-		mEditor->GetEngine()->eventBroadcaster.Attach(EventType::OnAnyEntityRemoved, this);
 	}
 
 	void PropertiesComponent::Update()

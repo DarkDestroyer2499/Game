@@ -6,7 +6,6 @@
 #include "Core/Entity.hpp"
 #include "Scene.hpp"
 #include "Core/ResourceManager.hpp"
-#include "Core/EventSystem/EventBroadcaster.hpp"
 
 #include "Core/EventSystem/EventBus.hpp"
 
@@ -15,7 +14,7 @@ namespace Oblivion
 
 #define WINDOW_NAME "SUPER GAME"
 
-	class Engine : public EventSubscriber
+	class Engine
 	{
 	public:
 		Engine();
@@ -48,7 +47,6 @@ namespace Oblivion
 
 	public:
 		ResourceManager resourceManager;
-		EventBroadcaster eventBroadcaster;
 		EventBus mEventBus;
 
 	private:
@@ -60,5 +58,6 @@ namespace Oblivion
 		uint32_t mLastRenderTime;
 		sf::Clock mClock;
 	};
+
 }
 #endif // !ENGINE_H

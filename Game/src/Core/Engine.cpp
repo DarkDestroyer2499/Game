@@ -10,8 +10,6 @@ namespace Oblivion
 		mWorking{ true }, mLastRenderTime{ 1 }, mCurrentScene(std::make_unique<Scene>(this)), mIsSceneRunning{ false }, mRenderTarget{nullptr}
 	{
 		mWorld = ::std::make_unique<b2World>(b2Vec2(0.f, 9.8f));
-		eventBroadcaster.Attach(EventType::OnAnyEntityCreated, this);
-		eventBroadcaster.Attach(EventType::OnAnyEntityRemoved, this);
 
 		resourceManager.resources.AddComponent<TextureComponent>();
 	}
@@ -127,7 +125,6 @@ namespace Oblivion
 		::std::list<Entity>& entityList = mCurrentScene->GetEntityList();
 		Entity& entity = entityList.emplace_back(this, name.c_str());
 		Log(INFO, entity.GetUUID() << " Create entity with name: " << name);
-		eventBroadcaster.Notify(EventType::OnAnyEntityCreated, &entity);
 		mEventBus.Publish(EntityCreatedEvent{ &entity });
 		return &entity;
 	}
@@ -135,9 +132,10 @@ namespace Oblivion
 	Entity* Engine::CreateObject(Scene& scene, ::std::string name)
 	{
 		::std::list<Entity>& entityList = scene.GetEntityList();
-		entityList.emplace_back(this, name.c_str());
-		Log(INFO, entityList.back().GetUUID() << " Create entity with name: " << name);
-		return &entityList.back();
+		Entity& entity = entityList.emplace_back(this, name.c_str());
+		Log(INFO, entity.GetUUID() << " Create entity with name: " << name);
+		mEventBus.Publish(EntityCreatedEvent{ &entity });
+		return &entity;
 	}
 
 	Entity* Engine::CloneObject(Entity* entity)
@@ -161,7 +159,6 @@ namespace Oblivion
 		{
 			if (it->GetUUID() == entId)
 			{
-				eventBroadcaster.Notify(EventType::OnAnyEntityRemoved, &(*it));
 				mEventBus.Publish(EntityRemovedEvent{ &(*it) });
 				entityList.erase(it);
 				return;

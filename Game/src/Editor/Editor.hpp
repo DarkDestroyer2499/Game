@@ -9,13 +9,14 @@
 #include "imgui.h"
 #include "imgui-SFML.h"
 #include "Core/ECS.hpp"
+#include "Core/EventSystem/Events.hpp"
 
 namespace Oblivion
 {
 	constexpr const char* PROGRAM_NAME = "Engine";
 	static const sf::Color EDITOR_BG_COLOR(62, 66, 63);
 
-	class Editor : public EventSubscriber
+	class Editor
 	{
 	public:
 		Editor();
@@ -60,11 +61,12 @@ namespace Oblivion
 		}
 
 	private:
-		void OnWindowClosed() override;
-		void OnResized(const sf::Event&) override;
+		void OnWindowClosed();
+		void OnResized(const WindowResizedEvent&);
 
 		void SetupStyles();
-
+	private:
+		std::unique_ptr<Engine> mEngine; //TODO: this here just to make sure that engine destroyed after all components, but maybe we can do it better? Later put to other private vars in bottom private section
 	public:
 		ECS<IEditorComponent, Editor*> ecs;
 
@@ -73,9 +75,12 @@ namespace Oblivion
 		sf::Clock mClock;
 		sf::Event mEvent;
 		sf::RenderTexture mTexture;
-		std::unique_ptr<Engine> mEngine;
 		sf::Vector2i mMousePosition;
 		sf::View mView;
+
+	private: //Subscriptions
+		Subscription mWindowClosedSubscription;
+		Subscription mResizedSubscription;
 	};
 }
 #endif // !EDITOR_H
