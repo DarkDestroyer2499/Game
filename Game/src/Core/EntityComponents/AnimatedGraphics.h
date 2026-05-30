@@ -33,7 +33,8 @@ namespace Oblivion
 		::std::map<::std::string, Animation> mAnimList;
 		GraphicsComponent* mGraphicsComponent;
 
-		friend Serializer;
+		friend void SerializeAnimatedGraphics(YAML::Emitter&, AnimatedGraphicsComponent*, Entity&);
+		friend void DeserializeAnimatedGraphics(const YAML::Node&, Entity&);
 	};
 }
 #endif // !ANIMATED_GRAPHICS_COMPONENT_H

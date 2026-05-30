@@ -19,6 +19,8 @@ namespace Oblivion
 		Entity* entity;
 	};
 
+	struct SceneChangedEvent {};
+
 	//Editor events
 	struct WindowClosedEvent {};
 	struct WindowResizedEvent

@@ -21,12 +21,6 @@ namespace Oblivion
 
 	private:
 		void Serialize(Entity& entity);
-		void Serialize(b2BodyDef bdef);
-		void Serialize(b2FixtureDef fdef);
-
-		void Deserialize(Entity& entity);
-		b2BodyDef DeserializeBodyDef(YAML::Node& data);
-		b2FixtureDef DeserializeFixtureDef(YAML::Node& data);
 	private:
 		Engine* mEngine;
 		::std::ofstream mStream;

@@ -35,8 +35,6 @@ namespace Oblivion
 
 		void RunStandalone();
 
-		void Tick(float time);
-
 		void Stop();
 		void Update(sf::RenderTarget* window);
 

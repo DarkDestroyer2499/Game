@@ -7,18 +7,16 @@ namespace Oblivion
 	AnimatedGraphicsComponent::AnimatedGraphicsComponent()
 		:mGraphicsComponent{ nullptr }
 	{
-		mName = COMPONENT_NAME;
 	}
 
 	AnimatedGraphicsComponent::AnimatedGraphicsComponent(const AnimatedGraphicsComponent& other)
-		: mCurrentAnimation{ other.mCurrentAnimation }, mAnimList{ other.mAnimList }
+		: mCurrentAnimation{ other.mCurrentAnimation }, mAnimList{ other.mAnimList }, mGraphicsComponent{ nullptr }
 	{
 	}
 
 	AnimatedGraphicsComponent::AnimatedGraphicsComponent(AnimatedGraphicsComponent&& other) noexcept
-		: mCurrentAnimation{ std::move(mCurrentAnimation) }
+		: mCurrentAnimation{ std::move(other.mCurrentAnimation) }, mAnimList{ std::move(other.mAnimList) }, mGraphicsComponent{ nullptr }
 	{
-		mAnimList.merge(other.mAnimList);
 	}
 
 	::std::unique_ptr<IEntityComponent> AnimatedGraphicsComponent::Clone() const
@@ -68,11 +66,10 @@ namespace Oblivion
 
 	void AnimatedGraphicsComponent::Render(sf::RenderTarget* target)
 	{
-		sf::Sprite& sprite = mGraphicsComponent->GetSprite();
+		if (mGraphicsComponent == nullptr)
+			return;
 
-
-
-		mOwner->GetEngine()->GetRenderWindow()->draw(sprite);
+		target->draw(mGraphicsComponent->GetSprite());
 	}
 
 	void AnimatedGraphicsComponent::Pause()

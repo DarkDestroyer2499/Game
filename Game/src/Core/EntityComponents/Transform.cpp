@@ -6,7 +6,6 @@ namespace Oblivion
 	TransformComponent::TransformComponent()
 		: position{}, rotation{}, mLastPosition{}, mLastRotation{}
 	{
-		mName = COMPONENT_NAME;
 	}
 
 	TransformComponent::~TransformComponent()

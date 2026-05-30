@@ -56,6 +56,7 @@ namespace Oblivion
 		Subscription mMouseButtonPressedEvent;
 		Subscription mKeyPressedEvent;
 		Subscription mKeyReleasedEvent;
+		Subscription mSceneChangedEvent;
 	};
 }
 #endif // !SELECTION_HANDLER_HPP

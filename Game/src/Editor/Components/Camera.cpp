@@ -83,7 +83,6 @@ namespace Oblivion
 
 	void CameraComponent::OnMouseButtonReleased(const MouseButtonReleasedEvent& event)
 	{
-		//Log(SUCCESS, "Mouse has been pressed " << lastClickedPos << " MiddlePressed: " << mMiddleButtonHold);
 		if (event.button == sf::Mouse::Button::Middle)
 		{
 			mMiddleButtonHold = false;

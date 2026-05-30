@@ -20,7 +20,6 @@ namespace Oblivion
 			eventBus.Publish(WindowResizedEvent{ event.size });
 			break;
 
-
 		case sf::Event::MouseButtonPressed:
 			eventBus.Publish(MouseButtonPressedEvent{ event.mouseButton });
 			break;

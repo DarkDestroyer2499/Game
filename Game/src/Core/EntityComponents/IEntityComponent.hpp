@@ -8,8 +8,6 @@
 
 namespace Oblivion
 {
-#define COMPONENT_NAME (::std::string(__FILE__).substr(::std::string(__FILE__).find_last_of("/\\") + 1)).substr(0, (::std::string(__FILE__).substr(::std::string(__FILE__).find_last_of("/\\") + 1)).find_first_of('.'))
-
 	class Entity;
 
 	class IEntityComponent
@@ -24,15 +22,14 @@ namespace Oblivion
 		virtual ComponentTypeID GetTypeID() const = 0;
 
 		virtual void SetOwner(Entity* newOwner) { mOwner = newOwner; }
-		virtual const char* GetName() { return mName.c_str(); };
+		virtual const char* GetName();
 
 		virtual void OnComponentAdded() {}
 		virtual void OnComponentRemoved() {}
 
 
 	protected:
-		Entity* mOwner;
-		::std::string mName;
+		Entity* mOwner = nullptr;
 	};
 }
 #endif // !I_COMPONENT_H

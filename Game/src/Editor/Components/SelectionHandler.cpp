@@ -24,6 +24,11 @@ namespace Oblivion
 			{
 				OnKeyReleased(event);
 			});
+
+		mSceneChangedEvent = mEngine->mEventBus.Subscribe<SceneChangedEvent>([this](const SceneChangedEvent&)
+			{
+				ClearSelected();
+			});
 	}
 
 
@@ -50,10 +55,7 @@ namespace Oblivion
 
 		if (IsInsideWorkspace(MouseInViewportPos))
 		{
-			for (auto& entity : mEditor->GetEngine()->GetCurrentScene()->GetEntityList())
-			{
-				TrySelectObject(center);
-			}
+			TrySelectObject(center);
 		}
 	}
 

@@ -4,10 +4,15 @@
 #include <SFML/Graphics.hpp>
 #include "Util/Util.hpp"
 
+namespace YAML { class Emitter; class Node; }
+
 namespace Oblivion
 {
 	class AnimatedGraphicsComponent;
-	class Serializer;
+	class Entity;
+
+	void SerializeAnimatedGraphics(YAML::Emitter&, AnimatedGraphicsComponent*, Entity&);
+	void DeserializeAnimatedGraphics(const YAML::Node&, Entity&);
 
 	class Animation
 	{
@@ -30,7 +35,8 @@ namespace Oblivion
 		sf::Texture *mTexture;
 
 		friend AnimatedGraphicsComponent;
-		friend Serializer;
+		friend void SerializeAnimatedGraphics(YAML::Emitter&, AnimatedGraphicsComponent*, Entity&);
+		friend void DeserializeAnimatedGraphics(const YAML::Node&, Entity&);
 	};
 }
 #endif //!ANIMATION_H

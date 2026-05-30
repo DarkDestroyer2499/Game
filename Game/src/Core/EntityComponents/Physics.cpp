@@ -24,7 +24,6 @@ namespace Oblivion
 			break;
 		}
 		}
-		mName = COMPONENT_NAME;
 	}
 
 	::std::unique_ptr<IEntityComponent> PhysicsComponent::Clone() const
@@ -44,14 +43,14 @@ namespace Oblivion
 			b2PolygonShape shape;
 			shape.SetAsBox(size.x / 2, size.y / 2);
 
-			this->mBody->CreateFixture(&shape, density);
+			fdef.shape = &shape;
+			this->mBody->CreateFixture(&fdef);
 
 			this->mBody->SetTransform(b2Vec2(pos.x, pos.y), 0);
 
 			break;
 		}
 		}
-		mName = COMPONENT_NAME;
 	}
 
 	PhysicsComponent::~PhysicsComponent()

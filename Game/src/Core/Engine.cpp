@@ -3,6 +3,7 @@
 #include "EntityComponents/ComponentLinker.hpp"
 
 #include "EventSystem/Events.hpp"
+#include "Core/ComponentRegistry.hpp"
 
 namespace Oblivion
 {
@@ -10,6 +11,8 @@ namespace Oblivion
 		mWorking{ true }, mLastRenderTime{ 1 }, mCurrentScene(std::make_unique<Scene>(this)), mIsSceneRunning{ false }, mRenderTarget{nullptr}
 	{
 		mWorld = ::std::make_unique<b2World>(b2Vec2(0.f, 9.8f));
+
+		RegisterComponents();
 
 		resourceManager.resources.AddComponent<TextureComponent>();
 	}
@@ -46,11 +49,6 @@ namespace Oblivion
 			window.display();
 		}
 		window.close();
-	}
-
-	void Engine::Tick(float time)
-	{
-
 	}
 
 	void Engine::Update(sf::RenderTarget* window)
@@ -118,6 +116,7 @@ namespace Oblivion
 	void Engine::SetCurrentScene(std::unique_ptr<Scene> newScene)
 	{
 		mCurrentScene = std::move(newScene);
+		mEventBus.Publish(SceneChangedEvent{});
 	}
 
 	Entity* Engine::CreateObject(::std::string name)

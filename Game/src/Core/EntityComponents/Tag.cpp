@@ -4,7 +4,6 @@ namespace Oblivion
 {
 	TagComponent::TagComponent(const ::std::string& newTag)
 	{
-		mName = COMPONENT_NAME;
 		mTag = newTag;
 	}
 

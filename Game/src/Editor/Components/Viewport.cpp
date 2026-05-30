@@ -3,7 +3,7 @@
 namespace Oblivion
 {
 	ViewportComponent::ViewportComponent(Editor* editor) :
-		mEditor{ editor }
+		mEditor{ editor }, mPosition{}, mSize{}
 	{
 	}
 
@@ -20,8 +20,15 @@ namespace Oblivion
 	void ViewportComponent::Update()
 	{
 		static ImVec2 viewportSize = ImGui::GetWindowSize();
-		mEditor->GetRenderTexture()->create(static_cast<unsigned int>(viewportSize.x),
-			static_cast<unsigned int>(viewportSize.y));
+
+		auto* texture = mEditor->GetRenderTexture();
+		unsigned int newWidth = static_cast<unsigned int>(viewportSize.x);
+		unsigned int newHeight = static_cast<unsigned int>(viewportSize.y);
+		if (newWidth > 0 && newHeight > 0 &&
+			(texture->getSize().x != newWidth || texture->getSize().y != newHeight))
+		{
+			texture->create(newWidth, newHeight);
+		}
 
 		ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0.f, 0.f));
 		mSize = viewportSize;
