@@ -69,7 +69,7 @@ namespace Oblivion
 
 					std::string entityStringId = std::to_string(entity->GetUUID());
 
-					bool open = ImGui::TreeNodeEx((entity->GetComponent<TagComponent>()->GetTag() + "##" + entityStringId).c_str(), (IsNeedToSelect(*entity) ? ImGuiTreeNodeFlags_Selected : 0) | ImGuiTreeNodeFlags_SpanFullWidth | ImGuiTreeNodeFlags_OpenOnArrow);
+					bool open = ImGui::TreeNodeEx((entity->GetName() + "##" + entityStringId).c_str(), (IsNeedToSelect(*entity) ? ImGuiTreeNodeFlags_Selected : 0) | ImGuiTreeNodeFlags_SpanFullWidth | ImGuiTreeNodeFlags_OpenOnArrow);
 
 					if (ImGui::BeginPopupContextItem(std::string("##EntityPopup" + entityStringId).c_str()))
 					{

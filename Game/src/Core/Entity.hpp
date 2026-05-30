@@ -34,7 +34,10 @@ namespace Oblivion
 
 		UUID GetUUID();
 
-		TransformComponent* GetTransform(); 
+		void SetName(const ::std::string& name);
+		const ::std::string& GetName() const;
+
+		TransformComponent* GetTransform();
 
 		template<typename Component>
 		bool HasComponent()
@@ -77,6 +80,7 @@ namespace Oblivion
 		ECS<IEntityComponent, Entity*> ecs;
 		Engine* mEngine;
 		UUID mUUID;
+		::std::string mName;
 	};
 }
 #endif // !ENTITY_H

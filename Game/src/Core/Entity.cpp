@@ -5,16 +5,14 @@
 namespace Oblivion
 {
 	Entity::Entity()
-		: mEngine{ nullptr }, ecs{ this }, rm{ nullptr }
+		: mEngine{ nullptr }, ecs{ this }, rm{ nullptr }, mName{ "Unknown" }
 	{
-		this->ecs.AddComponent<TagComponent>("");
 		this->ecs.AddComponent<TransformComponent>();
 	}
 
 	Entity::Entity(Engine* engine, const char* newName) :
-		mEngine{ engine }, ecs{ this }
+		mEngine{ engine }, ecs{ this }, mName{ newName }
 	{
-		this->ecs.AddComponent<TagComponent>("");
 		this->ecs.AddComponent<TransformComponent>();
 
 		rm = &mEngine->resourceManager;
@@ -79,6 +77,16 @@ namespace Oblivion
 		return mUUID;
 	}
 
+	void Entity::SetName(const ::std::string& name)
+	{
+		mName = name;
+	}
+
+	const ::std::string& Entity::GetName() const
+	{
+		return mName;
+	}
+
 	TransformComponent* Entity::GetTransform()
 	{
 		return ecs.GetComponent<TransformComponent>();
@@ -89,6 +97,7 @@ namespace Oblivion
 		, ecs(this)
 		, mEngine(other.mEngine)
 		, mUUID()
+		, mName(other.mName)
 	{
 		ecs = other.ecs;
 	}
@@ -110,6 +119,7 @@ namespace Oblivion
 
 		rm = other.rm;
 		mEngine = other.mEngine;
+		mName = other.mName;
 
 		ecs = other.ecs;
 

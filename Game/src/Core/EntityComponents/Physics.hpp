@@ -41,6 +41,10 @@ namespace Oblivion
 		float GetDensity();
 		b2FixtureDef GetFixtureDef();
 
+		void SetDensity(float density);
+		void SetFriction(float friction);
+		void SetRestitution(float restitution);
+
 		void OnComponentAdded() override;	
 
 	private:

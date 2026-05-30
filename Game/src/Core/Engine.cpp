@@ -139,7 +139,7 @@ namespace Oblivion
 
 	Entity* Engine::CloneObject(Entity* entity)
 	{
-		std::string name = entity->GetComponent<TagComponent>()->GetTag();
+		std::string name = entity->GetName();
 		Entity* cloneEnt = CreateObject(name);
 
 		cloneEnt->GetEcs().GetComponentList().clear();

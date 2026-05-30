@@ -87,6 +87,11 @@ namespace Oblivion
 
 			entity->SetUUID(uuid);
 
+			if (ent["Name"])
+				entity->SetName(ent["Name"].as<std::string>());
+			else if (ent["Tag"])
+				entity->SetName(ent["Tag"]["Tag"].as<std::string>());
+
 			for (const ComponentDescriptor& desc : GetComponentRegistry().All())
 			{
 				if (desc.deserialize && ent[desc.name])
@@ -104,6 +109,7 @@ namespace Oblivion
 
 		mEmitter << BeginMap;
 		mEmitter << Key << "Entity" << Value << (uintmax_t)entity.GetUUID();
+		mEmitter << Key << "Name" << Value << entity.GetName();
 
 		for (auto& component : entity.GetComponentList())
 		{

@@ -3,7 +3,6 @@
 
 #include "Graphics.hpp"
 #include "Physics.hpp"
-#include "Tag.hpp"
 #include "AnimatedGraphics.h"
 #include "Transform.hpp"
 

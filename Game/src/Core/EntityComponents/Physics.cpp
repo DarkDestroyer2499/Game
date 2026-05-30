@@ -120,6 +120,29 @@ namespace Oblivion
 	{
 		return mFixtureDef;
 	}
+
+	void PhysicsComponent::SetDensity(float density)
+	{
+		mDensity = density;
+		mFixtureDef.density = density;
+		for (b2Fixture* fixture = mBody->GetFixtureList(); fixture; fixture = fixture->GetNext())
+			fixture->SetDensity(density);
+		mBody->ResetMassData();
+	}
+
+	void PhysicsComponent::SetFriction(float friction)
+	{
+		mFixtureDef.friction = friction;
+		for (b2Fixture* fixture = mBody->GetFixtureList(); fixture; fixture = fixture->GetNext())
+			fixture->SetFriction(friction);
+	}
+
+	void PhysicsComponent::SetRestitution(float restitution)
+	{
+		mFixtureDef.restitution = restitution;
+		for (b2Fixture* fixture = mBody->GetFixtureList(); fixture; fixture = fixture->GetNext())
+			fixture->SetRestitution(restitution);
+	}
 	void PhysicsComponent::OnComponentAdded()
 	{
 		mOwner->GetTransform()->SubscribeToTransformChanged([this](const Vec2& newPosition, float newRotation)

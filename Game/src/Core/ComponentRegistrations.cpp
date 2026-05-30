@@ -1,5 +1,6 @@
 #include "ComponentRegistry.hpp"
 #include "YamlConverters.hpp"
+#include "InspectorWidgets.hpp"
 #include "Entity.hpp"
 #include "Engine.hpp"
 #include "ResourceManager.hpp"
@@ -10,8 +11,6 @@
 
 namespace Oblivion
 {
-	static ImGuiTreeNodeFlags InspectorTreeFlags = ImGuiTreeNodeFlags_SpanFullWidth | ImGuiTreeNodeFlags_Framed | ImGuiTreeNodeFlags_DefaultOpen;
-
 	static void WriteBodyDef(YAML::Emitter& emitter, const b2BodyDef& bdef)
 	{
 		using namespace YAML;
@@ -110,54 +109,6 @@ namespace Oblivion
 
 		ComponentRegistry& registry = GetComponentRegistry();
 
-		registry.Register<TagComponent>({
-			"Tag",
-			[](YAML::Emitter& emitter, IEntityComponent* component, Entity& entity)
-			{
-				auto* comp = static_cast<TagComponent*>(component);
-				emitter << YAML::BeginMap;
-				emitter << YAML::Key << "Tag" << YAML::Value << comp->GetTag();
-				emitter << YAML::EndMap;
-			},
-			[](const YAML::Node& node, Entity& entity)
-			{
-				entity.GetComponent<TagComponent>()->SetTag(node["Tag"].as<std::string>());
-			},
-			[](IEntityComponent* component, Editor& editor)
-			{
-				auto* comp = static_cast<TagComponent*>(component);
-
-				ImGui::TableNextRow();
-				ImGui::TableNextColumn();
-				bool open = ImGui::TreeNodeEx((std::string(comp->GetName()) + std::string(" Component")).c_str(), InspectorTreeFlags);
-				if (open)
-				{
-					ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(6.f, 6.f));
-					ImGui::Spacing();
-
-					char str0[50];
-					strcpy_s(str0, comp->GetTag().c_str());
-
-					ImGui::Columns(2, nullptr, false);
-					ImGui::SetColumnWidth(0, 80.f);
-					ImGui::AlignTextToFramePadding();
-					ImGui::Text("Name");
-					ImGui::NextColumn();
-
-					ImGui::SetNextItemWidth(ImGui::GetContentRegionAvail().x);
-					if (ImGui::InputText("##Name", str0, IM_ARRAYSIZE(str0)))
-					{
-						comp->SetTag(str0);
-					}
-					ImGui::Columns(1);
-
-					ImGui::Spacing();
-					ImGui::PopStyleVar();
-					ImGui::TreePop();
-				}
-			}
-		});
-
 		registry.Register<TransformComponent>({
 			"Transform",
 			nullptr,
@@ -165,84 +116,18 @@ namespace Oblivion
 			[](IEntityComponent* component, Editor& editor)
 			{
 				auto* transform = static_cast<TransformComponent*>(component);
+				if (!Inspector::BeginComponent(component))
+					return;
 
-				ImGui::TableNextRow();
-				ImGui::TableNextColumn();
-				bool open = ImGui::TreeNodeEx((std::string(transform->GetName()) + std::string(" component")).c_str(), InspectorTreeFlags);
-				if (open)
-				{
-					ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(4.f, 4.f));
-					ImGui::Spacing();
+				Vec2 position = transform->position;
+				if (Inspector::DragVec2("Position", position, 0.f, 0.1f))
+					transform->SetPosition(position);
 
-					Vec2 pos = transform->position;
-					float position[2]{ pos.x, pos.y };
-
-					ImGui::Columns(2, nullptr, false);
-					ImGui::SetColumnWidth(0, 80.f);
-					ImGui::AlignTextToFramePadding();
-					ImGui::Text("Position");
-					ImGui::NextColumn();
-
-					ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2(2.f, 4.f));
-					ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.8f, 0.1f, 0.15f, 1.0f));
-					ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(0.9f, 0.2f, 0.2f, 1.0f));
-					ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4(1.0f, 0.3f, 0.3f, 1.0f));
-					if (ImGui::Button("X", ImVec2(20.f, 0.f)))
-					{
-						position[0] = 0.f;
-					}
-					ImGui::PopStyleColor(3);
-					ImGui::SameLine();
-					ImGui::SetNextItemWidth(ImGui::GetContentRegionAvail().x * 0.5f - 2.f);
-					ImGui::DragFloat("##PositionX", &position[0], 0.1f, 0.f, 0.f, "%.2f");
-					ImGui::SameLine();
-
-					ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.2f, 0.7f, 0.2f, 1.0f));
-					ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(0.3f, 0.8f, 0.3f, 1.0f));
-					ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4(0.4f, 0.9f, 0.4f, 1.0f));
-					if (ImGui::Button("Y", ImVec2(20.f, 0.f)))
-					{
-						position[1] = 0.f;
-					}
-					ImGui::PopStyleColor(3);
-					ImGui::SameLine();
-					ImGui::SetNextItemWidth(ImGui::GetContentRegionAvail().x);
-					ImGui::DragFloat("##PositionY", &position[1], 0.1f, 0.f, 0.f, "%.2f");
-					ImGui::PopStyleVar();
-
-					ImGui::Columns(1);
-					ImGui::Spacing();
-
-					float rotation = transform->rotation * DEG_IN_RAD;
-
-					ImGui::Columns(2, nullptr, false);
-					ImGui::SetColumnWidth(0, 80.f);
-					ImGui::AlignTextToFramePadding();
-					ImGui::Text("Rotation");
-					ImGui::NextColumn();
-
-					ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2(2.f, 4.f));
-					ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.1f, 0.4f, 0.8f, 1.0f));
-					ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(0.2f, 0.5f, 0.9f, 1.0f));
-					ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4(0.3f, 0.6f, 1.0f, 1.0f));
-					if (ImGui::Button("R", ImVec2(20.f, 0.f)))
-					{
-						rotation = 0.f;
-					}
-					ImGui::PopStyleColor(3);
-					ImGui::SameLine();
-					ImGui::SetNextItemWidth(ImGui::GetContentRegionAvail().x);
-					ImGui::DragFloat("##Rotation", &rotation, 0.5f, 0.f, 360.f, "%.1f");
-					ImGui::PopStyleVar();
-
-					ImGui::Columns(1);
-					ImGui::Spacing();
-					ImGui::PopStyleVar();
-
+				float rotation = transform->rotation * DEG_IN_RAD;
+				if (Inspector::DragFloat("Rotation", rotation, 0.f, 0.5f, "%.1f"))
 					transform->SetRotation(rotation / DEG_IN_RAD);
-					transform->SetPosition({ position[0], position[1] });
-					ImGui::TreePop();
-				}
+
+				Inspector::EndComponent();
 			}
 		});
 
@@ -266,46 +151,32 @@ namespace Oblivion
 			[](IEntityComponent* component, Editor& editor)
 			{
 				auto* comp = static_cast<GraphicsComponent*>(component);
+				if (!Inspector::BeginComponent(component))
+					return;
 
-				ImGui::TableNextRow();
-				ImGui::TableNextColumn();
-				bool open = ImGui::TreeNodeEx((std::string(comp->GetName()) + std::string(" Component")).c_str(), InspectorTreeFlags);
-				if (open)
+				static Vec2 SpriteIconSize{ 100.f, 100.f };
+				sf::Sprite tmpSprite = comp->GetSprite();
+				tmpSprite.setRotation(0);
+				sf::IntRect rect = tmpSprite.getTextureRect();
+
+				ImGui::PushStyleColor(ImGuiCol_ChildBg, ImVec4(0.14f, 0.14f, 0.15f, 1.00f));
+				ImGui::BeginChild("SpritePreview", ImVec2(0, 140), true);
+				if (rect.width > 0 && rect.height > 0)
 				{
-					ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(6.f, 6.f));
-					ImGui::Spacing();
-
-					static Vec2 SpriteIconSize{ 100.f, 100.f };
-					sf::Sprite tmpSprite = comp->GetSprite();
-					tmpSprite.setRotation(0);
-
-					ImGui::PushStyleColor(ImGuiCol_ChildBg, ImVec4(0.14f, 0.14f, 0.15f, 1.00f));
-					ImGui::BeginChild("SpritePreview", ImVec2(0, 140), true);
-
 					ImGui::SetCursorPosX((ImGui::GetContentRegionAvail().x - SpriteIconSize.x) / 2.0f + 8.0f);
 					ImGui::SetCursorPosY(8.0f);
-
-					tmpSprite.setScale({ SpriteIconSize.x / tmpSprite.getTextureRect().width, SpriteIconSize.y / tmpSprite.getTextureRect().height });
+					tmpSprite.setScale({ SpriteIconSize.x / rect.width, SpriteIconSize.y / rect.height });
 					ImGui::Image(tmpSprite);
-
-					ImGui::EndChild();
-					ImGui::PopStyleColor();
-
-					ImGui::Spacing();
-
-					std::string spriteSizeText = std::to_string(tmpSprite.getTextureRect().width) + " x " + std::to_string(tmpSprite.getTextureRect().height);
-					ImGui::Text("Texture Size:");
-					ImGui::SameLine(120);
-					ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(0.26f, 0.59f, 0.98f, 1.0f));
-					ImGui::Text("%s", spriteSizeText.c_str());
-					ImGui::PopStyleColor();
-
-					ImGui::Spacing();
-					ImGui::PopStyleVar();
-					ImGui::TreePop();
 				}
-			}
-		,
+				ImGui::EndChild();
+				ImGui::PopStyleColor();
+				ImGui::Spacing();
+
+				std::string sizeText = std::to_string(rect.width) + " x " + std::to_string(rect.height);
+				Inspector::LabeledText("Texture", sizeText.c_str());
+
+				Inspector::EndComponent();
+			},
 			[](Entity& entity) { entity.AddComponent<GraphicsComponent>(); }
 		});
 
@@ -319,8 +190,25 @@ namespace Oblivion
 			{
 				DeserializeAnimatedGraphics(node, entity);
 			},
-			nullptr
-		,
+			[](IEntityComponent* component, Editor& editor)
+			{
+				auto* comp = static_cast<AnimatedGraphicsComponent*>(component);
+				if (!Inspector::BeginComponent(component))
+					return;
+
+				Inspector::LabeledText("Current", comp->GetCurrentAnimation().c_str());
+				Inspector::LabeledText("Clips", std::to_string(comp->GetAnimationCount()).c_str());
+
+				Inspector::BeginField("Playback");
+				if (ImGui::Button("Play"))
+					comp->Play();
+				ImGui::SameLine();
+				if (ImGui::Button("Pause"))
+					comp->Pause();
+				Inspector::EndField();
+
+				Inspector::EndComponent();
+			},
 			[](Entity& entity) { entity.AddComponent<AnimatedGraphicsComponent>(); }
 		});
 
@@ -375,8 +263,33 @@ namespace Oblivion
 
 				entity.AddComponent<PhysicsComponent>(entity.GetEngine()->GetMainWorld(), objectType, bdef, fdef, size, position, density);
 			},
-			nullptr
-		,
+			[](IEntityComponent* component, Editor& editor)
+			{
+				auto* comp = static_cast<PhysicsComponent*>(component);
+				if (!Inspector::BeginComponent(component))
+					return;
+
+				static const char* typeNames[] = { "Chain", "Circle", "Edge", "Polygon" };
+				b2FixtureDef fdef = comp->GetFixtureDef();
+				Vec2 size = comp->GetSize();
+
+				Inspector::LabeledText("Type", typeNames[static_cast<int>(comp->GetPhysicsType())]);
+				Inspector::LabeledText("Size", (std::to_string((int)size.x) + " x " + std::to_string((int)size.y)).c_str());
+
+				float density = comp->GetDensity();
+				if (Inspector::DragFloat("Density", density, 1.0f, 0.01f))
+					comp->SetDensity(density < 0.0f ? 0.0f : density);
+
+				float friction = fdef.friction;
+				if (Inspector::DragFloat("Friction", friction, 0.2f, 0.01f))
+					comp->SetFriction(friction < 0.0f ? 0.0f : friction);
+
+				float restitution = fdef.restitution;
+				if (Inspector::DragFloat("Restitution", restitution, 0.0f, 0.01f))
+					comp->SetRestitution(restitution < 0.0f ? 0.0f : restitution);
+
+				Inspector::EndComponent();
+			},
 			[](Entity& entity) { b2BodyDef bdef; entity.AddComponent<PhysicsComponent>(entity.GetEngine()->GetMainWorld(), PhysicsObjectType::POLYGON, bdef); }
 		});
 	}

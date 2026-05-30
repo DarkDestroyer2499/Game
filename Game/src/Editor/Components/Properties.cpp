@@ -44,6 +44,15 @@ namespace Oblivion
 
 			for (auto &selectedObject : selectionComponent->GetSelectedObjectList())
 			{
+				ImGui::TableNextRow();
+				ImGui::TableNextColumn();
+				char nameBuffer[64];
+				strcpy_s(nameBuffer, selectedObject.entity->GetName().c_str());
+				ImGui::SetNextItemWidth(ImGui::GetContentRegionAvail().x);
+				if (ImGui::InputText("##EntityName", nameBuffer, sizeof(nameBuffer)))
+					selectedObject.entity->SetName(nameBuffer);
+				ImGui::Spacing();
+
 				for (auto& component : selectedObject.entity->GetComponentList())
 				{
 					const ComponentDescriptor* desc = GetComponentRegistry().FindByType(component->GetTypeID());

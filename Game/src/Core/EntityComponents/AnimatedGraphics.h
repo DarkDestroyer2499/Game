@@ -28,6 +28,9 @@ namespace Oblivion
 		void Pause();
 		void Play();
 
+		const ::std::string& GetCurrentAnimation() const { return mCurrentAnimation; }
+		::std::size_t GetAnimationCount() const { return mAnimList.size(); }
+
 	private:
 		::std::string mCurrentAnimation;
 		::std::map<::std::string, Animation> mAnimList;
